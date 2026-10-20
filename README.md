@@ -85,18 +85,32 @@ Su Android non c'è una API key da copiare nel codice: Google riconosce l'app da
 dallo **SHA-1** del certificato che firma l'APK. Senza questa configurazione, collegare un account
 restituisce un errore.
 
+La console chiama questa parte **Google Auth Platform** (ex "Schermata consenso OAuth").
+
 1. Vai su [console.cloud.google.com](https://console.cloud.google.com) e crea un progetto (es. `asd`).
 2. In **API e servizi → Libreria**, abilita la **Google Drive API**.
-3. In **Schermata consenso OAuth**:
-   - tipo **Esterno**, stato **Test**;
-   - aggiungi lo scope `.../auth/drive.readonly`;
-   - tra gli **utenti di test** aggiungi gli account Google che userai (massimo 100).
-4. In **Credenziali → Crea credenziali → ID client OAuth → Android**:
-   - package: `com.asd.player`;
-   - SHA-1: quello della chiave che firma l'APK. Si ottiene con
+3. Apri **Google Auth Platform → Inizia** e compila i passaggi:
+   - **Informazioni sull'app**: nome applicazione `ASD` (è quello che compare nella schermata di
+     consenso) ed email di assistenza (la tua);
+   - **Pubblico**: **Esterno**. L'app nasce in stato **Test**: non premere "Pubblica app";
+   - **Dati di contatto**: la tua email;
+   - accetta le norme e premi **Crea**.
+
+   Logo, dominio e privacy policy si possono lasciare vuoti: in stato Test non servono.
+4. Nel menu di Google Auth Platform:
+   - **Pubblico → Utenti di test → + Add users**: aggiungi gli account Google che userai sul
+     telefono (massimo 100). Gli altri account vengono rifiutati;
+   - **Accesso ai dati → Aggiungi o rimuovi ambiti**: seleziona `.../auth/drive.readonly` e salva.
+     Se non compare, la Drive API del punto 2 non è ancora abilitata.
+5. **Client → + Crea client → Tipo di applicazione: Android**:
+   - nome del pacchetto: `com.asd.player`;
+   - impronta certificato SHA-1: quella della chiave che firma l'APK. Si ottiene con
      `keytool -list -v -keystore ~/.android/debug.keystore -storepass android -alias androiddebugkey`.
    - Crea **un client per ogni chiave**: la chiave debug di WSL e quella di Android Studio su Windows
      sono diverse, e lo sarà anche quella di release.
+
+Non c'è nulla da copiare nel codice: nessun client ID, nessun file `google-services.json`.
+Le modifiche in console possono richiedere qualche minuto prima di valere.
 
 `drive.readonly` è uno scope "restricted": in stato Test funziona per gli utenti di test, mostrando
 l'avviso "app non verificata". Per distribuire l'app a chiunque serve la verifica di Google.
