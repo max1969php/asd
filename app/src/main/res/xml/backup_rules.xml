@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Le playlist sono roba tua: vanno nel backup del telefono. -->
+<full-backup-content>
+    <include domain="database" path="asd.db" />
+    <include domain="sharedpref" path="asd_settings.xml" />
+</full-backup-content>

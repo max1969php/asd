@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.Asd" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/toner</item>
+        <item name="android:statusBarColor">@color/toner</item>
+        <item name="android:navigationBarColor">@color/toner</item>
+    </style>
+</resources>

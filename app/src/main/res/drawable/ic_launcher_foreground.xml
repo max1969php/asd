@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A cerchiata nera su giallo evidenziatore; le gambe sforano il cerchio. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:strokeColor="#FF0B0B0B"
+        android:strokeWidth="5"
+        android:pathData="M36,54 a18,18 0 1,0 36,0 a18,18 0 1,0 -36,0"
+        android:fillColor="#00000000"
+        />
+    <path
+        android:strokeColor="#FF0B0B0B"
+        android:strokeWidth="5"
+        android:strokeLineCap="square"
+        android:pathData="M54,32 L37,76 M54,32 L71,76 M33,61 L75,59" />
+</vector>
