@@ -4,6 +4,7 @@ import com.asd.player.domain.model.LibraryQuery
 import com.asd.player.domain.model.Song
 import com.asd.player.domain.model.SortField
 import java.text.Collator
+import java.text.Normalizer
 import java.util.Locale
 
 /**
@@ -17,22 +18,28 @@ class SearchSongs {
     }
 
     operator fun invoke(songs: List<Song>, query: LibraryQuery): List<Song> {
-        val terms = query.text.trim().lowercase().split(Regex("\\s+")).filter { it.isNotEmpty() }
+        val terms = normalize(query.text).split(Regex("\\s+")).filter { it.isNotEmpty() }
         val filtered = songs.filter { song ->
             (query.formats.isEmpty() || song.format in query.formats) &&
                 (query.sources.isEmpty() || song.source in query.sources) &&
-                (query.artist == null || song.displayArtist == query.artist) &&
-                terms.all { term -> song.matches(term) }
+                // Il menu artisti accorpa "Ramones" e "RAMONES": il confronto deve fare lo stesso.
+                (query.artist == null || song.displayArtist.equals(query.artist, ignoreCase = true)) &&
+                (terms.isEmpty() || song.searchable().let { text -> terms.all { it in text } })
         }
         val comparator = comparatorFor(query.sort.field)
         return filtered.sortedWith(if (query.sort.ascending) comparator else comparator.reversed())
     }
 
-    private fun Song.matches(term: String): Boolean =
-        title.lowercase().contains(term) ||
-            fileName.lowercase().contains(term) ||
-            artist?.lowercase()?.contains(term) == true ||
-            album?.lowercase()?.contains(term) == true
+    private fun Song.searchable(): String =
+        normalize(listOfNotNull(title, fileName, artist, album).joinToString("\u0000"))
+
+    /** Minuscolo e senza accenti: "canta" trova "Tanto pè cantà". */
+    private fun normalize(text: String): String =
+        Normalizer.normalize(text.trim().lowercase(), Normalizer.Form.NFD).replace(DIACRITICS, "")
+
+    private companion object {
+        val DIACRITICS = Regex("\\p{Mn}+")
+    }
 
     private fun comparatorFor(field: SortField): Comparator<Song> {
         val byTitle = Comparator<Song> { a, b -> collator.compare(a.title, b.title) }

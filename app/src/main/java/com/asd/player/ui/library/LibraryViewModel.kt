@@ -66,8 +66,10 @@ class LibraryViewModel(
             totalCount = all.size,
             driveCount = all.count { it.source == SongSource.DRIVE },
             songs = filtered,
-            formats = all.mapTo(sortedSetOf()) { it.format }.toList(),
-            sources = all.mapTo(sortedSetOf()) { it.source }.toList(),
+            // Anche i valori selezionati che non esistono più restano visibili come chip:
+            // altrimenti il filtro resterebbe attivo senza modo di toglierlo.
+            formats = (all.mapTo(sortedSetOf()) { it.format } + q.formats).sorted(),
+            sources = (all.mapTo(sortedSetOf()) { it.source } + q.sources).sorted(),
             artists = all.mapTo(sortedSetOf(String.CASE_INSENSITIVE_ORDER)) { it.displayArtist }.toList(),
             query = q,
             scanState = scan,
@@ -99,15 +101,15 @@ class LibraryViewModel(
         filters.update { it.copy(text = text) }
     }
 
-    fun toggleFormat(format: String) = filters.value.let {
-        filters.value = it.copy(formats = if (format in it.formats) it.formats - format else it.formats + format)
+    fun toggleFormat(format: String) = filters.update {
+        it.copy(formats = if (format in it.formats) it.formats - format else it.formats + format)
     }
 
-    fun toggleSource(source: SongSource) = filters.value.let {
-        filters.value = it.copy(sources = if (source in it.sources) it.sources - source else it.sources + source)
+    fun toggleSource(source: SongSource) = filters.update {
+        it.copy(sources = if (source in it.sources) it.sources - source else it.sources + source)
     }
 
-    fun setArtist(artist: String?) = filters.value.let { filters.value = it.copy(artist = artist) }
+    fun setArtist(artist: String?) = filters.update { it.copy(artist = artist) }
 
     fun clearFilters() {
         searchText = ""

@@ -57,6 +57,27 @@ class SearchSongsTest {
     }
 
     @Test
+    fun `ricerca ignora gli accenti in entrambe le direzioni`() {
+        assertEquals(listOf(3L), search(songs, LibraryQuery(text = "ca plane")).map { it.id })
+        val extra = songs + song(6, "Tanto pè cantà", "Nino Manfredi")
+        assertEquals(listOf(6L), search(extra, LibraryQuery(text = "canta")).map { it.id })
+        assertEquals(listOf(6L), search(extra, LibraryQuery(text = "PÈ CANTÀ")).map { it.id })
+    }
+
+    @Test
+    fun `filtro artista ignora maiuscole`() {
+        val extra = songs + song(6, "Pretty Vacant", "SEX PISTOLS")
+        assertEquals(listOf(1L, 5L, 6L), search(extra, LibraryQuery(artist = "Sex Pistols")).map { it.id })
+    }
+
+    @Test
+    fun `una parola non deve attraversare due campi`() {
+        // "uk" è nel titolo, "sex" nell'artista: entrambe presenti, ma nessuna parola nasce dall'unione dei campi.
+        assertEquals(listOf(1L), search(songs, LibraryQuery(text = "uk sex")).map { it.id })
+        assertEquals(emptyList<Long>(), search(songs, LibraryQuery(text = "uksex")).map { it.id })
+    }
+
+    @Test
     fun `brani senza artista finiscono sotto Anonimo`() {
         val q = LibraryQuery(artist = Song.UNKNOWN_ARTIST)
         assertEquals(listOf(4L), search(songs, q).map { it.id })

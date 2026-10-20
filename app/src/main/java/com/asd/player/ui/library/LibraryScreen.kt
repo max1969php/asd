@@ -198,6 +198,10 @@ private fun FilterBar(state: LibraryUiState, viewModel: LibraryViewModel) {
             .horizontalScroll(rememberScrollState())
             .padding(horizontal = 16.dp, vertical = 6.dp),
     ) {
+        val q = state.query
+        if (q.formats.isNotEmpty() || q.sources.isNotEmpty() || q.artist != null || q.text.isNotBlank()) {
+            TapeChip("✕ Azzera", selected = false, onClick = viewModel::clearFilters)
+        }
         Box {
             TapeChip("Ordina: ${sort.field.label()} ${if (sort.ascending) "↑" else "↓"}", selected = false, onClick = { sortMenu = true })
             DropdownMenu(expanded = sortMenu, onDismissRequest = { sortMenu = false }, containerColor = Asd.Asphalt) {
@@ -229,7 +233,7 @@ private fun FilterBar(state: LibraryUiState, viewModel: LibraryViewModel) {
             }
         }
         // Il filtro per fonte compare solo quando ce n'è più d'una.
-        if (state.sources.size > 1) {
+        if (state.sources.size > 1 || state.query.sources.isNotEmpty()) {
             state.sources.forEach { source ->
                 TapeChip(source.label(), selected = source in state.query.sources, onClick = { viewModel.toggleSource(source) })
             }
