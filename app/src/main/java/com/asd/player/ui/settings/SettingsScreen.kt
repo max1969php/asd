@@ -131,7 +131,7 @@ fun SettingsScreen(
                     PunkButton("Cartella Drive", onClick = driveViewModel::openPicker, icon = Icons.Filled.Cloud)
                     PunkButton(
                         "Riscansiona",
-                        onClick = driveViewModel::rescan,
+                        onClick = driveViewModel::refresh,
                         icon = Icons.Filled.Refresh,
                         container = Asd.Paper,
                         shadow = Asd.Acid,

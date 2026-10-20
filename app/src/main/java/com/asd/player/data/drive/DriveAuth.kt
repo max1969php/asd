@@ -55,7 +55,7 @@ class DriveAuth(context: Context) {
         }
         return when (val outcome = result.toOutcome(email)) {
             is Outcome.Granted -> outcome.token
-            is Outcome.NeedsConsent -> throw DriveAuthException("Serve di nuovo il consenso per $email: passa da SETUP")
+            is Outcome.NeedsConsent -> throw DriveAuthException("Serve di nuovo il consenso per $email: SETUP → Google Drive → Riscansiona")
         }
     }
 

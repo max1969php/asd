@@ -61,10 +61,15 @@ class DriveViewModel(private val container: AppContainer) : ViewModel() {
         authorizeAndActivate(email)
     }
 
-    /** Dalla select in SETUP: cambia l'account predefinito. */
-    fun selectDefault(email: String) {
-        if (email == drive.value.defaultAccount) return
-        authorizeAndActivate(email)
+    /**
+     * Dalla select in SETUP: cambia l'account predefinito. Riscegliere lo stesso account non è
+     * un no-op: rinnova l'autorizzazione (es. dopo un cambio di progetto Google Cloud) e riscansiona.
+     */
+    fun selectDefault(email: String) = authorizeAndActivate(email)
+
+    /** Bottone "Riscansiona" di Drive: passa dall'autorizzazione, così un consenso scaduto si chiede a schermo. */
+    fun refresh() {
+        drive.value.defaultAccount?.let(::authorizeAndActivate)
     }
 
     fun onConsentResult(data: Intent?) {
