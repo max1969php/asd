@@ -64,5 +64,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
+    implementation(libs.play.services.auth)
+
     testImplementation(libs.junit)
+    // org.json reale nei test JVM (quello di android.jar è uno stub).
+    testImplementation(libs.org.json)
 }

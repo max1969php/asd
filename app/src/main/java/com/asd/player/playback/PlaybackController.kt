@@ -56,7 +56,7 @@ class PlaybackController(private val context: Context) {
         override fun onEvents(player: Player, events: Player.Events) = publish(player)
 
         override fun onPlayerError(error: PlaybackException) {
-            _errors.tryEmit("File illeggibile o sparito. Salto.")
+            _errors.tryEmit("File illeggibile, sparito o Drive irraggiungibile. Salto.")
             controller?.let { c ->
                 if (c.hasNextMediaItem()) {
                     c.seekToNextMediaItem()

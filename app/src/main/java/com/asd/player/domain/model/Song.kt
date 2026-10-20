@@ -1,5 +1,7 @@
 package com.asd.player.domain.model
 
+enum class SongSource { LOCAL, DRIVE }
+
 data class Song(
     val id: Long,
     val uri: String,
@@ -11,6 +13,7 @@ data class Song(
     val mimeType: String?,
     val fileSize: Long,
     val modifiedAt: Long,
+    val source: SongSource = SongSource.LOCAL,
 ) {
     /** Estensione in maiuscolo (MP3, WAV, ...), usata per il filtro per formato. */
     val format: String

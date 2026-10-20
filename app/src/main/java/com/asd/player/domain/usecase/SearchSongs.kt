@@ -20,6 +20,7 @@ class SearchSongs {
         val terms = query.text.trim().lowercase().split(Regex("\\s+")).filter { it.isNotEmpty() }
         val filtered = songs.filter { song ->
             (query.formats.isEmpty() || song.format in query.formats) &&
+                (query.sources.isEmpty() || song.source in query.sources) &&
                 (query.artist == null || song.displayArtist == query.artist) &&
                 terms.all { term -> song.matches(term) }
         }

@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.asd.player.domain.model.Song
+import com.asd.player.domain.model.SongSource
 import com.asd.player.ui.theme.Asd
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -65,7 +66,12 @@ fun SongRow(
         Spacer(Modifier.width(8.dp))
         Column(horizontalAlignment = Alignment.End) {
             Text(formatDuration(song.durationMs), style = MaterialTheme.typography.labelSmall, color = ink)
-            Text(song.format, style = MaterialTheme.typography.labelSmall, color = faded)
+            // ☁ = suona in streaming da Google Drive.
+            Text(
+                if (song.source == SongSource.DRIVE) "☁ ${song.format}" else song.format,
+                style = MaterialTheme.typography.labelSmall,
+                color = faded,
+            )
         }
         trailing?.invoke()
     }

@@ -1,6 +1,8 @@
 package com.asd.player.ui
 
+import android.accounts.AccountManager
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -35,7 +37,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
+import com.asd.player.data.drive.DriveAuth
 import com.asd.player.ui.components.Slogans
+import com.asd.player.ui.drive.DriveFolderPicker
+import com.asd.player.ui.drive.DriveViewModel
 import com.asd.player.ui.library.LibraryScreen
 import com.asd.player.ui.library.LibraryViewModel
 import com.asd.player.ui.player.MiniPlayer
@@ -53,6 +59,7 @@ fun AsdApp() {
     val library: LibraryViewModel = viewModel(factory = AsdViewModels.Factory)
     val player: PlayerViewModel = viewModel(factory = AsdViewModels.Factory)
     val playlists: PlaylistsViewModel = viewModel(factory = AsdViewModels.Factory)
+    val driveVm: DriveViewModel = viewModel(factory = AsdViewModels.Factory)
 
     val libraryState by library.uiState.collectAsStateWithLifecycle()
     val libraryPlaylists by library.playlists.collectAsStateWithLifecycle()
@@ -60,6 +67,9 @@ fun AsdApp() {
     val position by player.position.collectAsStateWithLifecycle(initialValue = 0L)
     val allPlaylists by playlists.playlists.collectAsStateWithLifecycle()
     val openedPlaylist by playlists.opened.collectAsStateWithLifecycle()
+    val drive by driveVm.drive.collectAsStateWithLifecycle()
+    val driveBusy by driveVm.busy.collectAsStateWithLifecycle()
+    val folderPicker by driveVm.picker.collectAsStateWithLifecycle()
 
     var tab by rememberSaveable { mutableStateOf(Tab.LIBRARY) }
     var playerExpanded by rememberSaveable { mutableStateOf(false) }
@@ -71,13 +81,46 @@ fun AsdApp() {
     }
     val onPick = { pickDirectory.launch(null) }
 
-    LaunchedEffect(Unit) {
-        player.errors.collect { snackbar.showSnackbar(it) }
+    // Selettore di sistema: elenca gli account Google presenti sul telefono.
+    val pickAccount = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        driveVm.onAccountPicked(result.data?.getStringExtra(AccountManager.KEY_ACCOUNT_NAME))
+    }
+    val onAddGoogleAccount = {
+        pickAccount.launch(
+            AccountManager.newChooseAccountIntent(
+                null, null, arrayOf(DriveAuth.GOOGLE_ACCOUNT_TYPE), null, null, null, null,
+            )
+        )
+    }
+    // Schermata di consenso di Google per l'accesso in lettura a Drive.
+    val consent = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        driveVm.onConsentResult(result.data)
     }
 
-    // Finché le preferenze non dicono che una cartella c'è, mostriamo il manifesto.
-    if (libraryState.loaded && libraryState.directoryUri == null) {
-        Onboarding(onPickDirectory = onPick, modifier = Modifier.background(Asd.Toner).statusBarsPadding())
+    LaunchedEffect(Unit) {
+        launch { player.errors.collect { snackbar.showSnackbar(it) } }
+        launch { driveVm.messages.collect { snackbar.showSnackbar(it) } }
+        launch {
+            driveVm.consentRequests.collect {
+                consent.launch(IntentSenderRequest.Builder(it.intentSender).build())
+            }
+        }
+    }
+
+    folderPicker?.let { DriveFolderPicker(it, drive.defaultAccount, driveVm) }
+
+    // Finché non c'è almeno una fonte, mostriamo il manifesto.
+    if (libraryState.loaded && libraryState.directoryUri == null && drive.defaultAccount == null) {
+        Box(Modifier.fillMaxSize()) {
+            Onboarding(
+                onPickDirectory = onPick,
+                onConnectDrive = onAddGoogleAccount,
+                modifier = Modifier.background(Asd.Toner).statusBarsPadding(),
+            )
+            SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding()) {
+                Snackbar(it, containerColor = Asd.Spray, contentColor = Asd.Paper)
+            }
+        }
         return
     }
 
@@ -120,7 +163,11 @@ fun AsdApp() {
                 Tab.SETTINGS -> SettingsScreen(
                     state = libraryState,
                     viewModel = library,
+                    drive = drive,
+                    driveBusy = driveBusy,
+                    driveViewModel = driveVm,
                     onPickDirectory = onPick,
+                    onAddGoogleAccount = onAddGoogleAccount,
                     modifier = contentModifier,
                 )
             }

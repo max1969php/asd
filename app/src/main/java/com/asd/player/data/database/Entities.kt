@@ -6,6 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.asd.player.domain.model.Song
+import com.asd.player.domain.model.SongSource
 
 @Entity(tableName = "songs", indices = [Index(value = ["uri"], unique = true)])
 data class SongEntity(
@@ -19,8 +20,12 @@ data class SongEntity(
     val mimeType: String?,
     val fileSize: Long,
     val modifiedAt: Long,
+    @ColumnInfo(defaultValue = "LOCAL") val source: String = SongSource.LOCAL.name,
 ) {
-    fun toDomain() = Song(id, uri, fileName, title, artist, album, durationMs, mimeType, fileSize, modifiedAt)
+    fun toDomain() = Song(
+        id, uri, fileName, title, artist, album, durationMs, mimeType, fileSize, modifiedAt,
+        source = runCatching { SongSource.valueOf(source) }.getOrDefault(SongSource.LOCAL),
+    )
 }
 
 @Entity(tableName = "playlists")

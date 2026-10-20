@@ -11,6 +11,7 @@ data class SortOrder(
 data class LibraryQuery(
     val text: String = "",
     val formats: Set<String> = emptySet(),
+    val sources: Set<SongSource> = emptySet(),
     val artist: String? = null,
     val sort: SortOrder = SortOrder(),
 )

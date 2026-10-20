@@ -12,8 +12,8 @@ interface SongDao {
     @Query("SELECT * FROM songs")
     fun observeAll(): Flow<List<SongEntity>>
 
-    @Query("SELECT * FROM songs")
-    suspend fun getAll(): List<SongEntity>
+    @Query("SELECT * FROM songs WHERE source = :source")
+    suspend fun getBySource(source: String): List<SongEntity>
 
     @Insert
     suspend fun insertAll(songs: List<SongEntity>)
@@ -24,8 +24,8 @@ interface SongDao {
     @Query("DELETE FROM songs WHERE id IN (:ids)")
     suspend fun deleteByIds(ids: List<Long>)
 
-    @Query("DELETE FROM songs")
-    suspend fun deleteAll()
+    @Query("DELETE FROM songs WHERE source = :source")
+    suspend fun deleteBySource(source: String)
 
     @Transaction
     suspend fun applyScan(insert: List<SongEntity>, update: List<SongEntity>, deleteIds: List<Long>) {

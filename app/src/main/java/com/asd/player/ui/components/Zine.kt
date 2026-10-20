@@ -118,7 +118,7 @@ object Slogans {
     val all = listOf(
         "0€ al mese. Per sempre.",
         "Niente abbonamenti. Niente algoritmi. Niente padroni.",
-        "Il cloud è solo il computer di qualcun altro.",
+        "Il cloud è solo il computer di qualcun altro. Usalo tu.",
         "La tua musica non è un servizio.",
         "Nessun account. Nessuna traccia.",
         "Offline è il nuovo punk.",

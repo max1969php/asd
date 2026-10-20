@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,7 +23,7 @@ import com.asd.player.ui.components.Stamp
 import com.asd.player.ui.theme.Asd
 
 @Composable
-fun Onboarding(onPickDirectory: () -> Unit, modifier: Modifier = Modifier) {
+fun Onboarding(onPickDirectory: () -> Unit, onConnectDrive: () -> Unit, modifier: Modifier = Modifier) {
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = modifier.fillMaxSize().padding(24.dp),
@@ -42,10 +43,21 @@ fun Onboarding(onPickDirectory: () -> Unit, modifier: Modifier = Modifier) {
         Spacer(Modifier.height(24.dp))
         Text(
             "I tuoi MP3 sono già tuoi. Non devi pagare nessuno per ascoltarli.\n\n" +
-                "Scegli UNA cartella del telefono: ASD la setaccia, mette in fila i pezzi e ti lascia fare mixtape. Fine.",
+                "Scegli UNA cartella del telefono, o una del tuo Google Drive: ASD la setaccia, " +
+                "mette in fila i pezzi e ti lascia fare mixtape. Fine.",
             style = MaterialTheme.typography.bodyLarge,
         )
         Spacer(Modifier.height(32.dp))
-        PunkButton("Scegli la cartella", onClick = onPickDirectory, icon = Icons.Filled.Folder)
+        PunkButton("Cartella del telefono", onClick = onPickDirectory, icon = Icons.Filled.Folder)
+        Spacer(Modifier.height(12.dp))
+        PunkButton(
+            "Google Drive",
+            onClick = onConnectDrive,
+            icon = Icons.Filled.Cloud,
+            container = Asd.Paper,
+            shadow = Asd.Acid,
+        )
+        Spacer(Modifier.height(12.dp))
+        Text("Puoi aggiungere l'altra fonte quando vuoi da SETUP.", style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
     }
 }

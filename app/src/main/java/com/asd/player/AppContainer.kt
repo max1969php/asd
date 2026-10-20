@@ -2,6 +2,9 @@ package com.asd.player
 
 import android.content.Context
 import com.asd.player.data.database.AppDatabase
+import com.asd.player.data.drive.DriveAuth
+import com.asd.player.data.drive.DriveClient
+import com.asd.player.data.drive.DriveStreamResolver
 import com.asd.player.data.repository.MusicLibraryRepository
 import com.asd.player.data.repository.MusicLibraryRepositoryImpl
 import com.asd.player.data.repository.PlaylistRepository
@@ -17,11 +20,13 @@ class AppContainer(context: Context) {
     private val database = AppDatabase.build(context)
 
     val settings = SettingsStore(context)
-    val libraryRepository: MusicLibraryRepository = MusicLibraryRepositoryImpl(
-        songDao = database.songDao(),
-        scanner = AudioScanner(context.contentResolver),
-        metadataReader = MetadataReader(context),
-    )
+    val audioScanner = AudioScanner(context.contentResolver)
+    val metadataReader = MetadataReader(context)
+    val libraryRepository: MusicLibraryRepository = MusicLibraryRepositoryImpl(database.songDao())
+
+    val driveAuth = DriveAuth(context)
+    val driveClient = DriveClient(driveAuth)
+    val driveStreamResolver = DriveStreamResolver(driveAuth, settings)
     val playlistRepository: PlaylistRepository = PlaylistRepositoryImpl(database.playlistDao())
     val playbackController = PlaybackController(context)
     val searchSongs = SearchSongs()

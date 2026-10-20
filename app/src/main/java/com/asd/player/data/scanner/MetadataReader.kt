@@ -14,10 +14,15 @@ data class AudioMetadata(
 /** Legge i tag ID3/Vorbis/RIFF. Un file corrotto restituisce metadati vuoti, mai un crash. */
 class MetadataReader(private val context: Context) {
 
-    fun read(uri: Uri): AudioMetadata {
+    fun read(uri: Uri): AudioMetadata = extract { setDataSource(context, uri) }
+
+    /** Per i file remoti: il retriever scarica solo i byte che servono a leggere i tag. */
+    fun readRemote(url: String, headers: Map<String, String>): AudioMetadata = extract { setDataSource(url, headers) }
+
+    private fun extract(open: MediaMetadataRetriever.() -> Unit): AudioMetadata {
         val retriever = MediaMetadataRetriever()
         return try {
-            retriever.setDataSource(context, uri)
+            retriever.open()
             AudioMetadata(
                 title = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE).clean(),
                 artist = (retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)

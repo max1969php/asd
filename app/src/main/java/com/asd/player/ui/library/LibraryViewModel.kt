@@ -7,9 +7,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.asd.player.AppContainer
 import com.asd.player.data.repository.ScanState
+import com.asd.player.data.scanner.LocalSourceScanner
 import com.asd.player.domain.model.LibraryQuery
 import com.asd.player.domain.model.Playlist
 import com.asd.player.domain.model.Song
+import com.asd.player.domain.model.SongSource
 import com.asd.player.domain.model.SortOrder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,8 +25,10 @@ import kotlinx.coroutines.launch
 data class LibraryUiState(
     val directoryUri: Uri? = null,
     val totalCount: Int = 0,
+    val driveCount: Int = 0,
     val songs: List<Song> = emptyList(),
     val formats: List<String> = emptyList(),
+    val sources: List<SongSource> = emptyList(),
     val artists: List<String> = emptyList(),
     val query: LibraryQuery = LibraryQuery(),
     val scanState: ScanState = ScanState.Idle,
@@ -56,8 +60,10 @@ class LibraryViewModel(
         LibraryUiState(
             directoryUri = dir,
             totalCount = all.size,
+            driveCount = all.count { it.source == SongSource.DRIVE },
             songs = filtered,
             formats = all.mapTo(sortedSetOf()) { it.format }.toList(),
+            sources = all.mapTo(sortedSetOf()) { it.source }.toList(),
             artists = all.mapTo(sortedSetOf(String.CASE_INSENSITIVE_ORDER)) { it.displayArtist }.toList(),
             query = q,
             scanState = scan,
@@ -82,6 +88,10 @@ class LibraryViewModel(
         filters.value = it.copy(formats = if (format in it.formats) it.formats - format else it.formats + format)
     }
 
+    fun toggleSource(source: SongSource) = filters.value.let {
+        filters.value = it.copy(sources = if (source in it.sources) it.sources - source else it.sources + source)
+    }
+
     fun setArtist(artist: String?) = filters.value.let { filters.value = it.copy(artist = artist) }
 
     fun clearFilters() {
@@ -104,8 +114,8 @@ class LibraryViewModel(
     fun rescan(uri: Uri? = settings.directoryUri.value) {
         uri ?: return
         viewModelScope.launch {
-            repository.rescan(uri)
-            if (repository.scanState.value is ScanState.Done) settings.setLastScanAt(System.currentTimeMillis())
+            val scanner = LocalSourceScanner(uri, container.audioScanner, container.metadataReader)
+            if (repository.rescan(scanner)) settings.setLastScanAt(System.currentTimeMillis())
         }
     }
 

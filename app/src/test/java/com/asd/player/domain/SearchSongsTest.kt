@@ -2,6 +2,7 @@ package com.asd.player.domain
 
 import com.asd.player.domain.model.LibraryQuery
 import com.asd.player.domain.model.Song
+import com.asd.player.domain.model.SongSource
 import com.asd.player.domain.model.SortField
 import com.asd.player.domain.model.SortOrder
 import com.asd.player.domain.usecase.SearchSongs
@@ -12,15 +13,22 @@ class SearchSongsTest {
 
     private val search = SearchSongs()
 
-    private fun song(id: Long, title: String, artist: String?, album: String? = null, file: String = "$title.mp3", duration: Long = 0) =
-        Song(id, "content://x/$id", file, title, artist, album, duration, null, 0, id)
+    private fun song(
+        id: Long,
+        title: String,
+        artist: String?,
+        album: String? = null,
+        file: String = "$title.mp3",
+        duration: Long = 0,
+        source: SongSource = SongSource.LOCAL,
+    ) = Song(id, "content://x/$id", file, title, artist, album, duration, null, 0, id, source)
 
     private val songs = listOf(
         song(1, "Anarchy in the UK", "Sex Pistols", "Never Mind the Bollocks", duration = 210_000),
         song(2, "Blitzkrieg Bop", "Ramones", "Ramones", file = "blitz.wav", duration = 132_000),
         song(3, "Ça plane pour moi", "Plastic Bertrand", duration = 180_000),
         song(4, "traccia_live_03", null, file = "traccia_live_03.mp3", duration = 300_000),
-        song(5, "Holidays in the Sun", "Sex Pistols", "Never Mind the Bollocks", file = "holidays.flac"),
+        song(5, "Holidays in the Sun", "Sex Pistols", "Never Mind the Bollocks", file = "holidays.flac", source = SongSource.DRIVE),
     )
 
     @Test
@@ -40,6 +48,12 @@ class SearchSongsTest {
     fun `filtri e testo si combinano`() {
         val q = LibraryQuery(text = "the", formats = setOf("FLAC"), artist = "Sex Pistols")
         assertEquals(listOf(5L), search(songs, q).map { it.id })
+    }
+
+    @Test
+    fun `filtro per fonte`() {
+        assertEquals(listOf(5L), search(songs, LibraryQuery(sources = setOf(SongSource.DRIVE))).map { it.id })
+        assertEquals(5, search(songs, LibraryQuery(sources = setOf(SongSource.LOCAL, SongSource.DRIVE))).size)
     }
 
     @Test

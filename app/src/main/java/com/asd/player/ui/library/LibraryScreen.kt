@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import com.asd.player.data.repository.ScanState
 import com.asd.player.domain.model.Playlist
 import com.asd.player.domain.model.Song
+import com.asd.player.domain.model.SongSource
 import com.asd.player.domain.model.SortField
 import com.asd.player.ui.components.AnarchyLogo
 import com.asd.player.ui.components.PunkButton
@@ -227,6 +228,12 @@ private fun FilterBar(state: LibraryUiState, viewModel: LibraryViewModel) {
                 }
             }
         }
+        // Il filtro per fonte compare solo quando ce n'è più d'una.
+        if (state.sources.size > 1) {
+            state.sources.forEach { source ->
+                TapeChip(source.label(), selected = source in state.query.sources, onClick = { viewModel.toggleSource(source) })
+            }
+        }
         state.formats.forEach { format ->
             TapeChip(format, selected = format in state.query.formats, onClick = { viewModel.toggleFormat(format) })
         }
@@ -238,7 +245,8 @@ private fun ScanBanner(scan: ScanState) {
     when (scan) {
         is ScanState.Scanning -> Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)) {
             Text(
-                if (scan.total == 0) "FRUGANDO NELLA CARTELLA…" else "INDICIZZO ${scan.processed}/${scan.total}…",
+                if (scan.total == 0) "${scan.source.label()}: FRUGANDO NELLA CARTELLA…"
+                else "${scan.source.label()}: INDICIZZO ${scan.processed}/${scan.total}…",
                 style = MaterialTheme.typography.labelSmall,
                 color = Asd.Acid,
             )
@@ -255,7 +263,7 @@ private fun ScanBanner(scan: ScanState) {
             }
         }
         is ScanState.Failed -> Text(
-            "ERRORE: ${scan.reason}",
+            "ERRORE ${scan.source.label()}: ${scan.reason}",
             style = MaterialTheme.typography.labelSmall,
             color = Asd.Paper,
             modifier = Modifier.fillMaxWidth().background(Asd.Spray).padding(horizontal = 16.dp, vertical = 6.dp),
@@ -287,12 +295,17 @@ private fun EmptyLibrary(hasSongs: Boolean, scanning: Boolean, onClear: () -> Un
             else -> {
                 Text("CARTELLA VUOTA.", style = MaterialTheme.typography.headlineLarge, color = Asd.Spray)
                 Text(
-                    "Buttaci dentro qualche MP3, WAV o FLAC e premi Riscansiona in SETUP.",
+                    "Buttaci dentro qualche MP3, WAV o FLAC (sul telefono o su Drive) e premi Riscansiona in SETUP.",
                     style = MaterialTheme.typography.bodyLarge,
                 )
             }
         }
     }
+}
+
+fun SongSource.label(): String = when (this) {
+    SongSource.LOCAL -> "Telefono"
+    SongSource.DRIVE -> "Drive"
 }
 
 fun SortField.label(): String = when (this) {
