@@ -9,3 +9,11 @@
 .externalNativeBuild/
 .cxx/
 .kotlin/
+
+# Credenziali scaricate dalla Google Cloud console: non servono all'app e non vanno su GitHub.
+client_secret*.json
+google-services.json
+*.keystore
+*.jks
+# Metadati che Windows aggiunge ai file scaricati.
+*:Zone.Identifier
