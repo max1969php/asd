@@ -3,6 +3,9 @@ package com.asd.player.ui.library
 import android.app.Application
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.asd.player.AppContainer
@@ -20,6 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class LibraryUiState(
@@ -82,7 +86,18 @@ class LibraryViewModel(
         }
     }
 
-    fun setText(text: String) = filters.value.let { filters.value = it.copy(text = text) }
+    /**
+     * Testo del campo CERCA_, aggiornato in modo sincrono a ogni tasto. Il campo non deve leggere
+     * il testo da uiState: quello arriva in ritardo (filtraggio su un altro thread) e, scrivendo
+     * veloce, riporterebbe indietro testo e cursore.
+     */
+    var searchText by mutableStateOf("")
+        private set
+
+    fun setText(text: String) {
+        searchText = text
+        filters.update { it.copy(text = text) }
+    }
 
     fun toggleFormat(format: String) = filters.value.let {
         filters.value = it.copy(formats = if (format in it.formats) it.formats - format else it.formats + format)
@@ -95,6 +110,7 @@ class LibraryViewModel(
     fun setArtist(artist: String?) = filters.value.let { filters.value = it.copy(artist = artist) }
 
     fun clearFilters() {
+        searchText = ""
         filters.value = LibraryQuery()
     }
 

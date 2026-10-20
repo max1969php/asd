@@ -68,7 +68,7 @@ fun LibraryScreen(
 
     Column(modifier.fillMaxSize()) {
         LibraryHeader(total = state.totalCount, slogan = slogan)
-        SearchBox(text = state.query.text, onTextChange = viewModel::setText)
+        SearchBox(text = viewModel.searchText, onTextChange = viewModel::setText)
         FilterBar(state, viewModel)
         ScanBanner(state.scanState)
 
