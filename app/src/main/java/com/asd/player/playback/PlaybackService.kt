@@ -7,6 +7,7 @@ import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.ResolvingDataSource
@@ -16,6 +17,14 @@ import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import com.asd.player.MainActivity
 import com.asd.player.MusicApplication
+import com.asd.player.data.loudness.VolumeLeveling
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 
@@ -27,6 +36,12 @@ import com.google.common.util.concurrent.ListenableFuture
 class PlaybackService : MediaSessionService() {
 
     private var session: MediaSession? = null
+    private val scope = MainScope()
+
+    /** Loudness misurata per URI, e la mediana per i brani non ancora misurati. */
+    private var levels: Map<String, Double> = emptyMap()
+    private var fallbackLufs: Double? = null
+    private var normalize = true
 
     override fun onCreate() {
         super.onCreate()
@@ -47,6 +62,8 @@ class PlaybackService : MediaSessionService() {
             .setHandleAudioBecomingNoisy(true)
             .setWakeMode(C.WAKE_MODE_LOCAL)
             .build()
+
+        levelVolume(player)
 
         val openApp = PendingIntent.getActivity(
             this,
@@ -69,12 +86,44 @@ class PlaybackService : MediaSessionService() {
     }
 
     override fun onDestroy() {
+        scope.cancel()
         session?.run {
             player.release()
             release()
         }
         session = null
         super.onDestroy()
+    }
+
+    /**
+     * Volume uniforme: a ogni cambio di brano (e quando arriva una misura nuova) il volume del
+     * player diventa il guadagno ReplayGain del brano corrente.
+     */
+    private fun levelVolume(player: ExoPlayer) {
+        val container = (application as MusicApplication).container
+        fun apply() {
+            val uri = player.currentMediaItem?.mediaId
+            player.volume = if (normalize) VolumeLeveling.volumeFor(levels[uri], fallbackLufs) else 1f
+        }
+        player.addListener(object : Player.Listener {
+            override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+                apply()
+                if (normalize && mediaItem != null && mediaItem.mediaId !in levels) {
+                    container.loudnessQueue.prioritize(mediaItem.mediaId)
+                }
+            }
+        })
+        val measured = container.libraryRepository.songs
+            .map { songs -> songs.mapNotNull { s -> s.loudnessLufs?.let { s.uri to it } }.toMap() }
+            .flowOn(Dispatchers.Default)
+        scope.launch {
+            combine(measured, container.settings.normalizeVolume, ::Pair).collect { (map, enabled) ->
+                levels = map
+                fallbackLufs = VolumeLeveling.median(map.values)
+                normalize = enabled
+                apply()
+            }
+        }
     }
 
     /**

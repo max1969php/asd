@@ -116,6 +116,34 @@ fun SettingsScreen(
             onAddAccount = onAddDropboxAccount,
         )
 
+        Section("Volume uniforme") {
+            val normalize by viewModel.normalizeVolume.collectAsStateWithLifecycle()
+            val progress by viewModel.loudnessProgress.collectAsStateWithLifecycle()
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                TapeChip("Acceso", selected = normalize, onClick = { viewModel.setNormalizeVolume(true) })
+                TapeChip("Spento", selected = !normalize, onClick = { viewModel.setNormalizeVolume(false) })
+            }
+            Spacer(Modifier.height(8.dp))
+            if (normalize) {
+                Text(
+                    when {
+                        progress.pending == 0 -> "tutti i pezzi misurati"
+                        progress.running -> "misuro il volume: ne mancano ${progress.pending}"
+                        else -> "${progress.pending} pezzi cloud da misurare: aspetto il Wi-Fi"
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (progress.pending == 0) Asd.Acid else Asd.Paper,
+                )
+            }
+            Text(
+                "Ogni pezzo viene misurato una volta (EBU R128, come ReplayGain 2.0) e suonato a -18 LUFS: " +
+                    "niente più salti di volume tra un MP3 e l'altro. I pezzi più forti vengono abbassati, " +
+                    "quindi alza un po' il volume del telefono. I file su Drive e Dropbox si misurano solo in Wi-Fi.",
+                style = MaterialTheme.typography.bodySmall,
+                color = Asd.Smudge,
+            )
+        }
+
         Section("Ordine di default") {
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 SortField.entries.forEach { field ->

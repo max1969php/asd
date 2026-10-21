@@ -21,11 +21,20 @@ data class SongEntity(
     val fileSize: Long,
     val modifiedAt: Long,
     @ColumnInfo(defaultValue = "LOCAL") val source: String = SongSource.LOCAL.name,
+    /** Loudness integrata EBU R128; null = ancora da misurare, [LOUDNESS_FAILED] = illeggibile. */
+    val loudnessLufs: Double? = null,
+    val peakDb: Double? = null,
 ) {
     fun toDomain() = Song(
         id, uri, fileName, title, artist, album, durationMs, mimeType, fileSize, modifiedAt,
         source = runCatching { SongSource.valueOf(source) }.getOrDefault(SongSource.LOCAL),
+        loudnessLufs = loudnessLufs?.takeIf { it != LOUDNESS_FAILED },
     )
+
+    companion object {
+        /** Segnaposto per i file che non si riescono a decodificare: non li riproviamo a ogni avvio. */
+        const val LOUDNESS_FAILED = 999.0
+    }
 }
 
 @Entity(tableName = "playlists")

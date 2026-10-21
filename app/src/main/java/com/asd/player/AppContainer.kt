@@ -5,6 +5,8 @@ import android.content.Context
 import com.asd.player.data.database.AppDatabase
 import com.asd.player.data.drive.DriveAuth
 import com.asd.player.data.drive.DriveClient
+import com.asd.player.data.loudness.LoudnessAnalyzer
+import com.asd.player.data.loudness.LoudnessQueue
 import com.asd.player.data.dropbox.DropboxAuth
 import com.asd.player.data.dropbox.DropboxClient
 import com.asd.player.data.repository.MusicLibraryRepository
@@ -41,6 +43,9 @@ class AppContainer(context: Context) {
     val tubeImporter = TubeImporter(
         TubeDownloader(context, tubeCookies), tubeCookies, audioScanner, driveClient, dropboxClient, libraryRepository, settings,
     )
+    val loudnessQueue = LoudnessQueue(
+        context, LoudnessAnalyzer(context), libraryRepository, settings, driveAuth, dropboxClient,
+    ).also { it.start() }
     val playbackController = PlaybackController(context)
     val searchSongs = SearchSongs()
 }

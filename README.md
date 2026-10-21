@@ -21,6 +21,13 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
   (un brano, mai la playlist) e si scarica solo l'audio con **yt-dlp**. Una select **SALVA IN** sceglie
   la destinazione: cartella del telefono, Google Drive o Dropbox (la cartella scelta in SETUP per
   ciascuno). Il brano compare subito in ROBA.
+- **Volume uniforme**: niente salti di volume tra un brano e l'altro. Ogni brano viene misurato
+  una volta secondo **EBU R128 / ITU-R BS.1770-4** (lo standard di ReplayGain 2.0 e della
+  normalizzazione di Spotify e YouTube) e suonato a **-18 LUFS**, il riferimento ReplayGain.
+  La misura gira in sottofondo un brano alla volta (prima quello in riproduzione) e resta salvata;
+  i file di Drive e Dropbox si misurano solo su rete non a consumo. Il guadagno passa dal volume del
+  player, che può solo abbassare: i brani più bassi di -18 LUFS restano com'erano (niente clipping,
+  niente limiter). Si spegne in SETUP.
 - **Setup**: per cambiare cartella, riscansionare e scegliere l'ordinamento predefinito.
 - **Tre fonti**: la cartella del telefono (SAF), una cartella di **Google Drive** e una di **Dropbox**.
   La libreria le unisce; il filtro TELEFONO / DRIVE / DROPBOX compare quando ne usi più d'una.
@@ -94,6 +101,7 @@ app/src/main/java/com/asd/player/
 │   ├── scanner/      SourceScanner, AudioScanner (visita SAF), MetadataReader (tag)
 │   ├── drive/        DriveAuth (OAuth), DriveClient (REST), DriveSourceScanner, DriveStreamResolver
 │   ├── dropbox/      DropboxAuth (PKCE), DropboxClient, DropboxSourceScanner
+│   ├── loudness/     LoudnessMeter (BS.1770), LoudnessAnalyzer (MediaCodec), LoudnessQueue, VolumeLeveling
 │   ├── tube/         TubeLink, TubeTrack, TubeDownloader (yt-dlp), TubeImporter (coda → Drive)
 │   ├── repository/   MusicLibraryRepository, PlaylistRepository
 │   └── settings/     SettingsStore (cartella, ordinamento, ultima scansione)

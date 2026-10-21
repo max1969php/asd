@@ -19,6 +19,12 @@ interface SongDao {
     @Insert
     suspend fun insertAll(songs: List<SongEntity>)
 
+    @Query("SELECT * FROM songs WHERE loudnessLufs IS NULL")
+    suspend fun getUnmeasured(): List<SongEntity>
+
+    @Query("UPDATE songs SET loudnessLufs = :lufs, peakDb = :peakDb WHERE id = :id")
+    suspend fun setLoudness(id: Long, lufs: Double, peakDb: Double?)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(song: SongEntity)
 

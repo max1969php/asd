@@ -52,6 +52,15 @@ class SettingsStore(context: Context) {
     )
     val tubeDestination: StateFlow<TubeDestination> = _tubeDestination.asStateFlow()
 
+    private val _normalizeVolume = MutableStateFlow(prefs.getBoolean(KEY_NORMALIZE_VOLUME, true))
+    /** Volume uniforme (EBU R128 / ReplayGain 2.0): acceso di default. */
+    val normalizeVolume: StateFlow<Boolean> = _normalizeVolume.asStateFlow()
+
+    fun setNormalizeVolume(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_NORMALIZE_VOLUME, enabled).apply()
+        _normalizeVolume.value = enabled
+    }
+
     fun setTubeDestination(destination: TubeDestination) {
         prefs.edit().putString(KEY_TUBE_DESTINATION, destination.name).apply()
         _tubeDestination.value = destination
@@ -136,5 +145,6 @@ class SettingsStore(context: Context) {
         const val KEY_SORT_FIELD = "sort_field"
         const val KEY_SORT_ASC = "sort_asc"
         const val KEY_TUBE_DESTINATION = "tube_destination"
+        const val KEY_NORMALIZE_VOLUME = "normalize_volume"
     }
 }

@@ -25,6 +25,12 @@ interface MusicLibraryRepository {
     /** Aggiunge un singolo brano appena comparso in una fonte (es. caricato su Drive dal Tubo). */
     suspend fun add(file: ScannedFile, metadata: AudioMetadata, source: SongSource)
 
+    /** Brani di cui non si conosce ancora il volume percepito. */
+    suspend fun unmeasured(): List<Song>
+
+    /** [lufs] null = file illeggibile, da non riprovare. */
+    suspend fun setLoudness(songId: Long, lufs: Double?, peakDb: Double?)
+
     /** Toglie dal catalogo tutti i brani di una fonte (es. account Drive scollegato). */
     suspend fun clearSource(source: SongSource)
 }

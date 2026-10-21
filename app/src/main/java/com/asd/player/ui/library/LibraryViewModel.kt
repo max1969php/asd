@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.asd.player.AppContainer
+import com.asd.player.data.loudness.LoudnessProgress
 import com.asd.player.data.repository.ScanState
 import com.asd.player.data.scanner.LocalSourceScanner
 import com.asd.player.domain.model.LibraryQuery
@@ -117,6 +118,11 @@ class LibraryViewModel(
     }
 
     fun setSort(order: SortOrder) = settings.setSortOrder(order)
+
+    val normalizeVolume: StateFlow<Boolean> = settings.normalizeVolume
+    val loudnessProgress: StateFlow<LoudnessProgress> = container.loudnessQueue.progress
+
+    fun setNormalizeVolume(enabled: Boolean) = settings.setNormalizeVolume(enabled)
 
     fun onDirectoryChosen(uri: Uri) {
         val resolver = app.contentResolver

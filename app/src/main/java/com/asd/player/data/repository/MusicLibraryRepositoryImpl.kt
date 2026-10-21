@@ -83,6 +83,14 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
     override suspend fun add(file: ScannedFile, metadata: AudioMetadata, source: SongSource) =
         withContext(Dispatchers.IO) { songDao.upsert(entityOf(file, metadata, source)) }
 
+    override suspend fun unmeasured(): List<Song> = withContext(Dispatchers.IO) {
+        songDao.getUnmeasured().map { it.toDomain() }
+    }
+
+    override suspend fun setLoudness(songId: Long, lufs: Double?, peakDb: Double?) = withContext(Dispatchers.IO) {
+        songDao.setLoudness(songId, lufs ?: SongEntity.LOUDNESS_FAILED, peakDb)
+    }
+
     override suspend fun clearSource(source: SongSource) = withContext(Dispatchers.IO) {
         songDao.deleteBySource(source.name)
     }
