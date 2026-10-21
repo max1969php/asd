@@ -61,6 +61,12 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
   c'è il bottone **Aggiorna yt-dlp**.
 - La coda va avanti finché l'app è viva (un brano alla volta). Se Android chiude l'app, i download
   non finiti vanno rilanciati.
+- **"Conferma di non essere un bot"**: YouTube a volte blocca le richieste anonime di una rete
+  (succede anche a yt-dlp sul PC). Nella scheda, sezione YOUTUBE: **Accedi a YouTube** apre la pagina
+  di accesso di Google dentro ASD e al tocco su FATTO ne salva i cookie per yt-dlp. Prima di ogni
+  download i cookie vengono riletti, perché YouTube li fa ruotare. In alternativa
+  **Importa cookies.txt** (formato Netscape, es. esportato dal PC con un'estensione del browser).
+  Meglio usare un account secondario. **Esci** cancella i cookie.
 - Scarica solo roba che hai il diritto di scaricare: i termini di YouTube lo vietano per il resto.
 
 Formati accettati (whitelist): MP3, WAV, FLAC, M4A, AAC, OGG, OPUS.

@@ -1,5 +1,6 @@
 package com.asd.player
 
+import android.content.ContentResolver
 import android.content.Context
 import com.asd.player.data.database.AppDatabase
 import com.asd.player.data.drive.DriveAuth
@@ -13,6 +14,7 @@ import com.asd.player.data.repository.PlaylistRepositoryImpl
 import com.asd.player.data.scanner.AudioScanner
 import com.asd.player.data.scanner.MetadataReader
 import com.asd.player.data.settings.SettingsStore
+import com.asd.player.data.tube.TubeCookies
 import com.asd.player.data.tube.TubeDownloader
 import com.asd.player.data.tube.TubeImporter
 import com.asd.player.domain.usecase.SearchSongs
@@ -23,6 +25,7 @@ import com.asd.player.playback.PlaybackController
 class AppContainer(context: Context) {
     private val database = AppDatabase.build(context)
 
+    val contentResolver: ContentResolver = context.contentResolver
     val settings = SettingsStore(context)
     val audioScanner = AudioScanner(context.contentResolver)
     val metadataReader = MetadataReader(context)
@@ -34,7 +37,10 @@ class AppContainer(context: Context) {
     val dropboxClient = DropboxClient(dropboxAuth)
     val streamResolver = CloudStreamResolver(driveAuth, dropboxClient, settings)
     val playlistRepository: PlaylistRepository = PlaylistRepositoryImpl(database.playlistDao())
-    val tubeImporter = TubeImporter(TubeDownloader(context), audioScanner, driveClient, dropboxClient, libraryRepository, settings)
+    private val tubeCookies = TubeCookies(context)
+    val tubeImporter = TubeImporter(
+        TubeDownloader(context, tubeCookies), tubeCookies, audioScanner, driveClient, dropboxClient, libraryRepository, settings,
+    )
     val playbackController = PlaybackController(context)
     val searchSongs = SearchSongs()
 }

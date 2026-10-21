@@ -2,6 +2,7 @@ package com.asd.player.ui.tube
 
 import android.app.PendingIntent
 import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.asd.player.AppContainer
@@ -9,6 +10,7 @@ import com.asd.player.data.drive.DriveAuth
 import com.asd.player.data.scanner.AudioScanner
 import com.asd.player.data.settings.CloudSettings
 import com.asd.player.data.settings.TubeDestination
+import com.asd.player.data.tube.TubeCookies
 import com.asd.player.data.tube.TubeJob
 import com.asd.player.data.tube.TubeLink
 import com.asd.player.data.tube.TubeTarget
@@ -77,6 +79,34 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
 
     /** Link in attesa del consenso Google, tra il lancio dell'intent e il suo risultato. */
     private var pending: Pair<String, TubeTarget>? = null
+
+    val cookies: StateFlow<TubeCookies.Origin> = importer.cookies.origin
+
+    /** L'utente ha chiuso la pagina di accesso a YouTube. */
+    fun onLoginClosed() {
+        viewModelScope.launch {
+            val ok = withContext(Dispatchers.IO) { importer.cookies.saveFromLogin() }
+            _messages.tryEmit(if (ok) "Dentro YouTube: niente più domande da bot." else "Accesso a YouTube non completato.")
+        }
+    }
+
+    fun importCookies(uri: Uri) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    container.contentResolver.openInputStream(uri)!!.use(importer.cookies::import)
+                }
+                _messages.tryEmit("Cookie di YouTube importati.")
+            } catch (e: Exception) {
+                _messages.tryEmit("Cookie non importati: ${e.message}")
+            }
+        }
+    }
+
+    fun logoutYoutube() {
+        importer.cookies.clear()
+        _messages.tryEmit("Uscito da YouTube: ASD non ha più i tuoi cookie.")
+    }
 
     fun setDestination(destination: TubeDestination) = settings.setTubeDestination(destination)
 

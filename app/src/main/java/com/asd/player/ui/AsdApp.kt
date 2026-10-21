@@ -84,6 +84,7 @@ fun AsdApp() {
     val tubeJobs by tubeVm.jobs.collectAsStateWithLifecycle()
     val ytDlpVersion by tubeVm.ytDlpVersion.collectAsStateWithLifecycle()
     val ytDlpUpdating by tubeVm.updating.collectAsStateWithLifecycle()
+    val youtubeCookies by tubeVm.cookies.collectAsStateWithLifecycle()
 
     var tab by rememberSaveable { mutableStateOf(Tab.LIBRARY) }
     var playerExpanded by rememberSaveable { mutableStateOf(false) }
@@ -200,6 +201,7 @@ fun AsdApp() {
                     jobs = tubeJobs,
                     ytDlpVersion = ytDlpVersion,
                     updating = ytDlpUpdating,
+                    cookies = youtubeCookies,
                     viewModel = tubeVm,
                     onOpenSetup = { tab = Tab.SETTINGS },
                     modifier = contentModifier,

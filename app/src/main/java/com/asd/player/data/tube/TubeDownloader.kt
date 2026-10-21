@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
  * Scarica solo la traccia audio già pronta (m4a), senza ffmpeg né riconversioni.
  * Tutti i metodi sono bloccanti: vanno chiamati fuori dal main thread.
  */
-class TubeDownloader(private val context: Context) {
+class TubeDownloader(private val context: Context, private val cookies: TubeCookies) {
 
     private val ytdl = YoutubeDL.getInstance()
     private val prefs = context.getSharedPreferences("asd_tube", Context.MODE_PRIVATE)
@@ -57,6 +57,8 @@ class TubeDownloader(private val context: Context) {
             addOption("-o", File(dir, "%(id)s.%(ext)s").absolutePath)
             addOption("--no-mtime")
             addCommands(listOf("--print-to-file", "after_move:%(.{id,title,track,artist,uploader,duration,ext})j", meta.absolutePath))
+            cookies.refresh()
+            if (cookies.file.exists()) addOption("--cookies", cookies.file.absolutePath)
         }
         try {
             ytdl.execute(request, "tube-$jobId") { progress, _, _ -> onProgress(progress) }
@@ -81,6 +83,9 @@ class TubeDownloader(private val context: Context) {
         return when {
             error == null -> lines.lastOrNull() ?: "yt-dlp è fallito"
             "Requested format is not available" in error -> "Nessuna traccia audio m4a per questo video"
+            "not a bot" in error || "Sign in to confirm" in error ->
+                if (cookies.file.exists()) "YouTube non si fida nemmeno con l'accesso: rifai ACCEDI A YOUTUBE o cambia rete"
+                else "YouTube vuole sapere che non sei un bot: premi ACCEDI A YOUTUBE qui sotto"
             else -> error
         }
     }

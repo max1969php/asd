@@ -54,6 +54,7 @@ data class TubeJob(
  */
 class TubeImporter(
     private val downloader: TubeDownloader,
+    val cookies: TubeCookies,
     private val local: AudioScanner,
     private val drive: DriveClient,
     private val dropbox: DropboxClient,

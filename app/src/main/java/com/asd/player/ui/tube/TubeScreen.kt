@@ -1,10 +1,15 @@
 package com.asd.player.ui.tube
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,12 +43,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.asd.player.data.settings.TubeDestination
+import com.asd.player.data.tube.TubeCookies
 import com.asd.player.data.tube.TubeJob
 import com.asd.player.data.tube.TubeStatus
 import com.asd.player.ui.components.PunkButton
 import com.asd.player.ui.components.Stamp
 import com.asd.player.ui.theme.Asd
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TubeScreen(
     options: List<DestinationOption>,
@@ -51,12 +58,23 @@ fun TubeScreen(
     jobs: List<TubeJob>,
     ytDlpVersion: String?,
     updating: Boolean,
+    cookies: TubeCookies.Origin,
     viewModel: TubeViewModel,
     onOpenSetup: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LaunchedEffect(Unit) { viewModel.loadVersion() }
     var url by rememberSaveable { mutableStateOf("") }
+    var loginOpen by rememberSaveable { mutableStateOf(false) }
+    val importCookies = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        uri?.let(viewModel::importCookies)
+    }
+    if (loginOpen) {
+        YoutubeLogin(onDone = {
+            loginOpen = false
+            viewModel.onLoginClosed()
+        })
+    }
     val selected = options.find { it.destination == destination }
     val ready = selected?.target != null
     val submit = { if (viewModel.submit(url)) url = "" }
@@ -114,6 +132,43 @@ fun TubeScreen(
         item {
             Column(Modifier.padding(16.dp)) {
                 Spacer(Modifier.height(12.dp))
+                Text("// YOUTUBE", style = MaterialTheme.typography.labelLarge, color = Asd.Spray)
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    when (cookies) {
+                        TubeCookies.Origin.NONE -> "anonimo"
+                        TubeCookies.Origin.LOGIN -> "dentro con un account"
+                        TubeCookies.Origin.FILE -> "dentro con un cookies.txt"
+                    },
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = if (cookies == TubeCookies.Origin.NONE) Asd.Smudge else Asd.Acid,
+                )
+                Text(
+                    "Se YouTube chiede di confermare che non sei un bot, yt-dlp deve entrare con un account. " +
+                        "Meglio un account secondario: YouTube può prendersela con quello che usi.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Asd.Smudge,
+                )
+                Spacer(Modifier.height(8.dp))
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    PunkButton("Accedi a YouTube", onClick = { loginOpen = true })
+                    PunkButton(
+                        "Importa cookies.txt",
+                        onClick = { importCookies.launch(arrayOf("text/*", "application/octet-stream")) },
+                        container = Asd.Paper,
+                        shadow = Asd.Acid,
+                    )
+                    if (cookies != TubeCookies.Origin.NONE) {
+                        PunkButton(
+                            "Esci",
+                            onClick = viewModel::logoutYoutube,
+                            container = Asd.Spray,
+                            content = Asd.Paper,
+                            shadow = Asd.Paper,
+                        )
+                    }
+                }
+                Spacer(Modifier.height(20.dp))
                 Text(
                     "yt-dlp: ${ytDlpVersion ?: "…"}",
                     style = MaterialTheme.typography.bodySmall,

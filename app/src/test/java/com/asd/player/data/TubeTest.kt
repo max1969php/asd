@@ -1,9 +1,12 @@
 package com.asd.player.data
 
+import com.asd.player.data.tube.TubeCookies
 import com.asd.player.data.tube.TubeLink
 import com.asd.player.data.tube.TubeTrack
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class TubeTest {
@@ -58,5 +61,25 @@ class TubeTest {
     fun `il nome file non contiene caratteri vietati`() {
         val track = TubeTrack("d4", "Che fai? / A/B: \"live\"", "AC/DC", 0, "m4a")
         assertEquals("AC_DC - Che fai_ _ A_B_ _live_.m4a", track.fileName)
+    }
+
+    @Test
+    fun `i cookie della WebView diventano un cookies txt valido`() {
+        val text = TubeCookies.toNetscape("PREF=f6=40; SAPISID=abc/def; __Secure-3PSID=x=y", now = 0)
+        val lines = text.lines().filter { it.isNotEmpty() }
+        assertEquals("# Netscape HTTP Cookie File", lines[0])
+        assertEquals(".youtube.com\tTRUE\t/\tTRUE\t31536000\tPREF\tf6=40", lines[1])
+        assertEquals(".youtube.com\tTRUE\t/\tTRUE\t31536000\t__Secure-3PSID\tx=y", lines[3])
+        assertTrue(TubeCookies.isNetscapeFile(text))
+        assertTrue(TubeCookies.isLoggedIn(text))
+    }
+
+    @Test
+    fun `senza i cookie di accesso non si è dentro YouTube`() {
+        assertFalse(TubeCookies.isLoggedIn("PREF=f6=40; VISITOR_INFO1_LIVE=abc; YSC=x"))
+        assertFalse(TubeCookies.isLoggedIn("NOTSAPISID=1"))
+        assertTrue(TubeCookies.isLoggedIn("YSC=x; SAPISID=1"))
+        assertFalse(TubeCookies.isNetscapeFile("name=value"))
+        assertTrue(TubeCookies.isNetscapeFile("\uFEFF# Netscape HTTP Cookie File\n.youtube.com\tTRUE"))
     }
 }
