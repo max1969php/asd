@@ -299,7 +299,7 @@ private fun EmptyLibrary(hasSongs: Boolean, scanning: Boolean, onClear: () -> Un
             else -> {
                 Text("CARTELLA VUOTA.", style = MaterialTheme.typography.headlineLarge, color = Asd.Spray)
                 Text(
-                    "Buttaci dentro qualche MP3, WAV o FLAC (sul telefono o su Drive) e premi Riscansiona in SETUP.",
+                    "Buttaci dentro qualche MP3, WAV o FLAC (sul telefono, su Drive o su Dropbox) e premi Riscansiona in SETUP.",
                     style = MaterialTheme.typography.bodyLarge,
                 )
             }
@@ -310,6 +310,7 @@ private fun EmptyLibrary(hasSongs: Boolean, scanning: Boolean, onClear: () -> Un
 fun SongSource.label(): String = when (this) {
     SongSource.LOCAL -> "Telefono"
     SongSource.DRIVE -> "Drive"
+    SongSource.DROPBOX -> "Dropbox"
 }
 
 fun SortField.label(): String = when (this) {

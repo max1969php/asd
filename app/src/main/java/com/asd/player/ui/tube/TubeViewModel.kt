@@ -6,27 +6,61 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.asd.player.AppContainer
 import com.asd.player.data.drive.DriveAuth
-import com.asd.player.data.settings.DriveFolder
-import com.asd.player.data.settings.DriveSettings
+import com.asd.player.data.scanner.AudioScanner
+import com.asd.player.data.settings.CloudSettings
+import com.asd.player.data.settings.TubeDestination
 import com.asd.player.data.tube.TubeJob
 import com.asd.player.data.tube.TubeLink
+import com.asd.player.data.tube.TubeTarget
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
+/** Una voce della select "salva in": la destinazione pronta, oppure cosa manca per usarla. */
+data class DestinationOption(
+    val destination: TubeDestination,
+    val target: TubeTarget?,
+    val problem: String?,
+)
 
 class TubeViewModel(private val container: AppContainer) : ViewModel() {
 
     private val importer = container.tubeImporter
     private val auth = container.driveAuth
+    private val settings = container.settings
 
-    val drive: StateFlow<DriveSettings> = container.settings.drive
     val jobs: StateFlow<List<TubeJob>> = importer.jobs
+    val destination: StateFlow<TubeDestination> = settings.tubeDestination
+
+    val options: StateFlow<List<DestinationOption>> = combine(
+        settings.directoryUri,
+        settings.drive.state,
+        settings.dropbox.state,
+    ) { dir, drive, dropbox ->
+        listOf(
+            when {
+                dir == null -> DestinationOption(TubeDestination.LOCAL, null, "nessuna cartella del telefono")
+                !container.audioScanner.canWrite(dir) ->
+                    DestinationOption(TubeDestination.LOCAL, null, "riscegli la cartella in SETUP per poterci scrivere")
+                else -> DestinationOption(
+                    TubeDestination.LOCAL,
+                    TubeTarget(TubeDestination.LOCAL, null, dir.toString(), "Telefono · ${AudioScanner.readablePath(dir)}"),
+                    null,
+                )
+            },
+            cloudOption(TubeDestination.DRIVE, "Drive", drive),
+            cloudOption(TubeDestination.DROPBOX, "Dropbox", dropbox),
+        )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     private val _ytDlpVersion = MutableStateFlow<String?>(null)
     val ytDlpVersion: StateFlow<String?> = _ytDlpVersion.asStateFlow()
@@ -41,23 +75,28 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
     private val _messages = MutableSharedFlow<String>(extraBufferCapacity = 4)
     val messages: SharedFlow<String> = _messages.asSharedFlow()
 
-    /** Link in attesa del consenso, tra il lancio dell'intent e il suo risultato. */
-    private var pending: Triple<String, String, DriveFolder>? = null
+    /** Link in attesa del consenso Google, tra il lancio dell'intent e il suo risultato. */
+    private var pending: Pair<String, TubeTarget>? = null
+
+    fun setDestination(destination: TubeDestination) = settings.setTubeDestination(destination)
 
     /** Invio sul campo URL. Restituisce true se il link è buono e il campo si può svuotare. */
     fun submit(input: String): Boolean {
         val url = TubeLink.clean(input) ?: return false.also { _messages.tryEmit("Questo non è un link YouTube.") }
-        val state = drive.value
-        val email = state.defaultAccount
-            ?: return false.also { _messages.tryEmit("Prima collega Google Drive in SETUP.") }
-        val folder = state.folder
-            ?: return false.also { _messages.tryEmit("Scegli una cartella Drive in SETUP.") }
+        val option = options.value.find { it.destination == destination.value }
+        val target = option?.target
+            ?: return false.also { _messages.tryEmit("Destinazione non pronta: ${option?.problem ?: "vai in SETUP"}.") }
+        if (target.destination != TubeDestination.DRIVE) {
+            importer.enqueue(url, target)
+            return true
+        }
+        val email = target.account!!
         viewModelScope.launch {
             try {
                 when (val outcome = auth.authorize(email)) {
-                    is DriveAuth.Outcome.Granted -> importer.enqueue(url, email, folder)
+                    is DriveAuth.Outcome.Granted -> importer.enqueue(url, target)
                     is DriveAuth.Outcome.NeedsConsent -> {
-                        pending = Triple(url, email, folder)
+                        pending = url to target
                         _consentRequests.emit(outcome.intent)
                     }
                 }
@@ -69,11 +108,11 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
     }
 
     fun onConsentResult(data: Intent?) {
-        val (url, email, folder) = pending ?: return
+        val (url, target) = pending ?: return
         pending = null
         try {
-            auth.onConsentResult(email, data)
-            importer.enqueue(url, email, folder)
+            auth.onConsentResult(target.account!!, data)
+            importer.enqueue(url, target)
         } catch (e: Exception) {
             _messages.tryEmit("Senza il permesso di scrivere su Drive non si carica niente.")
         }
@@ -104,5 +143,11 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
                 _updating.value = false
             }
         }
+    }
+
+    private fun cloudOption(destination: TubeDestination, name: String, state: CloudSettings): DestinationOption {
+        val email = state.defaultAccount ?: return DestinationOption(destination, null, "nessun account $name collegato")
+        val folder = state.folder ?: return DestinationOption(destination, null, "nessuna cartella $name scelta")
+        return DestinationOption(destination, TubeTarget(destination, email, folder.id, "$name · $email · ${folder.name}"), null)
     }
 }

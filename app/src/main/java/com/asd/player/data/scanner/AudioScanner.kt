@@ -4,6 +4,8 @@ import android.content.ContentResolver
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
+import java.io.File
+import java.io.IOException
 
 /** File trovato nella cartella, prima della lettura dei metadati. */
 data class ScannedFile(
@@ -50,9 +52,62 @@ class AudioScanner(private val resolver: ContentResolver) {
         return result
     }
 
+    /**
+     * Copia [file] nella radice della cartella scelta, con il nome [displayName].
+     * Serve il permesso di scrittura sull'albero SAF (chiesto quando si sceglie la cartella).
+     */
+    fun write(treeUri: Uri, displayName: String, mimeType: String, file: File): ScannedFile {
+        val parent = DocumentsContract.buildDocumentUriUsingTree(treeUri, DocumentsContract.getTreeDocumentId(treeUri))
+        val created = DocumentsContract.createDocument(resolver, parent, mimeType, displayName)
+            ?: throw IOException("Il telefono non mi lascia creare $displayName")
+        try {
+            resolver.openOutputStream(created)?.use { out -> file.inputStream().use { it.copyTo(out) } }
+                ?: throw IOException("Il telefono non mi lascia scrivere $displayName")
+        } catch (e: Exception) {
+            runCatching { DocumentsContract.deleteDocument(resolver, created) }
+            throw e
+        }
+        // Rileggiamo nome, dimensione e data veri: la prossima riscansione li confronta con questi.
+        val docId = DocumentsContract.getDocumentId(created)
+        val uri = DocumentsContract.buildDocumentUriUsingTree(treeUri, docId)
+        resolver.query(uri, PROJECTION, null, null, null)?.use { c ->
+            if (c.moveToFirst()) {
+                return ScannedFile(
+                    uri = uri.toString(),
+                    fileName = c.getString(1) ?: displayName,
+                    mimeType = c.getString(2) ?: mimeType,
+                    size = c.getLong(3),
+                    lastModified = c.getLong(4),
+                )
+            }
+        }
+        return ScannedFile(uri.toString(), displayName, mimeType, file.length(), System.currentTimeMillis())
+    }
+
+    /** Le cartelle scelte prima del TUBO hanno solo il permesso di lettura. */
+    fun canWrite(treeUri: Uri): Boolean =
+        resolver.persistedUriPermissions.any { it.uri == treeUri && it.isWritePermission }
+
     companion object {
         /** Whitelist esplicita: mostriamo solo ciò che dichiariamo di supportare. */
-        val SUPPORTED_EXTENSIONS = setOf("mp3", "wav", "flac", "m4a", "aac", "ogg", "opus")
+        private val MIME_TYPES = linkedMapOf(
+            "mp3" to "audio/mpeg",
+            "wav" to "audio/wav",
+            "flac" to "audio/flac",
+            "m4a" to "audio/mp4",
+            "aac" to "audio/aac",
+            "ogg" to "audio/ogg",
+            "opus" to "audio/opus",
+        )
+        val SUPPORTED_EXTENSIONS: Set<String> = MIME_TYPES.keys
+
+        /** "primary:Music/Punk" → "Music/Punk", più leggibile di un content:// URI. */
+        fun readablePath(treeUri: Uri): String =
+            runCatching { DocumentsContract.getTreeDocumentId(treeUri).substringAfter(':').ifEmpty { "/" } }
+                .getOrDefault(treeUri.toString())
+
+        /** Per le fonti che non dicono il tipo dei file (Dropbox). */
+        fun mimeTypeOf(fileName: String): String? = MIME_TYPES[fileName.substringAfterLast('.', "").lowercase()]
 
         fun isSupported(fileName: String): Boolean =
             !fileName.startsWith(".") &&

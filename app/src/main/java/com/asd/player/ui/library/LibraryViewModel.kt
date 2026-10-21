@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 data class LibraryUiState(
     val directoryUri: Uri? = null,
     val totalCount: Int = 0,
-    val driveCount: Int = 0,
+    val countBySource: Map<SongSource, Int> = emptyMap(),
     val songs: List<Song> = emptyList(),
     val formats: List<String> = emptyList(),
     val sources: List<SongSource> = emptyList(),
@@ -64,7 +64,7 @@ class LibraryViewModel(
         LibraryUiState(
             directoryUri = dir,
             totalCount = all.size,
-            driveCount = all.count { it.source == SongSource.DRIVE },
+            countBySource = all.groupingBy { it.source }.eachCount(),
             songs = filtered,
             // Anche i valori selezionati che non esistono più restano visibili come chip:
             // altrimenti il filtro resterebbe attivo senza modo di toglierlo.
@@ -120,11 +120,15 @@ class LibraryViewModel(
 
     fun onDirectoryChosen(uri: Uri) {
         val resolver = app.contentResolver
-        val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        // Anche scrittura: il TUBO può salvare l'audio scaricato in questa cartella.
+        val read = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        val write = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         settings.directoryUri.value?.takeIf { it != uri }?.let { old ->
-            runCatching { resolver.releasePersistableUriPermission(old, flags) }
+            // Le cartelle scelte con le versioni precedenti hanno solo la lettura: si rilasciano separatamente.
+            runCatching { resolver.releasePersistableUriPermission(old, read or write) }
+                .onFailure { runCatching { resolver.releasePersistableUriPermission(old, read) } }
         }
-        resolver.takePersistableUriPermission(uri, flags)
+        resolver.takePersistableUriPermission(uri, read or write)
         settings.setDirectory(uri)
         rescan(uri)
     }

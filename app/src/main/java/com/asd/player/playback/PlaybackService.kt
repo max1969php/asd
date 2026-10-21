@@ -32,7 +32,7 @@ class PlaybackService : MediaSessionService() {
         super.onCreate()
         // Un'unica pipeline per entrambe le fonti: i file locali passano dritti,
         // quelli di Drive vengono riscritti in HTTPS autenticato dal resolver.
-        val resolver = (application as MusicApplication).container.driveStreamResolver
+        val resolver = (application as MusicApplication).container.streamResolver
         val dataSourceFactory = ResolvingDataSource.Factory(DefaultDataSource.Factory(this), resolver)
 
         val player = ExoPlayer.Builder(this)

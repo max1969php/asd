@@ -19,12 +19,15 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -34,7 +37,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.asd.player.data.settings.DriveSettings
+import com.asd.player.data.settings.TubeDestination
 import com.asd.player.data.tube.TubeJob
 import com.asd.player.data.tube.TubeStatus
 import com.asd.player.ui.components.PunkButton
@@ -43,7 +46,8 @@ import com.asd.player.ui.theme.Asd
 
 @Composable
 fun TubeScreen(
-    drive: DriveSettings,
+    options: List<DestinationOption>,
+    destination: TubeDestination,
     jobs: List<TubeJob>,
     ytDlpVersion: String?,
     updating: Boolean,
@@ -53,7 +57,8 @@ fun TubeScreen(
 ) {
     LaunchedEffect(Unit) { viewModel.loadVersion() }
     var url by rememberSaveable { mutableStateOf("") }
-    val ready = drive.defaultAccount != null && drive.folder != null
+    val selected = options.find { it.destination == destination }
+    val ready = selected?.target != null
     val submit = { if (viewModel.submit(url)) url = "" }
 
     LazyColumn(modifier.fillMaxSize()) {
@@ -61,27 +66,22 @@ fun TubeScreen(
             Column(Modifier.padding(16.dp)) {
                 Text("TUBO", style = MaterialTheme.typography.displayLarge)
                 Text(
-                    "incolla un link YouTube, premi invio: l'audio finisce nel tuo Drive",
+                    "incolla un link YouTube, premi invio: l'audio è tuo",
                     style = MaterialTheme.typography.bodySmall,
                     color = Asd.Smudge,
                 )
                 Spacer(Modifier.height(16.dp))
                 UrlBox(url, onChange = { url = it }, onSubmit = submit, enabled = ready)
+                Spacer(Modifier.height(12.dp))
+                Text("SALVA IN", style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
+                Spacer(Modifier.height(6.dp))
+                DestinationSelect(options, destination, onSelect = viewModel::setDestination)
                 Spacer(Modifier.height(10.dp))
                 if (ready) {
-                    Text(
-                        "→ ${drive.defaultAccount} · ${drive.folder?.name}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Asd.Acid,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    Spacer(Modifier.height(10.dp))
                     PunkButton("Ruba l'audio", onClick = submit, icon = Icons.Filled.Download, enabled = url.isNotBlank())
                 } else {
                     Text(
-                        if (drive.defaultAccount == null) "Serve un account Google Drive collegato."
-                        else "Serve una cartella Drive dove mettere i pezzi.",
+                        "Non si può: ${selected?.problem ?: "destinazione sconosciuta"}.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = Asd.Spray,
                     )
@@ -139,6 +139,64 @@ fun TubeScreen(
     }
 }
 
+/** La select della destinazione: telefono, Drive o Dropbox. Quelle non pronte dicono cosa manca. */
+@Composable
+private fun DestinationSelect(
+    options: List<DestinationOption>,
+    selected: TubeDestination,
+    onSelect: (TubeDestination) -> Unit,
+) {
+    var open by remember { mutableStateOf(false) }
+    val current = options.find { it.destination == selected }
+    Box {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(2.dp, Asd.Paper)
+                .clickable { open = true }
+                .padding(12.dp),
+        ) {
+            Text(
+                current?.target?.label ?: selected.label(),
+                style = MaterialTheme.typography.bodyLarge,
+                color = if (current?.target != null) Asd.Acid else Asd.Smudge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f),
+            )
+            Text("▼", style = MaterialTheme.typography.labelLarge, color = Asd.Paper)
+        }
+        DropdownMenu(expanded = open, onDismissRequest = { open = false }, containerColor = Asd.Asphalt) {
+            options.forEach { option ->
+                val active = option.destination == selected
+                DropdownMenuItem(
+                    text = {
+                        Column {
+                            Text(
+                                (if (active) "● " else "○ ") + (option.target?.label ?: option.destination.label()),
+                                color = if (active) Asd.Acid else Asd.Paper,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                            option.problem?.let {
+                                Text("   $it", style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
+                            }
+                        }
+                    },
+                    onClick = { open = false; onSelect(option.destination) },
+                )
+            }
+        }
+    }
+}
+
+private fun TubeDestination.label() = when (this) {
+    TubeDestination.LOCAL -> "Telefono"
+    TubeDestination.DRIVE -> "Google Drive"
+    TubeDestination.DROPBOX -> "Dropbox"
+}
+
 @Composable
 private fun UrlBox(text: String, onChange: (String) -> Unit, onSubmit: () -> Unit, enabled: Boolean) {
     Row(
@@ -190,8 +248,8 @@ private fun JobRow(job: TubeJob, onRetry: () -> Unit) {
             TubeStatus.QUEUED -> "in coda" to Asd.Smudge
             TubeStatus.DOWNLOADING ->
                 (if (job.progress > 0f) "scarico ${(job.progress * 100).toInt()}%" else "scaldo yt-dlp…") to Asd.Acid
-            TubeStatus.UPLOADING -> "carico su Drive…" to Asd.Acid
-            TubeStatus.DONE -> "✓ nel Drive e in ROBA" to Asd.Acid
+            TubeStatus.UPLOADING -> (if (job.target.destination == TubeDestination.LOCAL) "salvo…" else "carico…") to Asd.Acid
+            TubeStatus.DONE -> "✓ ${job.target.label}" to Asd.Acid
             TubeStatus.FAILED -> "✕ ${job.error}" to Asd.Spray
         }
         Text(label.uppercase(), style = MaterialTheme.typography.labelSmall, color = color, maxLines = 3)

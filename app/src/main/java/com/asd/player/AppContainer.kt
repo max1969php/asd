@@ -4,7 +4,8 @@ import android.content.Context
 import com.asd.player.data.database.AppDatabase
 import com.asd.player.data.drive.DriveAuth
 import com.asd.player.data.drive.DriveClient
-import com.asd.player.data.drive.DriveStreamResolver
+import com.asd.player.data.dropbox.DropboxAuth
+import com.asd.player.data.dropbox.DropboxClient
 import com.asd.player.data.repository.MusicLibraryRepository
 import com.asd.player.data.repository.MusicLibraryRepositoryImpl
 import com.asd.player.data.repository.PlaylistRepository
@@ -15,6 +16,7 @@ import com.asd.player.data.settings.SettingsStore
 import com.asd.player.data.tube.TubeDownloader
 import com.asd.player.data.tube.TubeImporter
 import com.asd.player.domain.usecase.SearchSongs
+import com.asd.player.playback.CloudStreamResolver
 import com.asd.player.playback.PlaybackController
 
 /** Dependency injection fatta a mano: per un'app così non serve un framework. */
@@ -28,9 +30,11 @@ class AppContainer(context: Context) {
 
     val driveAuth = DriveAuth(context)
     val driveClient = DriveClient(driveAuth)
-    val driveStreamResolver = DriveStreamResolver(driveAuth, settings)
+    val dropboxAuth = DropboxAuth(context)
+    val dropboxClient = DropboxClient(dropboxAuth)
+    val streamResolver = CloudStreamResolver(driveAuth, dropboxClient, settings)
     val playlistRepository: PlaylistRepository = PlaylistRepositoryImpl(database.playlistDao())
-    val tubeImporter = TubeImporter(TubeDownloader(context), driveClient, libraryRepository, settings)
+    val tubeImporter = TubeImporter(TubeDownloader(context), audioScanner, driveClient, dropboxClient, libraryRepository, settings)
     val playbackController = PlaybackController(context)
     val searchSongs = SearchSongs()
 }

@@ -1,6 +1,6 @@
 package com.asd.player.domain.model
 
-enum class SongSource { LOCAL, DRIVE }
+enum class SongSource { LOCAL, DRIVE, DROPBOX }
 
 data class Song(
     val id: Long,

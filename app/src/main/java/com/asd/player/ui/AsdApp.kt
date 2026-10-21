@@ -33,15 +33,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import com.asd.player.data.drive.DriveAuth
 import com.asd.player.ui.components.Slogans
-import com.asd.player.ui.drive.DriveFolderPicker
-import com.asd.player.ui.drive.DriveViewModel
+import com.asd.player.ui.cloud.DriveViewModel
+import com.asd.player.ui.cloud.DropboxViewModel
+import com.asd.player.ui.cloud.FolderPicker
 import com.asd.player.ui.library.LibraryScreen
 import com.asd.player.ui.library.LibraryViewModel
 import com.asd.player.ui.player.MiniPlayer
@@ -62,6 +66,7 @@ fun AsdApp() {
     val player: PlayerViewModel = viewModel(factory = AsdViewModels.Factory)
     val playlists: PlaylistsViewModel = viewModel(factory = AsdViewModels.Factory)
     val driveVm: DriveViewModel = viewModel(factory = AsdViewModels.Factory)
+    val dropboxVm: DropboxViewModel = viewModel(factory = AsdViewModels.Factory)
     val tubeVm: TubeViewModel = viewModel(factory = AsdViewModels.Factory)
 
     val libraryState by library.uiState.collectAsStateWithLifecycle()
@@ -70,9 +75,12 @@ fun AsdApp() {
     val position by player.position.collectAsStateWithLifecycle(initialValue = 0L)
     val allPlaylists by playlists.playlists.collectAsStateWithLifecycle()
     val openedPlaylist by playlists.opened.collectAsStateWithLifecycle()
-    val drive by driveVm.drive.collectAsStateWithLifecycle()
-    val driveBusy by driveVm.busy.collectAsStateWithLifecycle()
-    val folderPicker by driveVm.picker.collectAsStateWithLifecycle()
+    val drive by driveVm.settings.collectAsStateWithLifecycle()
+    val dropbox by dropboxVm.settings.collectAsStateWithLifecycle()
+    val driveFolderPicker by driveVm.picker.collectAsStateWithLifecycle()
+    val dropboxFolderPicker by dropboxVm.picker.collectAsStateWithLifecycle()
+    val tubeOptions by tubeVm.options.collectAsStateWithLifecycle()
+    val tubeDestination by tubeVm.destination.collectAsStateWithLifecycle()
     val tubeJobs by tubeVm.jobs.collectAsStateWithLifecycle()
     val ytDlpVersion by tubeVm.ytDlpVersion.collectAsStateWithLifecycle()
     val ytDlpUpdating by tubeVm.updating.collectAsStateWithLifecycle()
@@ -98,6 +106,11 @@ fun AsdApp() {
             )
         )
     }
+    // Login Dropbox: si apre l'app Dropbox o il browser, il risultato si legge al ritorno.
+    val context = LocalContext.current
+    val onAddDropboxAccount = { dropboxVm.login(context) }
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { dropboxVm.onResume() }
+
     // Schermata di consenso di Google per l'accesso a Drive.
     val consent = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
         driveVm.onConsentResult(result.data)
@@ -110,6 +123,7 @@ fun AsdApp() {
     LaunchedEffect(Unit) {
         launch { player.errors.collect { snackbar.showSnackbar(it) } }
         launch { driveVm.messages.collect { snackbar.showSnackbar(it) } }
+        launch { dropboxVm.messages.collect { snackbar.showSnackbar(it) } }
         launch { tubeVm.messages.collect { snackbar.showSnackbar(it) } }
         launch {
             tubeVm.consentRequests.collect {
@@ -123,14 +137,18 @@ fun AsdApp() {
         }
     }
 
-    folderPicker?.let { DriveFolderPicker(it, drive.defaultAccount, driveVm) }
+    driveFolderPicker?.let { FolderPicker("CARTELLA SU DRIVE", it, drive.defaultAccount, driveVm) }
+    dropboxFolderPicker?.let { FolderPicker("CARTELLA SU DROPBOX", it, dropbox.defaultAccount, dropboxVm) }
 
     // Finché non c'è almeno una fonte, mostriamo il manifesto.
-    if (libraryState.loaded && libraryState.directoryUri == null && drive.defaultAccount == null) {
+    if (libraryState.loaded && libraryState.directoryUri == null && drive.defaultAccount == null &&
+        dropbox.defaultAccount == null
+    ) {
         Box(Modifier.fillMaxSize()) {
             Onboarding(
                 onPickDirectory = onPick,
                 onConnectDrive = onAddGoogleAccount,
+                onConnectDropbox = onAddDropboxAccount,
                 modifier = Modifier.background(Asd.Toner).statusBarsPadding(),
             )
             SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding()) {
@@ -177,7 +195,8 @@ fun AsdApp() {
                     modifier = contentModifier,
                 )
                 Tab.TUBE -> TubeScreen(
-                    drive = drive,
+                    options = tubeOptions,
+                    destination = tubeDestination,
                     jobs = tubeJobs,
                     ytDlpVersion = ytDlpVersion,
                     updating = ytDlpUpdating,
@@ -188,11 +207,11 @@ fun AsdApp() {
                 Tab.SETTINGS -> SettingsScreen(
                     state = libraryState,
                     viewModel = library,
-                    drive = drive,
-                    driveBusy = driveBusy,
                     driveViewModel = driveVm,
+                    dropboxViewModel = dropboxVm,
                     onPickDirectory = onPick,
                     onAddGoogleAccount = onAddGoogleAccount,
+                    onAddDropboxAccount = onAddDropboxAccount,
                     modifier = contentModifier,
                 )
             }

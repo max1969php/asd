@@ -68,7 +68,11 @@ fun SongRow(
             Text(formatDuration(song.durationMs), style = MaterialTheme.typography.labelSmall, color = ink)
             // ☁ = suona in streaming da Google Drive.
             Text(
-                if (song.source == SongSource.DRIVE) "☁ ${song.format}" else song.format,
+                when (song.source) {
+                    SongSource.LOCAL -> song.format
+                    SongSource.DRIVE -> "☁ ${song.format}"
+                    SongSource.DROPBOX -> "◆ ${song.format}"
+                },
                 style = MaterialTheme.typography.labelSmall,
                 color = faded,
             )

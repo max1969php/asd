@@ -18,11 +18,13 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
   La riproduzione continua in background, con i controlli nella notifica, nella lock screen
   e sulle cuffie.
 - **Tubo**: incolli un link YouTube e premi invio. Del link si tiene solo la parte prima di `&list`
-  (un brano, mai la playlist), si scarica solo l'audio con **yt-dlp** e lo si carica nella cartella
-  Google Drive dell'account predefinito. Il brano compare subito in ROBA.
+  (un brano, mai la playlist) e si scarica solo l'audio con **yt-dlp**. Una select **SALVA IN** sceglie
+  la destinazione: cartella del telefono, Google Drive o Dropbox (la cartella scelta in SETUP per
+  ciascuno). Il brano compare subito in ROBA.
 - **Setup**: per cambiare cartella, riscansionare e scegliere l'ordinamento predefinito.
-- **Due fonti**: la cartella del telefono (SAF) e una cartella di **Google Drive**. La libreria le
-  unisce; il filtro TELEFONO / DRIVE compare quando le usi entrambe, e i brani di Drive hanno il simbolo ☁.
+- **Tre fonti**: la cartella del telefono (SAF), una cartella di **Google Drive** e una di **Dropbox**.
+  La libreria le unisce; il filtro TELEFONO / DRIVE / DROPBOX compare quando ne usi più d'una.
+  I brani di Drive hanno il simbolo ☁, quelli di Dropbox ◆.
 
 ### Google Drive
 
@@ -34,13 +36,27 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
 - I file restano su Drive: si leggono i tag e si suonano **in streaming** con lo stesso Media3 ExoPlayer,
   aggiungendo il token OAuth al volo (`DriveStreamResolver`). Scope richiesto: `drive` (vedi sotto).
 
+### Dropbox
+
+- Funziona come Drive: select dell'account predefinito, una cartella per account, streaming.
+- Dropbox non è un account di sistema di Android: "+ COLLEGA UN ACCOUNT DROPBOX" apre il login
+  (app Dropbox se installata, altrimenti il browser). Per collegare un secondo account, nel login
+  esci dal primo e entra con l'altro.
+- Login OAuth **PKCE** con l'SDK ufficiale `dropbox-sdk-java` 7.0.0: nell'app c'è solo la app key
+  (pubblica, in `app/build.gradle.kts`), nessun app secret. Si conserva il refresh token per account,
+  quindi non c'è un consenso da rinnovare.
+- Lo streaming usa i link temporanei di Dropbox (durano 4 ore), che ExoPlayer apre direttamente.
+
 ### Tubo
 
 - yt-dlp gira sul telefono grazie a [youtubedl-android](https://github.com/JunkFood02/youtubedl-android)
   (GPL-3.0), che impacchetta Python, yt-dlp e QuickJS (serve a YouTube). Niente server di mezzo.
 - Si scarica la traccia audio già pronta (`bestaudio[ext=m4a]`, cioè AAC in M4A): nessuna
-  riconversione e nessun FFmpeg, così l'APK resta più leggero. Su Drive il file si chiama
+  riconversione e nessun FFmpeg, così l'APK resta più leggero. Il file si chiama
   "Artista - Titolo.m4a"; titolo e artista vengono dai tag di YouTube Music o dal titolo del video.
+  Il file non ha tag: nelle riscansioni ASD ricava artista e titolo dal nome "Artista - Titolo".
+- Per salvare nella cartella del telefono serve il permesso di scrittura: le cartelle scelte con
+  le versioni precedenti hanno solo la lettura, va riscelta in SETUP una volta.
 - YouTube cambia spesso: yt-dlp si aggiorna da solo al massimo una volta al giorno, e nella scheda
   c'è il bottone **Aggiorna yt-dlp**.
 - La coda va avanti finché l'app è viva (un brano alla volta). Se Android chiude l'app, i download
@@ -59,6 +75,8 @@ Formati accettati (whitelist): MP3, WAV, FLAC, M4A, AAC, OGG, OPUS.
 | Catalogo e playlist | Room (SQLite) |
 | Accesso ai file | Storage Access Framework (`ACTION_OPEN_DOCUMENT_TREE`) con permesso persistente |
 | Google Drive | Drive REST API v3 + Google Identity `AuthorizationClient` (play-services-auth) |
+| Dropbox | `dropbox-core-sdk` + `dropbox-android-sdk` 7.0.0 (MIT), OAuth PKCE |
+| YouTube | `youtubedl-android` 0.18.1 (yt-dlp + Python + QuickJS sul telefono) |
 | DI | Manuale (`AppContainer`) |
 
 ## Struttura
@@ -69,12 +87,13 @@ app/src/main/java/com/asd/player/
 │   ├── database/     Room: entità, SongDao, PlaylistDao
 │   ├── scanner/      SourceScanner, AudioScanner (visita SAF), MetadataReader (tag)
 │   ├── drive/        DriveAuth (OAuth), DriveClient (REST), DriveSourceScanner, DriveStreamResolver
+│   ├── dropbox/      DropboxAuth (PKCE), DropboxClient, DropboxSourceScanner
 │   ├── tube/         TubeLink, TubeTrack, TubeDownloader (yt-dlp), TubeImporter (coda → Drive)
 │   ├── repository/   MusicLibraryRepository, PlaylistRepository
 │   └── settings/     SettingsStore (cartella, ordinamento, ultima scansione)
 ├── domain/           Song, Playlist, LibraryQuery, SearchSongs
-├── playback/         PlaybackService (MediaSession), PlaybackController (facciata per la UI)
-├── ui/               theme, components, library, playlists, player, tube, settings
+├── playback/         PlaybackService (MediaSession), PlaybackController, CloudStreamResolver
+├── ui/               theme, components, library, playlists, player, tube, cloud, settings
 ├── AppContainer.kt
 ├── MainActivity.kt
 └── MusicApplication.kt
@@ -135,6 +154,16 @@ Le modifiche in console possono richiedere qualche minuto prima di valere.
 
 `drive` è uno scope "restricted": in stato Test funziona per gli utenti di test, mostrando
 l'avviso "app non verificata". Per distribuire l'app a chiunque serve la verifica di Google.
+
+## Configurare Dropbox (una volta sola)
+
+1. Su https://www.dropbox.com/developers/apps → **Create app**: Scoped access, **Full Dropbox**.
+2. **Permissions**: spunta `files.metadata.read`, `files.content.read`, `files.content.write`
+   (più `account_info.read`, già attivo) e premi **Submit**.
+3. **Settings**: lascia "Allow public clients (PKCE)" su Allow; nessun Redirect URI da aggiungere.
+   Copia la **App key** in `dropboxAppKey` dentro `app/build.gradle.kts`. L'app secret non serve.
+4. Finché l'app è in sviluppo, Dropbox limita quanti utenti possono collegarsi
+   (Settings → Development users).
 
 ## Fuori dall'MVP
 

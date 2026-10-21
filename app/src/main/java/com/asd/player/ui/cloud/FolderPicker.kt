@@ -1,4 +1,4 @@
-package com.asd.player.ui.drive
+package com.asd.player.ui.cloud
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,15 +20,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.asd.player.ui.theme.Asd
 
+/** Navigazione tra le cartelle di Drive o Dropbox per scegliere quella da indicizzare. */
 @Composable
-fun DriveFolderPicker(state: FolderPickerState, account: String?, viewModel: DriveViewModel) {
+fun FolderPicker(title: String, state: FolderPickerState, account: String?, viewModel: CloudViewModel) {
     AlertDialog(
         onDismissRequest = viewModel::closePicker,
         containerColor = Asd.Asphalt,
         modifier = Modifier.border(2.dp, Asd.Acid),
         title = {
             Column {
-                Text("CARTELLA SU DRIVE", style = MaterialTheme.typography.headlineSmall)
+                Text(title, style = MaterialTheme.typography.headlineSmall)
                 account?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = Asd.Smudge) }
                 Text(
                     "/" + state.path.drop(1).joinToString("/") { it.name },

@@ -16,6 +16,11 @@ android {
         versionCode = 1
         versionName = "0.1.0"
 
+        // App key Dropbox (App Console → Settings). Non è un segreto: il login usa PKCE, senza app secret.
+        val dropboxAppKey = "ubdflgsdzeo7bic"
+        buildConfigField("String", "DROPBOX_APP_KEY", "\"$dropboxAppKey\"")
+        manifestPlaceholders["dropboxAppKey"] = dropboxAppKey
+
         // Python e yt-dlp (TUBO) sono librerie native: teniamo solo le CPU dei telefoni veri, ~15 MB l'una.
         ndk {
             abiFilters += listOf("arm64-v8a", "armeabi-v7a")
@@ -46,6 +51,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     testOptions {
         unitTests.isReturnDefaultValues = true
@@ -78,6 +84,8 @@ dependencies {
 
     implementation(libs.play.services.auth)
     implementation(libs.youtubedl.android)
+    implementation(libs.dropbox.core)
+    implementation(libs.dropbox.android)
 
     testImplementation(libs.junit)
     // org.json reale nei test JVM (quello di android.jar è uno stub).

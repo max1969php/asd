@@ -1,7 +1,5 @@
 package com.asd.player.ui.settings
 
-import android.net.Uri
-import android.provider.DocumentsContract
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,15 +20,18 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.asd.player.data.repository.ScanState
 import com.asd.player.data.scanner.AudioScanner
-import com.asd.player.data.settings.DriveSettings
 import com.asd.player.domain.model.SongSource
 import com.asd.player.domain.model.SortField
-import com.asd.player.ui.drive.AccountSelect
-import com.asd.player.ui.drive.DriveViewModel
+import com.asd.player.ui.cloud.AccountSelect
+import com.asd.player.ui.cloud.CloudViewModel
+import com.asd.player.ui.cloud.DriveViewModel
+import com.asd.player.ui.cloud.DropboxViewModel
 import com.asd.player.ui.components.PunkButton
 import com.asd.player.ui.components.Stamp
 import com.asd.player.ui.components.TapeChip
@@ -46,11 +47,11 @@ import java.util.Date
 fun SettingsScreen(
     state: LibraryUiState,
     viewModel: LibraryViewModel,
-    drive: DriveSettings,
-    driveBusy: Boolean,
     driveViewModel: DriveViewModel,
+    dropboxViewModel: DropboxViewModel,
     onPickDirectory: () -> Unit,
     onAddGoogleAccount: () -> Unit,
+    onAddDropboxAccount: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -64,12 +65,12 @@ fun SettingsScreen(
 
         Section("Cartella del telefono") {
             Text(
-                state.directoryUri?.let(::readablePath) ?: "nessuna",
+                state.directoryUri?.let(AudioScanner::readablePath) ?: "nessuna",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Asd.Acid,
             )
             Text(
-                "${state.totalCount - state.driveCount} pezzi indicizzati" +
+                "${state.countBySource[SongSource.LOCAL] ?: 0} pezzi indicizzati" +
                     (state.lastScanAt.takeIf { it > 0 }?.let { " · ultimo giro ${formatDate(it)}" } ?: ""),
                 style = MaterialTheme.typography.bodySmall,
                 color = Asd.Smudge,
@@ -95,67 +96,25 @@ fun SettingsScreen(
             }
         }
 
-        Section("Google Drive") {
-            Text("Account predefinito", style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
-            Spacer(Modifier.height(6.dp))
-            AccountSelect(
-                accounts = drive.accounts,
-                selected = drive.defaultAccount,
-                onSelect = driveViewModel::selectDefault,
-                onAddAccount = onAddGoogleAccount,
-            )
-            if (driveBusy) Text("parlo con Google…", style = MaterialTheme.typography.bodySmall, color = Asd.Acid)
-            if (drive.defaultAccount != null) {
-                Spacer(Modifier.height(12.dp))
-                Text("Cartella", style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
-                Text(
-                    drive.folder?.name ?: "nessuna",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = if (drive.folder != null) Asd.Acid else Asd.Smudge,
-                )
-                Text(
-                    "${state.driveCount} pezzi su Drive" +
-                        (drive.lastScanAt.takeIf { it > 0 }?.let { " · ultimo giro ${formatDate(it)}" } ?: ""),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Asd.Smudge,
-                )
-                (state.scanState as? ScanState.Done)?.takeIf { it.source == SongSource.DRIVE }?.let {
-                    Text(
-                        "+${it.added} nuovi · ~${it.updated} cambiati · -${it.removed} spariti",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Asd.Paper,
-                    )
-                }
-                Spacer(Modifier.height(12.dp))
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    PunkButton("Cartella Drive", onClick = driveViewModel::openPicker, icon = Icons.Filled.Cloud)
-                    PunkButton(
-                        "Riscansiona",
-                        onClick = driveViewModel::refresh,
-                        icon = Icons.Filled.Refresh,
-                        container = Asd.Paper,
-                        shadow = Asd.Acid,
-                        enabled = drive.folder != null && state.scanState !is ScanState.Scanning,
-                    )
-                    PunkButton(
-                        "Scollega",
-                        onClick = { driveViewModel.disconnect(drive.defaultAccount) },
-                        icon = Icons.Filled.LinkOff,
-                        container = Asd.Spray,
-                        content = Asd.Paper,
-                        shadow = Asd.Paper,
-                    )
-                }
-            }
-            Spacer(Modifier.height(8.dp))
-            Text(
-                "Scegli l'account dalla select quando vuoi: i pezzi Drive in libreria diventano i suoi. " +
-                    "I file restano su Drive e vengono suonati in streaming. " +
-                    "Quello che rubi dal TUBO finisce in questa cartella.",
-                style = MaterialTheme.typography.bodySmall,
-                color = Asd.Smudge,
-            )
-        }
+        CloudSection(
+            title = "Google Drive",
+            name = "Drive",
+            source = SongSource.DRIVE,
+            state = state,
+            viewModel = driveViewModel,
+            addLabel = "+ COLLEGA UN ACCOUNT DEL TELEFONO",
+            onAddAccount = onAddGoogleAccount,
+        )
+
+        CloudSection(
+            title = "Dropbox",
+            name = "Dropbox",
+            source = SongSource.DROPBOX,
+            state = state,
+            viewModel = dropboxViewModel,
+            addLabel = "+ COLLEGA UN ACCOUNT DROPBOX",
+            onAddAccount = onAddDropboxAccount,
+        )
 
         Section("Ordine di default") {
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -189,7 +148,7 @@ fun SettingsScreen(
                 ASD = Anarchic Streaming Device.
                 Lo "streaming" è dalla tua memoria alle tue orecchie, e basta.
 
-                · La rete serve solo a Google Drive e al TUBO, e solo se li usi tu.
+                · La rete serve solo a Drive, Dropbox e TUBO, e solo se li usi tu.
                 · Nessun account, nessuna pubblicità, nessun tracciamento.
                 · Le playlist vivono sul telefono. Cancellarle non tocca i file.
                 · Costo: 0€. Per sempre.
@@ -218,10 +177,87 @@ private fun Section(title: String, content: @Composable () -> Unit) {
     }
 }
 
-/** "primary:Music/Punk" → "Music/Punk", più leggibile di un content:// URI. */
-private fun readablePath(uri: Uri): String =
-    runCatching { DocumentsContract.getTreeDocumentId(uri).substringAfter(':').ifEmpty { "/" } }
-        .getOrDefault(uri.toString())
+/** Account predefinito, cartella e bottoni di una fonte cloud: uguale per Drive e Dropbox. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun CloudSection(
+    title: String,
+    name: String,
+    source: SongSource,
+    state: LibraryUiState,
+    viewModel: CloudViewModel,
+    addLabel: String,
+    onAddAccount: () -> Unit,
+) {
+    val cloud by viewModel.settings.collectAsStateWithLifecycle()
+    val busy by viewModel.busy.collectAsStateWithLifecycle()
+    Section(title) {
+        Text("Account predefinito", style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
+        Spacer(Modifier.height(6.dp))
+        AccountSelect(
+            accounts = cloud.accounts,
+            selected = cloud.defaultAccount,
+            onSelect = viewModel::selectDefault,
+            onAddAccount = onAddAccount,
+            addLabel = addLabel,
+        )
+        if (busy) Text("parlo con $name…", style = MaterialTheme.typography.bodySmall, color = Asd.Acid)
+        val email = cloud.defaultAccount
+        if (email != null) {
+            Spacer(Modifier.height(12.dp))
+            Text("Cartella", style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
+            Text(
+                cloud.folder?.name ?: "nessuna",
+                style = MaterialTheme.typography.bodyLarge,
+                color = if (cloud.folder != null) Asd.Acid else Asd.Smudge,
+            )
+            Text(
+                "${state.countBySource[source] ?: 0} pezzi su $name" +
+                    (cloud.lastScanAt.takeIf { it > 0 }?.let { " · ultimo giro ${formatDate(it)}" } ?: ""),
+                style = MaterialTheme.typography.bodySmall,
+                color = Asd.Smudge,
+            )
+            (state.scanState as? ScanState.Done)?.takeIf { it.source == source }?.let {
+                Text(
+                    "+${it.added} nuovi · ~${it.updated} cambiati · -${it.removed} spariti",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Asd.Paper,
+                )
+            }
+            (state.scanState as? ScanState.Failed)?.takeIf { it.source == source }?.let {
+                Text("ERRORE: ${it.reason}", style = MaterialTheme.typography.bodySmall, color = Asd.Spray)
+            }
+            Spacer(Modifier.height(12.dp))
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                PunkButton("Cartella $name", onClick = viewModel::openPicker, icon = Icons.Filled.Cloud)
+                PunkButton(
+                    "Riscansiona",
+                    onClick = viewModel::refresh,
+                    icon = Icons.Filled.Refresh,
+                    container = Asd.Paper,
+                    shadow = Asd.Acid,
+                    enabled = cloud.folder != null && state.scanState !is ScanState.Scanning,
+                )
+                PunkButton(
+                    "Scollega",
+                    onClick = { viewModel.disconnect(email) },
+                    icon = Icons.Filled.LinkOff,
+                    container = Asd.Spray,
+                    content = Asd.Paper,
+                    shadow = Asd.Paper,
+                )
+            }
+        }
+        Spacer(Modifier.height(8.dp))
+        Text(
+            "Scegli l'account dalla select quando vuoi: i pezzi $name in libreria diventano i suoi. " +
+                "I file restano su $name e vengono suonati in streaming. " +
+                "Quello che rubi dal TUBO può finire in questa cartella.",
+            style = MaterialTheme.typography.bodySmall,
+            color = Asd.Smudge,
+        )
+    }
+}
 
 private fun formatDate(ts: Long): String =
     DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(Date(ts))

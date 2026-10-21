@@ -1,4 +1,4 @@
-package com.asd.player.ui.drive
+package com.asd.player.ui.cloud
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import com.asd.player.ui.theme.Asd
 
 /**
- * La "select" dell'account Google predefinito. Elenca gli account già collegati;
- * l'ultima voce apre il selettore di sistema per collegarne un altro presente sul telefono.
+ * La "select" dell'account predefinito di una fonte cloud. Elenca gli account già collegati;
+ * l'ultima voce ne collega un altro (selettore di sistema per Google, login per Dropbox).
  */
 @Composable
 fun AccountSelect(
@@ -32,6 +32,7 @@ fun AccountSelect(
     selected: String?,
     onSelect: (String) -> Unit,
     onAddAccount: () -> Unit,
+    addLabel: String,
     modifier: Modifier = Modifier,
 ) {
     var open by remember { mutableStateOf(false) }
@@ -68,7 +69,7 @@ fun AccountSelect(
             }
             if (accounts.isNotEmpty()) HorizontalDivider(color = Asd.Concrete)
             DropdownMenuItem(
-                text = { Text("+ COLLEGA UN ACCOUNT DEL TELEFONO", color = Asd.Spray) },
+                text = { Text(addLabel, color = Asd.Spray) },
                 onClick = { open = false; onAddAccount() },
             )
         }

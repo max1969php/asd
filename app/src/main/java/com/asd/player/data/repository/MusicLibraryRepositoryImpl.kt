@@ -90,13 +90,16 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
     private fun toEntity(scanner: SourceScanner, file: ScannedFile, old: SongEntity?): SongEntity =
         entityOf(file, scanner.readMetadata(file), scanner.source, old?.id ?: 0)
 
-    private fun entityOf(file: ScannedFile, meta: AudioMetadata, source: SongSource, id: Long = 0): SongEntity =
-        SongEntity(
+    private fun entityOf(file: ScannedFile, meta: AudioMetadata, source: SongSource, id: Long = 0): SongEntity {
+        // Senza tag (es. gli m4a del TUBO dopo una riscansione completa) il nome "Artista - Titolo" fa da tag.
+        val base = file.fileName.substringBeforeLast('.')
+        val parts = base.split(" - ", limit = 2).map { it.trim() }.takeIf { it.size == 2 && it.all(String::isNotEmpty) }
+        return SongEntity(
             id = id,
             uri = file.uri,
             fileName = file.fileName,
-            title = meta.title ?: file.fileName.substringBeforeLast('.'),
-            artist = meta.artist,
+            title = meta.title ?: parts?.get(1) ?: base,
+            artist = meta.artist ?: parts?.takeIf { meta.title == null }?.get(0),
             album = meta.album,
             durationMs = meta.durationMs,
             mimeType = file.mimeType,
@@ -104,4 +107,5 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
             modifiedAt = file.lastModified,
             source = source.name,
         )
+    }
 }
