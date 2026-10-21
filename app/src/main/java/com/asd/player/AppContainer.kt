@@ -12,6 +12,8 @@ import com.asd.player.data.repository.PlaylistRepositoryImpl
 import com.asd.player.data.scanner.AudioScanner
 import com.asd.player.data.scanner.MetadataReader
 import com.asd.player.data.settings.SettingsStore
+import com.asd.player.data.tube.TubeDownloader
+import com.asd.player.data.tube.TubeImporter
 import com.asd.player.domain.usecase.SearchSongs
 import com.asd.player.playback.PlaybackController
 
@@ -28,6 +30,7 @@ class AppContainer(context: Context) {
     val driveClient = DriveClient(driveAuth)
     val driveStreamResolver = DriveStreamResolver(driveAuth, settings)
     val playlistRepository: PlaylistRepository = PlaylistRepositoryImpl(database.playlistDao())
+    val tubeImporter = TubeImporter(TubeDownloader(context), driveClient, libraryRepository, settings)
     val playbackController = PlaybackController(context)
     val searchSongs = SearchSongs()
 }

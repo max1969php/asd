@@ -1,5 +1,7 @@
 package com.asd.player.data.repository
 
+import com.asd.player.data.scanner.AudioMetadata
+import com.asd.player.data.scanner.ScannedFile
 import com.asd.player.data.scanner.SourceScanner
 import com.asd.player.domain.model.Song
 import com.asd.player.domain.model.SongSource
@@ -19,6 +21,9 @@ interface MusicLibraryRepository {
 
     /** Sincronizza i brani di una fonte con il suo contenuto attuale. Le altre fonti non vengono toccate. */
     suspend fun rescan(scanner: SourceScanner): Boolean
+
+    /** Aggiunge un singolo brano appena comparso in una fonte (es. caricato su Drive dal Tubo). */
+    suspend fun add(file: ScannedFile, metadata: AudioMetadata, source: SongSource)
 
     /** Toglie dal catalogo tutti i brani di una fonte (es. account Drive scollegato). */
     suspend fun clearSource(source: SongSource)

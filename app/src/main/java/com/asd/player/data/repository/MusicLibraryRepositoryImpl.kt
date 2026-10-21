@@ -3,6 +3,7 @@ package com.asd.player.data.repository
 import com.asd.player.data.database.SongDao
 import com.asd.player.data.database.SongEntity
 import com.asd.player.data.drive.DriveAuthException
+import com.asd.player.data.scanner.AudioMetadata
 import com.asd.player.data.scanner.ScannedFile
 import com.asd.player.data.scanner.SourceScanner
 import com.asd.player.domain.model.Song
@@ -79,14 +80,19 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
         }
     }
 
+    override suspend fun add(file: ScannedFile, metadata: AudioMetadata, source: SongSource) =
+        withContext(Dispatchers.IO) { songDao.upsert(entityOf(file, metadata, source)) }
+
     override suspend fun clearSource(source: SongSource) = withContext(Dispatchers.IO) {
         songDao.deleteBySource(source.name)
     }
 
-    private fun toEntity(scanner: SourceScanner, file: ScannedFile, old: SongEntity?): SongEntity {
-        val meta = scanner.readMetadata(file)
-        return SongEntity(
-            id = old?.id ?: 0,
+    private fun toEntity(scanner: SourceScanner, file: ScannedFile, old: SongEntity?): SongEntity =
+        entityOf(file, scanner.readMetadata(file), scanner.source, old?.id ?: 0)
+
+    private fun entityOf(file: ScannedFile, meta: AudioMetadata, source: SongSource, id: Long = 0): SongEntity =
+        SongEntity(
+            id = id,
             uri = file.uri,
             fileName = file.fileName,
             title = meta.title ?: file.fileName.substringBeforeLast('.'),
@@ -96,7 +102,6 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
             mimeType = file.mimeType,
             fileSize = file.size,
             modifiedAt = file.lastModified,
-            source = scanner.source.name,
+            source = source.name,
         )
-    }
 }

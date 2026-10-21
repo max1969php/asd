@@ -65,7 +65,7 @@ class DriveAuth(context: Context) {
     }
 
     private fun request(email: String) = AuthorizationRequest.Builder()
-        .setRequestedScopes(listOf(Scope(DRIVE_READONLY)))
+        .setRequestedScopes(listOf(Scope(DRIVE)))
         .setAccount(Account(email, GOOGLE_ACCOUNT_TYPE))
         .build()
 
@@ -79,6 +79,10 @@ class DriveAuth(context: Context) {
 
     companion object {
         const val GOOGLE_ACCOUNT_TYPE = "com.google"
-        const val DRIVE_READONLY = "https://www.googleapis.com/auth/drive.readonly"
+        /**
+         * Accesso completo: serve per caricare i brani dal Tubo nella cartella scelta
+         * (drive.file non permette di scrivere in cartelle create da altri). ASD non cancella né modifica niente.
+         */
+        const val DRIVE = "https://www.googleapis.com/auth/drive"
     }
 }

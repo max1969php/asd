@@ -51,8 +51,10 @@ import com.asd.player.ui.playlists.PlaylistsScreen
 import com.asd.player.ui.playlists.PlaylistsViewModel
 import com.asd.player.ui.settings.SettingsScreen
 import com.asd.player.ui.theme.Asd
+import com.asd.player.ui.tube.TubeScreen
+import com.asd.player.ui.tube.TubeViewModel
 
-private enum class Tab(val label: String) { LIBRARY("Roba"), PLAYLISTS("Mixtape"), SETTINGS("Setup") }
+private enum class Tab(val label: String) { LIBRARY("Roba"), PLAYLISTS("Mixtape"), TUBE("Tubo"), SETTINGS("Setup") }
 
 @Composable
 fun AsdApp() {
@@ -60,6 +62,7 @@ fun AsdApp() {
     val player: PlayerViewModel = viewModel(factory = AsdViewModels.Factory)
     val playlists: PlaylistsViewModel = viewModel(factory = AsdViewModels.Factory)
     val driveVm: DriveViewModel = viewModel(factory = AsdViewModels.Factory)
+    val tubeVm: TubeViewModel = viewModel(factory = AsdViewModels.Factory)
 
     val libraryState by library.uiState.collectAsStateWithLifecycle()
     val libraryPlaylists by library.playlists.collectAsStateWithLifecycle()
@@ -70,6 +73,9 @@ fun AsdApp() {
     val drive by driveVm.drive.collectAsStateWithLifecycle()
     val driveBusy by driveVm.busy.collectAsStateWithLifecycle()
     val folderPicker by driveVm.picker.collectAsStateWithLifecycle()
+    val tubeJobs by tubeVm.jobs.collectAsStateWithLifecycle()
+    val ytDlpVersion by tubeVm.ytDlpVersion.collectAsStateWithLifecycle()
+    val ytDlpUpdating by tubeVm.updating.collectAsStateWithLifecycle()
 
     var tab by rememberSaveable { mutableStateOf(Tab.LIBRARY) }
     var playerExpanded by rememberSaveable { mutableStateOf(false) }
@@ -92,14 +98,24 @@ fun AsdApp() {
             )
         )
     }
-    // Schermata di consenso di Google per l'accesso in lettura a Drive.
+    // Schermata di consenso di Google per l'accesso a Drive.
     val consent = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
         driveVm.onConsentResult(result.data)
+    }
+    // Stessa schermata, chiesta dal Tubo prima di caricare: alla fine riparte il download in attesa.
+    val tubeConsent = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        tubeVm.onConsentResult(result.data)
     }
 
     LaunchedEffect(Unit) {
         launch { player.errors.collect { snackbar.showSnackbar(it) } }
         launch { driveVm.messages.collect { snackbar.showSnackbar(it) } }
+        launch { tubeVm.messages.collect { snackbar.showSnackbar(it) } }
+        launch {
+            tubeVm.consentRequests.collect {
+                tubeConsent.launch(IntentSenderRequest.Builder(it.intentSender).build())
+            }
+        }
         launch {
             driveVm.consentRequests.collect {
                 consent.launch(IntentSenderRequest.Builder(it.intentSender).build())
@@ -160,6 +176,15 @@ fun AsdApp() {
                     viewModel = playlists,
                     modifier = contentModifier,
                 )
+                Tab.TUBE -> TubeScreen(
+                    drive = drive,
+                    jobs = tubeJobs,
+                    ytDlpVersion = ytDlpVersion,
+                    updating = ytDlpUpdating,
+                    viewModel = tubeVm,
+                    onOpenSetup = { tab = Tab.SETTINGS },
+                    modifier = contentModifier,
+                )
                 Tab.SETTINGS -> SettingsScreen(
                     state = libraryState,
                     viewModel = library,
@@ -211,9 +236,11 @@ private fun TabBar(selected: Tab, onSelect: (Tab) -> Unit) {
             ) {
                 Text(
                     text = if (active) "[${tab.label.uppercase()}]" else tab.label.uppercase(),
-                    style = MaterialTheme.typography.labelLarge,
+                    // Quattro schede su un telefono stretto: "[MIXTAPE]" deve stare su una riga.
+                    style = MaterialTheme.typography.labelMedium,
                     color = if (active) Asd.Toner else Asd.Paper,
                     textAlign = TextAlign.Center,
+                    maxLines = 1,
                 )
             }
         }

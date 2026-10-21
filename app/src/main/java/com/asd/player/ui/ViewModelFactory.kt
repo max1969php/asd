@@ -9,6 +9,7 @@ import com.asd.player.ui.drive.DriveViewModel
 import com.asd.player.ui.library.LibraryViewModel
 import com.asd.player.ui.player.PlayerViewModel
 import com.asd.player.ui.playlists.PlaylistsViewModel
+import com.asd.player.ui.tube.TubeViewModel
 
 object AsdViewModels {
     val Factory: ViewModelProvider.Factory = viewModelFactory {
@@ -22,5 +23,6 @@ object AsdViewModels {
             PlaylistsViewModel(container.playlistRepository, container.playbackController)
         }
         initializer { DriveViewModel((this[APPLICATION_KEY] as MusicApplication).container) }
+        initializer { TubeViewModel((this[APPLICATION_KEY] as MusicApplication).container) }
     }
 }

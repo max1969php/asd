@@ -150,7 +150,8 @@ fun SettingsScreen(
             Spacer(Modifier.height(8.dp))
             Text(
                 "Scegli l'account dalla select quando vuoi: i pezzi Drive in libreria diventano i suoi. " +
-                    "I file restano su Drive e vengono suonati in streaming.",
+                    "I file restano su Drive e vengono suonati in streaming. " +
+                    "Quello che rubi dal TUBO finisce in questa cartella.",
                 style = MaterialTheme.typography.bodySmall,
                 color = Asd.Smudge,
             )
@@ -188,7 +189,7 @@ fun SettingsScreen(
                 ASD = Anarchic Streaming Device.
                 Lo "streaming" è dalla tua memoria alle tue orecchie, e basta.
 
-                · La rete serve solo a Google Drive, e solo se lo colleghi tu.
+                · La rete serve solo a Google Drive e al TUBO, e solo se li usi tu.
                 · Nessun account, nessuna pubblicità, nessun tracciamento.
                 · Le playlist vivono sul telefono. Cancellarle non tocca i file.
                 · Costo: 0€. Per sempre.

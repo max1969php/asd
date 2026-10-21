@@ -15,6 +15,18 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "0.1.0"
+
+        // Python e yt-dlp (TUBO) sono librerie native: teniamo solo le CPU dei telefoni veri, ~15 MB l'una.
+        ndk {
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+        }
+    }
+
+    // youtubedl-android legge Python dai file .so estratti su disco: niente librerie compresse nell'APK.
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
     }
 
     buildTypes {
@@ -65,6 +77,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.play.services.auth)
+    implementation(libs.youtubedl.android)
 
     testImplementation(libs.junit)
     // org.json reale nei test JVM (quello di android.jar è uno stub).

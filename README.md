@@ -17,6 +17,9 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
 - **Player**: mini-player sempre visibile e schermata completa con seek, shuffle e repeat.
   La riproduzione continua in background, con i controlli nella notifica, nella lock screen
   e sulle cuffie.
+- **Tubo**: incolli un link YouTube e premi invio. Del link si tiene solo la parte prima di `&list`
+  (un brano, mai la playlist), si scarica solo l'audio con **yt-dlp** e lo si carica nella cartella
+  Google Drive dell'account predefinito. Il brano compare subito in ROBA.
 - **Setup**: per cambiare cartella, riscansionare e scegliere l'ordinamento predefinito.
 - **Due fonti**: la cartella del telefono (SAF) e una cartella di **Google Drive**. La libreria le
   unisce; il filtro TELEFONO / DRIVE compare quando le usi entrambe, e i brani di Drive hanno il simbolo ☁.
@@ -29,7 +32,20 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
 - Ogni account ricorda la sua cartella. Quando cambi account predefinito, i brani Drive in libreria
   diventano quelli del nuovo account (e spariscono dai mixtape quelli del vecchio).
 - I file restano su Drive: si leggono i tag e si suonano **in streaming** con lo stesso Media3 ExoPlayer,
-  aggiungendo il token OAuth al volo (`DriveStreamResolver`). Scope richiesto: `drive.readonly`.
+  aggiungendo il token OAuth al volo (`DriveStreamResolver`). Scope richiesto: `drive` (vedi sotto).
+
+### Tubo
+
+- yt-dlp gira sul telefono grazie a [youtubedl-android](https://github.com/JunkFood02/youtubedl-android)
+  (GPL-3.0), che impacchetta Python, yt-dlp e QuickJS (serve a YouTube). Niente server di mezzo.
+- Si scarica la traccia audio già pronta (`bestaudio[ext=m4a]`, cioè AAC in M4A): nessuna
+  riconversione e nessun FFmpeg, così l'APK resta più leggero. Su Drive il file si chiama
+  "Artista - Titolo.m4a"; titolo e artista vengono dai tag di YouTube Music o dal titolo del video.
+- YouTube cambia spesso: yt-dlp si aggiorna da solo al massimo una volta al giorno, e nella scheda
+  c'è il bottone **Aggiorna yt-dlp**.
+- La coda va avanti finché l'app è viva (un brano alla volta). Se Android chiude l'app, i download
+  non finiti vanno rilanciati.
+- Scarica solo roba che hai il diritto di scaricare: i termini di YouTube lo vietano per il resto.
 
 Formati accettati (whitelist): MP3, WAV, FLAC, M4A, AAC, OGG, OPUS.
 
@@ -53,11 +69,12 @@ app/src/main/java/com/asd/player/
 │   ├── database/     Room: entità, SongDao, PlaylistDao
 │   ├── scanner/      SourceScanner, AudioScanner (visita SAF), MetadataReader (tag)
 │   ├── drive/        DriveAuth (OAuth), DriveClient (REST), DriveSourceScanner, DriveStreamResolver
+│   ├── tube/         TubeLink, TubeTrack, TubeDownloader (yt-dlp), TubeImporter (coda → Drive)
 │   ├── repository/   MusicLibraryRepository, PlaylistRepository
 │   └── settings/     SettingsStore (cartella, ordinamento, ultima scansione)
 ├── domain/           Song, Playlist, LibraryQuery, SearchSongs
 ├── playback/         PlaybackService (MediaSession), PlaybackController (facciata per la UI)
-├── ui/               theme, components, library, playlists, player, settings
+├── ui/               theme, components, library, playlists, player, tube, settings
 ├── AppContainer.kt
 ├── MainActivity.kt
 └── MusicApplication.kt
@@ -78,6 +95,8 @@ Apri il progetto con Android Studio, oppure da terminale:
 ```
 
 Servono JDK 17 e l'Android SDK con la piattaforma 34 (`ANDROID_HOME` oppure `local.properties`).
+L'APK include solo le librerie native ARM (`arm64-v8a`, `armeabi-v7a`), quelle dei telefoni veri.
+Per un emulatore x86_64 aggiungi `x86_64` ad `abiFilters` in `app/build.gradle.kts` (+15 MB).
 
 ## Configurare Google Drive (una volta sola)
 
@@ -100,7 +119,9 @@ La console chiama questa parte **Google Auth Platform** (ex "Schermata consenso 
 4. Nel menu di Google Auth Platform:
    - **Pubblico → Utenti di test → + Add users**: aggiungi gli account Google che userai sul
      telefono (massimo 100). Gli altri account vengono rifiutati;
-   - **Accesso ai dati → Aggiungi o rimuovi ambiti**: seleziona `.../auth/drive.readonly` e salva.
+   - **Accesso ai dati → Aggiungi o rimuovi ambiti**: seleziona `.../auth/drive` (vedere, modificare,
+     creare ed eliminare i file di Drive) e salva. Serve la scrittura per caricare i brani del TUBO:
+     `drive.file` non permette di scrivere in una cartella creata da te fuori dall'app.
      Se non compare, la Drive API del punto 2 non è ancora abilitata.
 5. **Client → + Crea client → Tipo di applicazione: Android**:
    - nome del pacchetto: `com.asd.player`;
@@ -112,7 +133,7 @@ La console chiama questa parte **Google Auth Platform** (ex "Schermata consenso 
 Non c'è nulla da copiare nel codice: nessun client ID, nessun file `google-services.json`.
 Le modifiche in console possono richiedere qualche minuto prima di valere.
 
-`drive.readonly` è uno scope "restricted": in stato Test funziona per gli utenti di test, mostrando
+`drive` è uno scope "restricted": in stato Test funziona per gli utenti di test, mostrando
 l'avviso "app non verificata". Per distribuire l'app a chiunque serve la verifica di Google.
 
 ## Fuori dall'MVP
