@@ -17,3 +17,6 @@ google-services.json
 *.jks
 # Metadati che Windows aggiunge ai file scaricati.
 *:Zone.Identifier
+
+
+reach.md
