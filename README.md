@@ -17,6 +17,9 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
 - **Player**: mini-player sempre visibile e schermata completa con seek, shuffle e repeat.
   La riproduzione continua in background, con i controlli nella notifica, nella lock screen
   e sulle cuffie.
+- **Niente cancellazioni**: l'app non elimina mai file, né dal telefono né da Drive. Chi vuole
+  togliere un pezzo lo fa dal telefono (file manager) o da Drive; alla riscansione sparisce
+  anche dalla lista.
 - **Tubo**: incolli un link YouTube e premi invio. Del link si tiene solo la parte prima di `&list`
   (un brano, mai la playlist) e si scarica solo l'audio con **yt-dlp**. Una select **SALVA IN** sceglie
   la destinazione: cartella del telefono o Google Drive (la cartella scelta in SETUP). Il brano compare subito in ROBA.
@@ -139,7 +142,9 @@ La console chiama questa parte **Google Auth Platform** (ex "Schermata consenso 
    - **Pubblico → Utenti di test → + Add users**: aggiungi gli account Google che userai sul
      telefono (massimo 100). Gli altri account vengono rifiutati;
    - **Accesso ai dati → Aggiungi o rimuovi ambiti**: seleziona `.../auth/drive` (vedere, modificare,
-     creare ed eliminare i file di Drive) e salva. Serve la scrittura per caricare i brani del TUBO:
+     creare ed eliminare i file di Drive) e salva. Serve la scrittura per caricare i brani del TUBO
+     (l'app non cancella mai niente: lo scope è largo solo perché Google non ne offre uno
+     "scrivi ma non cancellare"):
      `drive.file` non permette di scrivere in una cartella creata da te fuori dall'app.
      Se non compare, la Drive API del punto 2 non è ancora abilitata.
 5. **Client → + Crea client → Tipo di applicazione: Android**:

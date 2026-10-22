@@ -77,6 +77,8 @@ class AudioScanner(private val resolver: ContentResolver) {
             resolver.openOutputStream(created)?.use(writeTo)
                 ?: throw IOException("Il telefono non mi lascia scrivere $displayName")
         } catch (e: Exception) {
+            // Unica eccezione alla regola "l'app non cancella file": il file vuoto o a metà
+            // appena creato qui sopra da un download fallito, mai un file dell'utente.
             runCatching { DocumentsContract.deleteDocument(resolver, created) }
             throw e
         }
