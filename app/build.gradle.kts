@@ -20,10 +20,16 @@ android {
         val dropboxAppKey = "ubdflgsdzeo7bic"
         buildConfigField("String", "DROPBOX_APP_KEY", "\"$dropboxAppKey\"")
         manifestPlaceholders["dropboxAppKey"] = dropboxAppKey
+    }
 
-        // Python e yt-dlp (TUBO) sono librerie native: teniamo solo le CPU dei telefoni veri, ~15 MB l'una.
-        ndk {
-            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+    // Python e yt-dlp (TUBO) sono librerie native da ~15 MB per CPU: un APK per CPU invece di uno con
+    // tutte. arm64-v8a va su quasi tutti i telefoni dal 2017; armeabi-v7a per quelli vecchi a 32 bit.
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a", "armeabi-v7a")
+            isUniversalApk = false
         }
     }
 
@@ -36,6 +42,9 @@ android {
 
     buildTypes {
         release {
+            // Firmato con la chiave debug: stesso SHA-1 già registrato su Google Cloud, si installa
+            // sopra la versione debug. Per distribuire davvero serve una chiave di release propria.
+            signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -83,7 +92,10 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.play.services.auth)
-    implementation(libs.youtubedl.android)
+    implementation(libs.youtubedl.android) {
+        // La libreria dichiara appcompat ma non lo usa: sarebbero ~1 MB di risorse per niente.
+        exclude(group = "androidx.appcompat")
+    }
     implementation(libs.dropbox.core)
     implementation(libs.dropbox.android)
 
