@@ -113,6 +113,7 @@ fun AsdApp() {
         launch { player.errors.collect { snackbar.showSnackbar(it) } }
         launch { driveVm.messages.collect { snackbar.showSnackbar(it) } }
         launch { tubeVm.messages.collect { snackbar.showSnackbar(it) } }
+        launch { library.messages.collect { snackbar.showSnackbar(it) } }
         launch {
             tubeVm.consentRequests.collect {
                 tubeConsent.launch(IntentSenderRequest.Builder(it.intentSender).build())

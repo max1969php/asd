@@ -5,9 +5,11 @@ import com.asd.player.data.drive.DriveClient
 import com.asd.player.data.repository.MusicLibraryRepository
 import com.asd.player.data.scanner.AudioMetadata
 import com.asd.player.data.scanner.AudioScanner
+import com.asd.player.data.scanner.MetadataReader
 import com.asd.player.data.scanner.ScannedFile
 import com.asd.player.data.settings.SettingsStore
 import com.asd.player.data.settings.TubeDestination
+import com.asd.player.domain.model.Song
 import com.asd.player.domain.model.SongSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,9 +38,18 @@ data class TubeTarget(
     val label: String,
 )
 
+/** Cosa scaricare: l'audio di un video YouTube oppure un file del proprio Google Drive. */
+sealed interface JobSource {
+    data class Youtube(val url: String) : JobSource
+
+    /** [dirs]: sottocartelle da ricreare sul telefono (scaricando una cartella intera). */
+    data class DriveFile(val email: String, val fileId: String, val name: String, val dirs: List<String>, val size: Long) :
+        JobSource
+}
+
 data class TubeJob(
     val id: Long,
-    val url: String,
+    val source: JobSource,
     val target: TubeTarget,
     val status: TubeStatus = TubeStatus.QUEUED,
     val progress: Float = 0f,
@@ -47,15 +58,16 @@ data class TubeJob(
 )
 
 /**
- * Coda del TUBO: scarica l'audio con yt-dlp, lo salva nella destinazione scelta (cartella del
- * telefono o Drive) e lo aggiunge subito alla libreria. Un lavoro alla volta,
- * fuori dal ciclo di vita delle schermate.
+ * Coda dei download (il "bottino" del TUBO): l'audio da YouTube con yt-dlp, salvato sul telefono
+ * o su Drive, e i file del proprio Drive copiati sul telefono per ascoltarli offline.
+ * Ogni brano finisce subito in libreria. Un lavoro alla volta, fuori dal ciclo di vita delle schermate.
  */
 class TubeImporter(
     private val downloader: TubeDownloader,
     val cookies: TubeCookies,
     private val local: AudioScanner,
     private val drive: DriveClient,
+    private val metadata: MetadataReader,
     private val library: MusicLibraryRepository,
     private val settings: SettingsStore,
 ) {
@@ -74,10 +86,29 @@ class TubeImporter(
     }
 
     /** Per Drive il token di [TubeTarget.account] deve essere già stato autorizzato dalla UI. */
-    fun enqueue(url: String, target: TubeTarget) {
-        val job = TubeJob(nextId.incrementAndGet(), url, target)
-        _jobs.update { listOf(job) + it }
-        queue.trySend(job.id)
+    fun enqueue(url: String, target: TubeTarget) = enqueue(listOf(JobSource.Youtube(url)), target)
+
+    /** [target] è la cartella del telefono; il token Drive dei file deve essere già autorizzato. */
+    fun enqueue(sources: List<JobSource>, target: TubeTarget) {
+        val jobs = sources.map { TubeJob(nextId.incrementAndGet(), it, target) }
+        _jobs.update { jobs.reversed() + it }
+        jobs.forEach { queue.trySend(it.id) }
+    }
+
+    /** La cartella del telefono come destinazione, se c'è e ci si può scrivere. */
+    fun localTarget(): TubeTarget? {
+        val dir = settings.directoryUri.value ?: return null
+        if (!local.canWrite(dir)) return null
+        return TubeTarget(TubeDestination.LOCAL, null, dir.toString(), "Telefono · ${AudioScanner.readablePath(dir)}")
+    }
+
+    /** Copia sul telefono un brano di Drive già in libreria. Restituisce false se manca la cartella. */
+    fun downloadToPhone(song: Song): Boolean {
+        val target = localTarget() ?: return false
+        val email = settings.drive.state.value.defaultAccount ?: return false
+        val fileId = DriveClient.fileIdOf(Uri.parse(song.uri)) ?: return false
+        enqueue(listOf(JobSource.DriveFile(email, fileId, song.fileName, emptyList(), song.fileSize)), target)
+        return true
     }
 
     fun retry(id: Long) {
@@ -97,15 +128,9 @@ class TubeImporter(
         val job = _jobs.value.find { it.id == id } ?: return
         try {
             edit(id) { it.copy(status = TubeStatus.DOWNLOADING) }
-            val (file, track) = ytdlLock.withLock {
-                downloader.download(job.url, id) { p -> edit(id) { it.copy(progress = p.coerceIn(0f, 100f) / 100f) } }
-            }
-            edit(id) { it.copy(status = TubeStatus.UPLOADING, title = listOfNotNull(track.artist, track.title).joinToString(" - ")) }
-            val (source, saved) = save(job.target, track, file)
-
-            // Se nel frattempo l'utente ha cambiato cartella o account, il brano è salvato ma non in questa libreria.
-            if (isCurrent(job.target)) {
-                library.add(saved, AudioMetadata(track.title, track.artist, null, track.durationMs), source)
+            when (val source = job.source) {
+                is JobSource.Youtube -> runYoutube(job, source)
+                is JobSource.DriveFile -> runDriveFile(job, source)
             }
             edit(id) { it.copy(status = TubeStatus.DONE, progress = 1f) }
         } catch (e: SecurityException) {
@@ -116,6 +141,33 @@ class TubeImporter(
             edit(id) { it.copy(status = TubeStatus.FAILED, error = e.message ?: e.javaClass.simpleName) }
         } finally {
             downloader.cleanup(id)
+        }
+    }
+
+    /** Dal Drive al telefono, scrivendo direttamente nella cartella scelta (niente file temporanei). */
+    private suspend fun runDriveFile(job: TubeJob, source: JobSource.DriveFile) {
+        val id = job.id
+        edit(id) { it.copy(title = source.name) }
+        val mime = AudioScanner.mimeTypeOf(source.name) ?: "audio/mpeg"
+        val saved = local.create(Uri.parse(job.target.folderId), source.dirs, source.name, mime) { out ->
+            drive.download(source.email, source.fileId, out) { bytes ->
+                if (source.size > 0) edit(id) { it.copy(progress = (bytes.toFloat() / source.size).coerceAtMost(1f)) }
+            }
+        }
+        if (isCurrent(job.target)) library.add(saved, metadata.read(Uri.parse(saved.uri)), SongSource.LOCAL)
+    }
+
+    private suspend fun runYoutube(job: TubeJob, source: JobSource.Youtube) {
+        val id = job.id
+        val (file, track) = ytdlLock.withLock {
+            downloader.download(source.url, id) { p -> edit(id) { it.copy(progress = p.coerceIn(0f, 100f) / 100f) } }
+        }
+        edit(id) { it.copy(status = TubeStatus.UPLOADING, title = listOfNotNull(track.artist, track.title).joinToString(" - ")) }
+        val (songSource, saved) = save(job.target, track, file)
+
+        // Se nel frattempo l'utente ha cambiato cartella o account, il brano è salvato ma non in questa libreria.
+        if (isCurrent(job.target)) {
+            library.add(saved, AudioMetadata(track.title, track.artist, null, track.durationMs), songSource)
         }
     }
 

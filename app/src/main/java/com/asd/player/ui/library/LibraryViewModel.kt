@@ -18,7 +18,10 @@ import com.asd.player.domain.model.Song
 import com.asd.player.domain.model.SongSource
 import com.asd.player.domain.model.SortOrder
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -145,6 +148,17 @@ class LibraryViewModel(
             val scanner = LocalSourceScanner(uri, container.audioScanner, container.metadataReader)
             if (repository.rescan(scanner)) settings.setLastScanAt(System.currentTimeMillis())
         }
+    }
+
+    private val _messages = MutableSharedFlow<String>(extraBufferCapacity = 4)
+    val messages: SharedFlow<String> = _messages.asSharedFlow()
+
+    /** Copia sul telefono un brano di Drive (lo scarica la coda del TUBO). */
+    fun downloadToPhone(song: Song) {
+        _messages.tryEmit(
+            if (container.tubeImporter.downloadToPhone(song)) "In coda: ${song.title}. Lo trovi nel BOTTINO del TUBO."
+            else "Serve una cartella del telefono in cui si può scrivere: sceglila in SETUP."
+        )
     }
 
     fun play(songs: List<Song>, index: Int) = container.playbackController.playQueue(songs, index)

@@ -121,6 +121,11 @@ fun LibraryScreen(
             onPick = { viewModel.addToPlaylist(it.id, song); songForPlaylist = null },
             onCreate = { viewModel.createPlaylistWith(it, song); songForPlaylist = null },
             onDismiss = { songForPlaylist = null },
+            onDownload = if (song.source == SongSource.DRIVE) {
+                { viewModel.downloadToPhone(song); songForPlaylist = null }
+            } else {
+                null
+            },
         )
     }
 }

@@ -43,12 +43,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.asd.player.data.settings.TubeDestination
+import com.asd.player.data.tube.JobSource
 import com.asd.player.data.tube.TubeCookies
 import com.asd.player.data.tube.TubeJob
 import com.asd.player.data.tube.TubeStatus
 import com.asd.player.ui.components.PunkButton
 import com.asd.player.ui.components.Stamp
 import com.asd.player.ui.theme.Asd
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -69,6 +71,8 @@ fun TubeScreen(
     val importCookies = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let(viewModel::importCookies)
     }
+    val browser by viewModel.browser.collectAsStateWithLifecycle()
+    browser?.let { DriveBrowser(it, viewModel) }
     if (loginOpen) {
         YoutubeLogin(onDone = {
             loginOpen = false
@@ -132,6 +136,16 @@ fun TubeScreen(
         item {
             Column(Modifier.padding(16.dp)) {
                 Spacer(Modifier.height(12.dp))
+                Text("// DAL DRIVE AL TELEFONO", style = MaterialTheme.typography.labelLarge, color = Asd.Spray)
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "Copia sul telefono un pezzo o una cartella intera del tuo Drive, per ascoltarli senza rete.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Asd.Smudge,
+                )
+                Spacer(Modifier.height(8.dp))
+                PunkButton("Scarica dal Drive", onClick = viewModel::openBrowser, icon = Icons.Filled.Download)
+                Spacer(Modifier.height(20.dp))
                 Text("// YOUTUBE", style = MaterialTheme.typography.labelLarge, color = Asd.Spray)
                 Spacer(Modifier.height(6.dp))
                 Text(
@@ -291,7 +305,10 @@ private fun JobRow(job: TubeJob, onRetry: () -> Unit) {
             .padding(12.dp)
     ) {
         Text(
-            job.title ?: job.url,
+            job.title ?: when (val source = job.source) {
+                is JobSource.Youtube -> source.url
+                is JobSource.DriveFile -> source.name
+            },
             style = MaterialTheme.typography.bodyMedium,
             color = Asd.Paper,
             maxLines = 2,

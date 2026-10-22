@@ -37,7 +37,8 @@ class AppContainer(context: Context) {
     val playlistRepository: PlaylistRepository = PlaylistRepositoryImpl(database.playlistDao())
     private val tubeCookies = TubeCookies(context)
     val tubeImporter = TubeImporter(
-        TubeDownloader(context, tubeCookies), tubeCookies, audioScanner, driveClient, libraryRepository, settings,
+        TubeDownloader(context, tubeCookies), tubeCookies, audioScanner, driveClient, metadataReader,
+        libraryRepository, settings,
     )
     val loudnessQueue = LoudnessQueue(
         context, LoudnessAnalyzer(context), libraryRepository, settings, driveAuth,

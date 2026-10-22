@@ -6,6 +6,7 @@ import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
 import java.io.File
 import java.io.IOException
+import java.io.OutputStream
 
 /** File trovato nella cartella, prima della lettura dei metadati. */
 data class ScannedFile(
@@ -52,24 +53,35 @@ class AudioScanner(private val resolver: ContentResolver) {
         return result
     }
 
+    /** Copia [file] nella radice della cartella scelta, con il nome [displayName]. */
+    fun write(treeUri: Uri, displayName: String, mimeType: String, file: File): ScannedFile =
+        create(treeUri, emptyList(), displayName, mimeType) { out -> file.inputStream().use { it.copyTo(out) } }
+
     /**
-     * Copia [file] nella radice della cartella scelta, con il nome [displayName].
-     * Serve il permesso di scrittura sull'albero SAF (chiesto quando si sceglie la cartella).
+     * Crea un file nella cartella scelta, dentro le sottocartelle [dirs] (create se mancano),
+     * e lo riempie con [writeTo]. Serve il permesso di scrittura sull'albero SAF.
      */
-    fun write(treeUri: Uri, displayName: String, mimeType: String, file: File): ScannedFile {
-        val parent = DocumentsContract.buildDocumentUriUsingTree(treeUri, DocumentsContract.getTreeDocumentId(treeUri))
+    fun create(
+        treeUri: Uri,
+        dirs: List<String>,
+        displayName: String,
+        mimeType: String,
+        writeTo: (OutputStream) -> Unit,
+    ): ScannedFile {
+        var parentId = DocumentsContract.getTreeDocumentId(treeUri)
+        dirs.forEach { parentId = ensureDir(treeUri, parentId, it) }
+        val parent = DocumentsContract.buildDocumentUriUsingTree(treeUri, parentId)
         val created = DocumentsContract.createDocument(resolver, parent, mimeType, displayName)
             ?: throw IOException("Il telefono non mi lascia creare $displayName")
         try {
-            resolver.openOutputStream(created)?.use { out -> file.inputStream().use { it.copyTo(out) } }
+            resolver.openOutputStream(created)?.use(writeTo)
                 ?: throw IOException("Il telefono non mi lascia scrivere $displayName")
         } catch (e: Exception) {
             runCatching { DocumentsContract.deleteDocument(resolver, created) }
             throw e
         }
         // Rileggiamo nome, dimensione e data veri: la prossima riscansione li confronta con questi.
-        val docId = DocumentsContract.getDocumentId(created)
-        val uri = DocumentsContract.buildDocumentUriUsingTree(treeUri, docId)
+        val uri = DocumentsContract.buildDocumentUriUsingTree(treeUri, DocumentsContract.getDocumentId(created))
         resolver.query(uri, PROJECTION, null, null, null)?.use { c ->
             if (c.moveToFirst()) {
                 return ScannedFile(
@@ -81,7 +93,21 @@ class AudioScanner(private val resolver: ContentResolver) {
                 )
             }
         }
-        return ScannedFile(uri.toString(), displayName, mimeType, file.length(), System.currentTimeMillis())
+        return ScannedFile(uri.toString(), displayName, mimeType, 0L, System.currentTimeMillis())
+    }
+
+    /** Id della sottocartella [name] di [parentId]; se non c'è la crea. */
+    private fun ensureDir(treeUri: Uri, parentId: String, name: String): String {
+        val children = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, parentId)
+        resolver.query(children, PROJECTION, null, null, null)?.use { c ->
+            while (c.moveToNext()) {
+                if (c.getString(2) == Document.MIME_TYPE_DIR && c.getString(1) == name) return c.getString(0)
+            }
+        }
+        val parent = DocumentsContract.buildDocumentUriUsingTree(treeUri, parentId)
+        val created = DocumentsContract.createDocument(resolver, parent, Document.MIME_TYPE_DIR, name)
+            ?: throw IOException("Il telefono non mi lascia creare la cartella $name")
+        return DocumentsContract.getDocumentId(created)
     }
 
     /** Le cartelle scelte prima del TUBO hanno solo il permesso di lettura. */

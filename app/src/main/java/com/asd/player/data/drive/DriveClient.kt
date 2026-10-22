@@ -7,6 +7,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
+import java.io.OutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
@@ -51,6 +52,60 @@ class DriveClient(private val auth: DriveAuth) {
             }
         }
         return result
+    }
+
+    /** Contenuto di una cartella per il browser "Scarica dal Drive": sottocartelle e file audio. */
+    fun listEntries(email: String, parentId: String): List<DriveFile> =
+        listChildren(email, parentId, foldersOnly = false).filter { it.isFolder || AudioScanner.isSupported(it.name) }
+
+    /** Tutti i file audio sotto [folderId], ciascuno con il percorso delle sottocartelle che lo contengono. */
+    fun audioTree(email: String, folderId: String): List<Pair<List<String>, DriveFile>> {
+        val result = mutableListOf<Pair<List<String>, DriveFile>>()
+        val pending = ArrayDeque(listOf(folderId to emptyList<String>()))
+        while (pending.isNotEmpty()) {
+            val (id, path) = pending.removeFirst()
+            listChildren(email, id, foldersOnly = false).forEach { file ->
+                when {
+                    file.isFolder -> pending.add(file.id to path + file.name)
+                    AudioScanner.isSupported(file.name) -> result += path to file
+                }
+            }
+        }
+        return result
+    }
+
+    /** Scarica il contenuto di un file in [out]; [onBytes] riceve i byte scritti finora. */
+    fun download(email: String, fileId: String, out: OutputStream, onBytes: (Long) -> Unit) {
+        for (attempt in 1..2) {
+            val connection = (URL(mediaUrl(fileId)).openConnection() as HttpURLConnection).apply {
+                setRequestProperty("Authorization", "Bearer ${auth.token(email)}")
+                connectTimeout = 15_000
+                readTimeout = 60_000
+            }
+            try {
+                val code = connection.responseCode
+                if (code == HttpURLConnection.HTTP_UNAUTHORIZED && attempt == 1) {
+                    auth.invalidate(email)
+                    continue
+                }
+                if (code !in 200..299) throw IOException("Drive ha risposto $code")
+                connection.inputStream.use { input ->
+                    val buffer = ByteArray(64 * 1024)
+                    var total = 0L
+                    while (true) {
+                        val n = input.read(buffer)
+                        if (n < 0) break
+                        out.write(buffer, 0, n)
+                        total += n
+                        onBytes(total)
+                    }
+                }
+                return
+            } finally {
+                connection.disconnect()
+            }
+        }
+        throw DriveAuthException("Drive non accetta il token di $email")
     }
 
     /** Carica un file nella cartella [folderId] (upload multipart, va bene per file da pochi MB). */

@@ -68,6 +68,8 @@ fun AddToPlaylistDialog(
     onPick: (Playlist) -> Unit,
     onCreate: (String) -> Unit,
     onDismiss: () -> Unit,
+    /** Solo per i brani di Drive: copia il file sul telefono. */
+    onDownload: (() -> Unit)? = null,
 ) {
     var creating by remember { mutableStateOf(false) }
     if (creating) {
@@ -86,6 +88,16 @@ fun AddToPlaylistDialog(
         },
         text = {
             LazyColumn(Modifier.heightIn(max = 320.dp)) {
+                if (onDownload != null) {
+                    item {
+                        Text(
+                            "↓ SCARICA SUL TELEFONO",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = Asd.Paper,
+                            modifier = Modifier.fillMaxWidth().clickable(onClick = onDownload).padding(vertical = 12.dp),
+                        )
+                    }
+                }
                 item {
                     Text(
                         "+ NUOVO MIXTAPE",
