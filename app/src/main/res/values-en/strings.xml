@@ -224,4 +224,5 @@
     <string name="drive_login_done">Done: Drive is linked. Go back to ASD.</string>
     <string name="drive_login_timeout">Google sign-in not completed within 5 minutes.</string>
     <string name="drive_login_refused">Google refused access (%1$s).</string>
+    <string name="drive_login_channel">Google sign-in</string>
 </resources>

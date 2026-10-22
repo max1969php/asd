@@ -225,4 +225,5 @@
     <string name="drive_login_done">Fatto: Drive è collegato. Torna ad ASD.</string>
     <string name="drive_login_timeout">Accesso a Google non completato entro 5 minuti.</string>
     <string name="drive_login_refused">Google ha rifiutato l\'accesso (%1$s).</string>
+    <string name="drive_login_channel">Accesso a Google</string>
 </resources>

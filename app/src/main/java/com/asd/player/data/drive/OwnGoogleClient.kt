@@ -109,11 +109,17 @@ class OwnGoogleClient(private val context: Context) {
                 .build()
             val results = LinkedBlockingQueue<Result<String>>()
             serve(server, state, results)
-            context.startActivity(Intent(Intent.ACTION_VIEW, url).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-            val code = runInterruptible {
-                results.poll(LOGIN_TIMEOUT_MS, TimeUnit.MILLISECONDS)
-                    ?: throw DriveAuthException(L10n.str(R.string.drive_login_timeout))
-            }.getOrThrow()
+            // Senza il servizio Android congela ASD mentre si è nel browser, e il server non risponde.
+            DriveLoginService.start(context)
+            val code = try {
+                context.startActivity(Intent(Intent.ACTION_VIEW, url).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                runInterruptible {
+                    results.poll(LOGIN_TIMEOUT_MS, TimeUnit.MILLISECONDS)
+                        ?: throw DriveAuthException(L10n.str(R.string.drive_login_timeout))
+                }.getOrThrow()
+            } finally {
+                DriveLoginService.stop(context)
+            }
             val json = post(
                 mapOf(
                     "client_id" to config.clientId,
