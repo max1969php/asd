@@ -22,9 +22,10 @@ data class Song(
         get() = fileName.substringAfterLast('.', "").uppercase()
 
     val displayArtist: String
-        get() = artist?.takeIf { it.isNotBlank() } ?: UNKNOWN_ARTIST
+        get() = artist?.takeIf { it.isNotBlank() } ?: unknownArtist
 
     companion object {
-        const val UNKNOWN_ARTIST = "Anonimo"
+        /** "Anonimo" nella lingua dell'app: lo imposta MainActivity dalle risorse. */
+        @Volatile var unknownArtist = "Anonimo"
     }
 }

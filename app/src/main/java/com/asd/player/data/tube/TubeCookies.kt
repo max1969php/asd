@@ -2,13 +2,15 @@ package com.asd.player.data.tube
 
 import android.content.Context
 import android.webkit.CookieManager
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.asd.player.L10n
+import com.asd.player.R
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * I cookie di YouTube per yt-dlp. Quando YouTube chiede "conferma di non essere un bot"
@@ -47,8 +49,8 @@ class TubeCookies(context: Context) {
 
     fun import(input: InputStream) {
         val text = input.bufferedReader().use { it.readText() }
-        if (!isNetscapeFile(text)) throw IOException("Non è un cookies.txt in formato Netscape")
-        if (!isLoggedIn(text)) throw IOException("Nel file non c'è un accesso a YouTube")
+        if (!isNetscapeFile(text)) throw IOException(L10n.str(R.string.cookies_not_netscape))
+        if (!isLoggedIn(text)) throw IOException(L10n.str(R.string.cookies_no_login))
         file.writeText(text)
         setOrigin(Origin.FILE)
     }

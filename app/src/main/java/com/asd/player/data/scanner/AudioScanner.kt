@@ -4,6 +4,8 @@ import android.content.ContentResolver
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
+import com.asd.player.L10n
+import com.asd.player.R
 import java.io.File
 import java.io.IOException
 import java.io.OutputStream
@@ -72,10 +74,10 @@ class AudioScanner(private val resolver: ContentResolver) {
         dirs.forEach { parentId = ensureDir(treeUri, parentId, it) }
         val parent = DocumentsContract.buildDocumentUriUsingTree(treeUri, parentId)
         val created = DocumentsContract.createDocument(resolver, parent, mimeType, displayName)
-            ?: throw IOException("Il telefono non mi lascia creare $displayName")
+            ?: throw IOException(L10n.str(R.string.cannot_create, displayName))
         try {
             resolver.openOutputStream(created)?.use(writeTo)
-                ?: throw IOException("Il telefono non mi lascia scrivere $displayName")
+                ?: throw IOException(L10n.str(R.string.cannot_write, displayName))
         } catch (e: Exception) {
             // Unica eccezione alla regola "l'app non cancella file": il file vuoto o a metà
             // appena creato qui sopra da un download fallito, mai un file dell'utente.
@@ -108,7 +110,7 @@ class AudioScanner(private val resolver: ContentResolver) {
         }
         val parent = DocumentsContract.buildDocumentUriUsingTree(treeUri, parentId)
         val created = DocumentsContract.createDocument(resolver, parent, Document.MIME_TYPE_DIR, name)
-            ?: throw IOException("Il telefono non mi lascia creare la cartella $name")
+            ?: throw IOException(L10n.str(R.string.cannot_create_dir, name))
         return DocumentsContract.getDocumentId(created)
     }
 

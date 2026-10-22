@@ -18,8 +18,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.asd.player.R
 import com.asd.player.ui.theme.Asd
 
 /**
@@ -46,7 +48,7 @@ fun AccountSelect(
                 .padding(horizontal = 12.dp, vertical = 12.dp),
         ) {
             Text(
-                selected ?: "nessun account",
+                selected ?: stringResource(R.string.no_account),
                 style = MaterialTheme.typography.bodyLarge,
                 color = if (selected != null) Asd.Acid else Asd.Smudge,
                 maxLines = 1,

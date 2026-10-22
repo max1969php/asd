@@ -17,10 +17,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.asd.player.R
 import com.asd.player.data.tube.TubeCookies
 import com.asd.player.ui.theme.Asd
 
@@ -38,13 +40,13 @@ fun YoutubeLogin(onDone: () -> Unit) {
                 modifier = Modifier.fillMaxWidth().background(Asd.Acid).padding(horizontal = 16.dp, vertical = 10.dp),
             ) {
                 Text(
-                    "Accedi, poi premi FATTO",
+                    stringResource(R.string.yt_login_banner),
                     style = MaterialTheme.typography.labelMedium,
                     color = Asd.Toner,
                     modifier = Modifier.weight(1f),
                 )
                 Text(
-                    "[FATTO]",
+                    stringResource(R.string.yt_login_done),
                     style = MaterialTheme.typography.labelLarge,
                     color = Asd.Toner,
                     modifier = Modifier.clickable(onClick = onDone).padding(6.dp),

@@ -5,8 +5,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -38,10 +38,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.asd.player.R
 import com.asd.player.data.settings.TubeDestination
 import com.asd.player.data.tube.JobSource
 import com.asd.player.data.tube.TubeCookies
@@ -50,7 +53,6 @@ import com.asd.player.data.tube.TubeStatus
 import com.asd.player.ui.components.PunkButton
 import com.asd.player.ui.components.Stamp
 import com.asd.player.ui.theme.Asd
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -88,27 +90,27 @@ fun TubeScreen(
             Column(Modifier.padding(16.dp)) {
                 Text("TUBO", style = MaterialTheme.typography.displayLarge)
                 Text(
-                    "incolla un link YouTube, premi invio: l'audio è tuo",
+                    stringResource(R.string.tube_subtitle),
                     style = MaterialTheme.typography.bodySmall,
                     color = Asd.Smudge,
                 )
                 Spacer(Modifier.height(16.dp))
                 UrlBox(url, onChange = { url = it }, onSubmit = submit, enabled = ready)
                 Spacer(Modifier.height(12.dp))
-                Text("SALVA IN", style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
+                Text(stringResource(R.string.save_to), style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
                 Spacer(Modifier.height(6.dp))
                 DestinationSelect(options, destination, onSelect = viewModel::setDestination)
                 Spacer(Modifier.height(10.dp))
                 if (ready) {
-                    PunkButton("Ruba l'audio", onClick = submit, icon = Icons.Filled.Download, enabled = url.isNotBlank())
+                    PunkButton(stringResource(R.string.tube_steal), onClick = submit, icon = Icons.Filled.Download, enabled = url.isNotBlank())
                 } else {
                     Text(
-                        "Non si può: ${selected?.problem ?: "destinazione sconosciuta"}.",
+                        stringResource(R.string.tube_cannot, selected?.problem ?: stringResource(R.string.unknown_destination)),
                         style = MaterialTheme.typography.bodyMedium,
                         color = Asd.Spray,
                     )
                     Spacer(Modifier.height(10.dp))
-                    PunkButton("Vai al setup", onClick = onOpenSetup, container = Asd.Paper, shadow = Asd.Acid)
+                    PunkButton(stringResource(R.string.go_to_setup), onClick = onOpenSetup, container = Asd.Paper, shadow = Asd.Acid)
                 }
             }
         }
@@ -119,10 +121,10 @@ fun TubeScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
                 ) {
-                    Text("// BOTTINO", style = MaterialTheme.typography.labelLarge, color = Asd.Spray, modifier = Modifier.weight(1f))
+                    Text(stringResource(R.string.tube_loot), style = MaterialTheme.typography.labelLarge, color = Asd.Spray, modifier = Modifier.weight(1f))
                     if (jobs.any { it.status == TubeStatus.DONE || it.status == TubeStatus.FAILED }) {
                         Text(
-                            "PULISCI",
+                            stringResource(R.string.clean_up),
                             style = MaterialTheme.typography.labelMedium,
                             color = Asd.Smudge,
                             modifier = Modifier.clickable(onClick = viewModel::clearFinished).padding(6.dp),
@@ -136,45 +138,44 @@ fun TubeScreen(
         item {
             Column(Modifier.padding(16.dp)) {
                 Spacer(Modifier.height(12.dp))
-                Text("// DAL DRIVE AL TELEFONO", style = MaterialTheme.typography.labelLarge, color = Asd.Spray)
+                Text(stringResource(R.string.tube_drive_to_phone), style = MaterialTheme.typography.labelLarge, color = Asd.Spray)
                 Spacer(Modifier.height(6.dp))
                 Text(
-                    "Copia sul telefono un pezzo o una cartella intera del tuo Drive, per ascoltarli senza rete.",
+                    stringResource(R.string.tube_drive_hint),
                     style = MaterialTheme.typography.bodySmall,
                     color = Asd.Smudge,
                 )
                 Spacer(Modifier.height(8.dp))
-                PunkButton("Scarica dal Drive", onClick = viewModel::openBrowser, icon = Icons.Filled.Download)
+                PunkButton(stringResource(R.string.download_from_drive), onClick = viewModel::openBrowser, icon = Icons.Filled.Download)
                 Spacer(Modifier.height(20.dp))
                 Text("// YOUTUBE", style = MaterialTheme.typography.labelLarge, color = Asd.Spray)
                 Spacer(Modifier.height(6.dp))
                 Text(
                     when (cookies) {
-                        TubeCookies.Origin.NONE -> "anonimo"
-                        TubeCookies.Origin.LOGIN -> "dentro con un account"
-                        TubeCookies.Origin.FILE -> "dentro con un cookies.txt"
+                        TubeCookies.Origin.NONE -> stringResource(R.string.yt_anonymous)
+                        TubeCookies.Origin.LOGIN -> stringResource(R.string.yt_logged_in)
+                        TubeCookies.Origin.FILE -> stringResource(R.string.yt_cookies_file)
                     },
                     style = MaterialTheme.typography.bodyLarge,
                     color = if (cookies == TubeCookies.Origin.NONE) Asd.Smudge else Asd.Acid,
                 )
                 Text(
-                    "Se YouTube chiede di confermare che non sei un bot, yt-dlp deve entrare con un account. " +
-                        "Meglio un account secondario: YouTube può prendersela con quello che usi.",
+                    stringResource(R.string.yt_hint),
                     style = MaterialTheme.typography.bodySmall,
                     color = Asd.Smudge,
                 )
                 Spacer(Modifier.height(8.dp))
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    PunkButton("Accedi a YouTube", onClick = { loginOpen = true })
+                    PunkButton(stringResource(R.string.yt_login), onClick = { loginOpen = true })
                     PunkButton(
-                        "Importa cookies.txt",
+                        stringResource(R.string.yt_import_cookies),
                         onClick = { importCookies.launch(arrayOf("text/*", "application/octet-stream")) },
                         container = Asd.Paper,
                         shadow = Asd.Acid,
                     )
                     if (cookies != TubeCookies.Origin.NONE) {
                         PunkButton(
-                            "Esci",
+                            stringResource(R.string.yt_logout),
                             onClick = viewModel::logoutYoutube,
                             container = Asd.Spray,
                             content = Asd.Paper,
@@ -189,20 +190,20 @@ fun TubeScreen(
                     color = Asd.Smudge,
                 )
                 Text(
-                    "Si aggiorna da solo una volta al giorno. Se YouTube fa i capricci, aggiornalo a mano.",
+                    stringResource(R.string.ytdlp_hint),
                     style = MaterialTheme.typography.bodySmall,
                     color = Asd.Smudge,
                 )
                 Spacer(Modifier.height(8.dp))
                 PunkButton(
-                    if (updating) "Aggiorno…" else "Aggiorna yt-dlp",
+                    if (updating) stringResource(R.string.ytdlp_updating) else stringResource(R.string.ytdlp_update),
                     onClick = viewModel::updateYtDlp,
                     container = Asd.Paper,
                     shadow = Asd.Acid,
                     enabled = !updating,
                 )
                 Spacer(Modifier.height(16.dp))
-                Stamp("solo per roba tua o libera", rotation = -2f)
+                Stamp(stringResource(R.string.tube_stamp), rotation = -2f)
             }
         }
     }
@@ -260,8 +261,9 @@ private fun DestinationSelect(
     }
 }
 
+@Composable
 private fun TubeDestination.label() = when (this) {
-    TubeDestination.LOCAL -> "Telefono"
+    TubeDestination.LOCAL -> stringResource(R.string.phone)
     TubeDestination.DRIVE -> "Google Drive"
 }
 
@@ -316,10 +318,10 @@ private fun JobRow(job: TubeJob, onRetry: () -> Unit) {
         )
         Spacer(Modifier.height(6.dp))
         val (label, color) = when (job.status) {
-            TubeStatus.QUEUED -> "in coda" to Asd.Smudge
+            TubeStatus.QUEUED -> stringResource(R.string.job_queued) to Asd.Smudge
             TubeStatus.DOWNLOADING ->
-                (if (job.progress > 0f) "scarico ${(job.progress * 100).toInt()}%" else "scaldo yt-dlp…") to Asd.Acid
-            TubeStatus.UPLOADING -> (if (job.target.destination == TubeDestination.LOCAL) "salvo…" else "carico…") to Asd.Acid
+                (if (job.progress > 0f) stringResource(R.string.job_downloading, (job.progress * 100).toInt()) else stringResource(R.string.job_warming_up)) to Asd.Acid
+            TubeStatus.UPLOADING -> (if (job.target.destination == TubeDestination.LOCAL) stringResource(R.string.job_saving) else stringResource(R.string.job_uploading)) to Asd.Acid
             TubeStatus.DONE -> "✓ ${job.target.label}" to Asd.Acid
             TubeStatus.FAILED -> "✕ ${job.error}" to Asd.Spray
         }
@@ -333,7 +335,7 @@ private fun JobRow(job: TubeJob, onRetry: () -> Unit) {
         if (job.status == TubeStatus.FAILED) {
             Spacer(Modifier.height(6.dp))
             Text(
-                "RIPROVA",
+                stringResource(R.string.retry),
                 style = MaterialTheme.typography.labelMedium,
                 color = Asd.Paper,
                 modifier = Modifier.clickable(onClick = onRetry).padding(vertical = 4.dp),

@@ -1,6 +1,8 @@
 package com.asd.player.data.tube
 
 import android.content.Context
+import com.asd.player.L10n
+import com.asd.player.R
 import com.yausername.youtubedl_android.YoutubeDL
 import com.yausername.youtubedl_android.YoutubeDLRequest
 import java.io.File
@@ -40,7 +42,7 @@ class TubeDownloader(private val context: Context, private val cookies: TubeCook
         }
         ytdl.updateYoutubeDL(context, YoutubeDL.UpdateChannel._STABLE)
         prefs.edit().putLong(KEY_UPDATED_AT, System.currentTimeMillis()).apply()
-        return version() ?: "ultima"
+        return version() ?: L10n.str(R.string.ytdlp_latest)
     }
 
     /** null finché non è mai stato aggiornato: c'è quello impacchettato nell'APK. */
@@ -66,9 +68,9 @@ class TubeDownloader(private val context: Context, private val cookies: TubeCook
             throw IOException(errorLine(e.message))
         }
         val track = meta.takeIf { it.exists() }?.readLines()?.firstOrNull { it.isNotBlank() }?.let(TubeTrack::parse)
-            ?: throw IOException("yt-dlp non ha scaricato niente")
+            ?: throw IOException(L10n.str(R.string.ytdlp_nothing))
         val file = File(dir, "${track.id}.${track.ext}")
-        if (!file.exists()) throw IOException("File audio sparito: ${file.name}")
+        if (!file.exists()) throw IOException(L10n.str(R.string.audio_file_gone, file.name))
         return file to track
     }
 
@@ -81,11 +83,11 @@ class TubeDownloader(private val context: Context, private val cookies: TubeCook
         val lines = output.orEmpty().lines().map { it.trim() }.filter { it.isNotEmpty() }
         val error = lines.lastOrNull { it.startsWith("ERROR:") }?.removePrefix("ERROR:")?.trim()
         return when {
-            error == null -> lines.lastOrNull() ?: "yt-dlp è fallito"
-            "Requested format is not available" in error -> "Nessuna traccia audio m4a per questo video"
+            error == null -> lines.lastOrNull() ?: L10n.str(R.string.ytdlp_failed)
+            "Requested format is not available" in error -> L10n.str(R.string.ytdlp_no_m4a)
             "not a bot" in error || "Sign in to confirm" in error ->
-                if (cookies.file.exists()) "YouTube non si fida nemmeno con l'accesso: rifai ACCEDI A YOUTUBE o cambia rete"
-                else "YouTube vuole sapere che non sei un bot: premi ACCEDI A YOUTUBE qui sotto"
+                if (cookies.file.exists()) L10n.str(R.string.yt_bot_even_logged)
+                else L10n.str(R.string.yt_bot)
             else -> error
         }
     }

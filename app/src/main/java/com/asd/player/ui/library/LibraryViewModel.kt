@@ -9,6 +9,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.asd.player.AppContainer
+import com.asd.player.L10n
+import com.asd.player.R
 import com.asd.player.data.loudness.LoudnessProgress
 import com.asd.player.data.repository.ScanState
 import com.asd.player.data.scanner.LocalSourceScanner
@@ -21,9 +23,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
@@ -156,8 +158,8 @@ class LibraryViewModel(
     /** Copia sul telefono un brano di Drive (lo scarica la coda del TUBO). */
     fun downloadToPhone(song: Song) {
         _messages.tryEmit(
-            if (container.tubeImporter.downloadToPhone(song)) "In coda: ${song.title}. Lo trovi nel BOTTINO del TUBO."
-            else "Serve una cartella del telefono in cui si può scrivere: sceglila in SETUP."
+            if (container.tubeImporter.downloadToPhone(song)) L10n.str(R.string.queued_find_in_loot, song.title)
+            else L10n.str(R.string.need_writable_folder)
         )
     }
 

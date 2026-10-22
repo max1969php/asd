@@ -4,6 +4,8 @@ import android.app.PendingIntent
 import android.content.Intent
 import androidx.lifecycle.viewModelScope
 import com.asd.player.AppContainer
+import com.asd.player.L10n
+import com.asd.player.R
 import com.asd.player.data.drive.DriveAuth
 import com.asd.player.data.drive.DriveClient
 import com.asd.player.data.drive.DriveSourceScanner
@@ -18,7 +20,7 @@ class DriveViewModel(private val container: AppContainer) : CloudViewModel(
     prefs = container.settings.drive,
     library = container.libraryRepository,
     source = SongSource.DRIVE,
-    root = CloudFolder(DriveClient.ROOT, "Il mio Drive"),
+    root = CloudFolder(DriveClient.ROOT, L10n.str(R.string.my_drive)),
 ) {
     private val auth = container.driveAuth
 
@@ -42,7 +44,7 @@ class DriveViewModel(private val container: AppContainer) : CloudViewModel(
             auth.onConsentResult(email, data)
             activate(email)
         } catch (e: Exception) {
-            _messages.tryEmit("Niente consenso, niente Drive.")
+            _messages.tryEmit(L10n.str(R.string.drive_no_consent))
         }
     }
 
@@ -67,7 +69,7 @@ class DriveViewModel(private val container: AppContainer) : CloudViewModel(
                 }
             } catch (e: Exception) {
                 _messages.tryEmit(
-                    "Google ha detto no (${e.message}). Il client OAuth è configurato? Vedi README."
+                    L10n.str(R.string.drive_google_said_no, e.message.orEmpty())
                 )
             } finally {
                 _busy.value = false

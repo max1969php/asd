@@ -16,8 +16,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.asd.player.R
 import com.asd.player.ui.theme.Asd
 
 /** Navigazione tra le cartelle di Drive per scegliere quella da indicizzare. */
@@ -43,7 +45,7 @@ fun FolderPicker(title: String, state: FolderPickerState, account: String?, view
         text = {
             Column {
                 if (state.loading) LinearProgressIndicator(Modifier.fillMaxWidth(), color = Asd.Acid, trackColor = Asd.Concrete)
-                state.error?.let { Text("ERRORE: $it", style = MaterialTheme.typography.bodySmall, color = Asd.Spray) }
+                state.error?.let { Text(stringResource(R.string.error_colon, it), style = MaterialTheme.typography.bodySmall, color = Asd.Spray) }
                 LazyColumn(Modifier.heightIn(max = 360.dp)) {
                     if (state.path.size > 1) {
                         item {
@@ -55,7 +57,7 @@ fun FolderPicker(title: String, state: FolderPickerState, account: String?, view
                     }
                     if (!state.loading && state.error == null && state.folders.isEmpty()) {
                         item {
-                            Text("(nessuna sottocartella)", style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
+                            Text(stringResource(R.string.picker_no_subfolders), style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
                         }
                     }
                 }
@@ -63,10 +65,10 @@ fun FolderPicker(title: String, state: FolderPickerState, account: String?, view
         },
         confirmButton = {
             TextButton(onClick = viewModel::confirmFolder, enabled = !state.loading) {
-                Text("USA QUESTA", color = Asd.Acid)
+                Text(stringResource(R.string.picker_use_this), color = Asd.Acid)
             }
         },
-        dismissButton = { TextButton(onClick = viewModel::closePicker) { Text("LASCIA STARE", color = Asd.Smudge) } },
+        dismissButton = { TextButton(onClick = viewModel::closePicker) { Text(stringResource(R.string.cancel), color = Asd.Smudge) } },
     )
 }
 

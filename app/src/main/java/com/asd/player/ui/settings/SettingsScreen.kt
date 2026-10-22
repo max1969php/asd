@@ -1,10 +1,16 @@
 package com.asd.player.ui.settings
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,13 +23,23 @@ import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.LinkOff
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.asd.player.L10n
+import com.asd.player.R
 import com.asd.player.data.repository.ScanState
 import com.asd.player.data.scanner.AudioScanner
 import com.asd.player.domain.model.SongSource
@@ -58,32 +74,32 @@ fun SettingsScreen(
             .padding(16.dp),
     ) {
         Text("SETUP", style = MaterialTheme.typography.displayLarge)
-        Text("poche manopole, nessun contratto", style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
+        Text(stringResource(R.string.settings_subtitle), style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
 
-        Section("Cartella del telefono") {
+        Section(stringResource(R.string.phone_folder)) {
             Text(
-                state.directoryUri?.let(AudioScanner::readablePath) ?: "nessuna",
+                state.directoryUri?.let(AudioScanner::readablePath) ?: stringResource(R.string.none_f),
                 style = MaterialTheme.typography.bodyLarge,
                 color = Asd.Acid,
             )
             Text(
-                "${state.countBySource[SongSource.LOCAL] ?: 0} pezzi indicizzati" +
-                    (state.lastScanAt.takeIf { it > 0 }?.let { " · ultimo giro ${formatDate(it)}" } ?: ""),
+                stringResource(R.string.settings_indexed, state.countBySource[SongSource.LOCAL] ?: 0) +
+                    (state.lastScanAt.takeIf { it > 0 }?.let { stringResource(R.string.last_scan, formatDate(it)) } ?: ""),
                 style = MaterialTheme.typography.bodySmall,
                 color = Asd.Smudge,
             )
             (state.scanState as? ScanState.Done)?.takeIf { it.source == SongSource.LOCAL }?.let {
                 Text(
-                    "+${it.added} nuovi · ~${it.updated} cambiati · -${it.removed} spariti",
+                    stringResource(R.string.scan_summary, it.added, it.updated, it.removed),
                     style = MaterialTheme.typography.bodySmall,
                     color = Asd.Paper,
                 )
             }
             Spacer(Modifier.height(12.dp))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                PunkButton("Cambia cartella", onClick = onPickDirectory, icon = Icons.Filled.Folder)
+                PunkButton(stringResource(R.string.change_folder), onClick = onPickDirectory, icon = Icons.Filled.Folder)
                 PunkButton(
-                    "Riscansiona",
+                    stringResource(R.string.rescan),
                     onClick = { viewModel.rescan() },
                     icon = Icons.Filled.Refresh,
                     container = Asd.Paper,
@@ -95,43 +111,41 @@ fun SettingsScreen(
 
         CloudSection(
             title = "Google Drive",
-            name = "Drive",
+            name = stringResource(R.string.drive),
             source = SongSource.DRIVE,
             state = state,
             viewModel = driveViewModel,
-            addLabel = "+ COLLEGA UN ACCOUNT DEL TELEFONO",
+            addLabel = stringResource(R.string.link_phone_account),
             onAddAccount = onAddGoogleAccount,
         )
 
-        Section("Volume uniforme") {
+        Section(stringResource(R.string.volume_title)) {
             val normalize by viewModel.normalizeVolume.collectAsStateWithLifecycle()
             val progress by viewModel.loudnessProgress.collectAsStateWithLifecycle()
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                TapeChip("Acceso", selected = normalize, onClick = { viewModel.setNormalizeVolume(true) })
-                TapeChip("Spento", selected = !normalize, onClick = { viewModel.setNormalizeVolume(false) })
+                TapeChip(stringResource(R.string.on), selected = normalize, onClick = { viewModel.setNormalizeVolume(true) })
+                TapeChip(stringResource(R.string.off), selected = !normalize, onClick = { viewModel.setNormalizeVolume(false) })
             }
             Spacer(Modifier.height(8.dp))
             if (normalize) {
                 Text(
                     when {
-                        progress.pending == 0 -> "tutti i pezzi misurati"
-                        progress.running -> "misuro il volume: ne mancano ${progress.pending}"
-                        else -> "${progress.pending} pezzi cloud da misurare: aspetto il Wi-Fi"
+                        progress.pending == 0 -> stringResource(R.string.volume_all_measured)
+                        progress.running -> stringResource(R.string.volume_measuring, progress.pending)
+                        else -> stringResource(R.string.volume_waiting_wifi, progress.pending)
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = if (progress.pending == 0) Asd.Acid else Asd.Paper,
                 )
             }
             Text(
-                "Ogni pezzo viene misurato una volta (EBU R128, come ReplayGain 2.0) e suonato a -18 LUFS: " +
-                    "niente più salti di volume tra un MP3 e l'altro. I pezzi più forti vengono abbassati, " +
-                    "quindi alza un po' il volume del telefono. I file su Drive si misurano solo in Wi-Fi.",
+                stringResource(R.string.volume_hint),
                 style = MaterialTheme.typography.bodySmall,
                 color = Asd.Smudge,
             )
         }
 
-        Section("Ordine di default") {
+        Section(stringResource(R.string.default_sort)) {
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 SortField.entries.forEach { field ->
                     TapeChip(field.label(), selected = state.query.sort.field == field, onClick = {
@@ -141,16 +155,20 @@ fun SettingsScreen(
             }
             Spacer(Modifier.height(8.dp))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                TapeChip("↑ crescente", selected = state.query.sort.ascending, onClick = {
+                TapeChip(stringResource(R.string.ascending), selected = state.query.sort.ascending, onClick = {
                     viewModel.setSort(state.query.sort.copy(ascending = true))
                 })
-                TapeChip("↓ decrescente", selected = !state.query.sort.ascending, onClick = {
+                TapeChip(stringResource(R.string.descending), selected = !state.query.sort.ascending, onClick = {
                     viewModel.setSort(state.query.sort.copy(ascending = false))
                 })
             }
         }
 
-        Section("Formati accettati") {
+        Section(stringResource(R.string.language_title)) {
+            LanguageSelect()
+        }
+
+        Section(stringResource(R.string.formats)) {
             Text(
                 AudioScanner.SUPPORTED_EXTENSIONS.joinToString(" · ") { it.uppercase() },
                 style = MaterialTheme.typography.bodyMedium,
@@ -159,20 +177,25 @@ fun SettingsScreen(
 
         Section("Manifesto") {
             Text(
-                """
-                ASD = Anarchic Streaming Device.
-                Lo "streaming" è dalla tua memoria alle tue orecchie, e basta.
-
-                · La rete serve solo a Google Drive e al TUBO, e solo se li usi tu.
-                · Nessun account, nessuna pubblicità, nessun tracciamento.
-                · Le playlist vivono sul telefono. Cancellarle non tocca i file.
-                · Costo: 0€. Per sempre.
-                """.trimIndent(),
+                stringResource(R.string.manifesto),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Spacer(Modifier.height(12.dp))
-            Stamp("copia e diffondi", rotation = -2f)
+            Stamp(stringResource(R.string.copy_and_spread), rotation = -2f)
         }
+        Spacer(Modifier.height(16.dp))
+        // L'indirizzo non si traduce: tocca e si apre l'app della posta.
+        val context = LocalContext.current
+        Text(
+            stringResource(R.string.suggestions, SUGGESTIONS_EMAIL),
+            style = MaterialTheme.typography.bodyMedium,
+            color = Asd.Acid,
+            modifier = Modifier.clickable {
+                runCatching {
+                    context.startActivity(Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$SUGGESTIONS_EMAIL")))
+                }
+            },
+        )
         Spacer(Modifier.height(24.dp))
     }
 }
@@ -207,7 +230,7 @@ private fun CloudSection(
     val cloud by viewModel.settings.collectAsStateWithLifecycle()
     val busy by viewModel.busy.collectAsStateWithLifecycle()
     Section(title) {
-        Text("Account predefinito", style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
+        Text(stringResource(R.string.default_account), style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
         Spacer(Modifier.height(6.dp))
         AccountSelect(
             accounts = cloud.accounts,
@@ -216,37 +239,37 @@ private fun CloudSection(
             onAddAccount = onAddAccount,
             addLabel = addLabel,
         )
-        if (busy) Text("parlo con $name…", style = MaterialTheme.typography.bodySmall, color = Asd.Acid)
+        if (busy) Text(stringResource(R.string.talking_to, name), style = MaterialTheme.typography.bodySmall, color = Asd.Acid)
         val email = cloud.defaultAccount
         if (email != null) {
             Spacer(Modifier.height(12.dp))
-            Text("Cartella", style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
+            Text(stringResource(R.string.folder), style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
             Text(
-                cloud.folder?.name ?: "nessuna",
+                cloud.folder?.name ?: stringResource(R.string.none_f),
                 style = MaterialTheme.typography.bodyLarge,
                 color = if (cloud.folder != null) Asd.Acid else Asd.Smudge,
             )
             Text(
-                "${state.countBySource[source] ?: 0} pezzi su $name" +
-                    (cloud.lastScanAt.takeIf { it > 0 }?.let { " · ultimo giro ${formatDate(it)}" } ?: ""),
+                stringResource(R.string.cloud_count, state.countBySource[source] ?: 0, name) +
+                    (cloud.lastScanAt.takeIf { it > 0 }?.let { stringResource(R.string.last_scan, formatDate(it)) } ?: ""),
                 style = MaterialTheme.typography.bodySmall,
                 color = Asd.Smudge,
             )
             (state.scanState as? ScanState.Done)?.takeIf { it.source == source }?.let {
                 Text(
-                    "+${it.added} nuovi · ~${it.updated} cambiati · -${it.removed} spariti",
+                    stringResource(R.string.scan_summary, it.added, it.updated, it.removed),
                     style = MaterialTheme.typography.bodySmall,
                     color = Asd.Paper,
                 )
             }
             (state.scanState as? ScanState.Failed)?.takeIf { it.source == source }?.let {
-                Text("ERRORE: ${it.reason}", style = MaterialTheme.typography.bodySmall, color = Asd.Spray)
+                Text(stringResource(R.string.error_colon, it.reason), style = MaterialTheme.typography.bodySmall, color = Asd.Spray)
             }
             Spacer(Modifier.height(12.dp))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                PunkButton("Cartella $name", onClick = viewModel::openPicker, icon = Icons.Filled.Cloud)
+                PunkButton(stringResource(R.string.cloud_folder_button, name), onClick = viewModel::openPicker, icon = Icons.Filled.Cloud)
                 PunkButton(
-                    "Riscansiona",
+                    stringResource(R.string.rescan),
                     onClick = viewModel::refresh,
                     icon = Icons.Filled.Refresh,
                     container = Asd.Paper,
@@ -254,7 +277,7 @@ private fun CloudSection(
                     enabled = cloud.folder != null && state.scanState !is ScanState.Scanning,
                 )
                 PunkButton(
-                    "Scollega",
+                    stringResource(R.string.disconnect),
                     onClick = { viewModel.disconnect(email) },
                     icon = Icons.Filled.LinkOff,
                     container = Asd.Spray,
@@ -265,14 +288,51 @@ private fun CloudSection(
         }
         Spacer(Modifier.height(8.dp))
         Text(
-            "Scegli l'account dalla select quando vuoi: i pezzi $name in libreria diventano i suoi. " +
-                "I file restano su $name e vengono suonati in streaming. " +
-                "Quello che rubi dal TUBO può finire in questa cartella.",
+            stringResource(R.string.cloud_hint, name),
             style = MaterialTheme.typography.bodySmall,
             color = Asd.Smudge,
         )
     }
 }
+
+/** Select della lingua: ogni lingua scritta nella sua lingua, così la trova anche chi non legge l'italiano. */
+@Composable
+private fun LanguageSelect() {
+    val activity = LocalContext.current as Activity
+    val current = remember { L10n.current(activity) }
+    var open by remember { mutableStateOf(false) }
+    val system = stringResource(R.string.language_system)
+    Box {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth().border(2.dp, Asd.Paper).clickable { open = true }.padding(12.dp),
+        ) {
+            Text(
+                if (current.isEmpty()) system else L10n.nativeName(current),
+                style = MaterialTheme.typography.bodyLarge,
+                color = Asd.Acid,
+                modifier = Modifier.weight(1f),
+            )
+            Text("▼", style = MaterialTheme.typography.labelLarge, color = Asd.Paper)
+        }
+        DropdownMenu(expanded = open, onDismissRequest = { open = false }, containerColor = Asd.Asphalt) {
+            (listOf("") + L10n.SUPPORTED).forEach { tag ->
+                val active = tag == current
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            (if (active) "● " else "○ ") + (if (tag.isEmpty()) system else L10n.nativeName(tag)),
+                            color = if (active) Asd.Acid else Asd.Paper,
+                        )
+                    },
+                    onClick = { open = false; if (!active) L10n.set(activity, tag) },
+                )
+            }
+        }
+    }
+}
+
+private const val SUGGESTIONS_EMAIL = "deviceasd403@gmail.com"
 
 private fun formatDate(ts: Long): String =
     DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(Date(ts))

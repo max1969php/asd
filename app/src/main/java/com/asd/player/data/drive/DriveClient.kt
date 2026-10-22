@@ -1,10 +1,10 @@
 package com.asd.player.data.drive
 
 import android.net.Uri
+import com.asd.player.L10n
+import com.asd.player.R
 import com.asd.player.data.scanner.AudioScanner
 import com.asd.player.data.scanner.ScannedFile
-import org.json.JSONArray
-import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 import java.io.OutputStream
@@ -12,6 +12,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 import java.time.Instant
+import org.json.JSONArray
+import org.json.JSONObject
 
 data class DriveFile(
     val id: String,
@@ -88,7 +90,7 @@ class DriveClient(private val auth: DriveAuth) {
                     auth.invalidate(email)
                     continue
                 }
-                if (code !in 200..299) throw IOException("Drive ha risposto $code")
+                if (code !in 200..299) throw IOException(L10n.str(R.string.drive_http, code))
                 connection.inputStream.use { input ->
                     val buffer = ByteArray(64 * 1024)
                     var total = 0L
@@ -105,7 +107,7 @@ class DriveClient(private val auth: DriveAuth) {
                 connection.disconnect()
             }
         }
-        throw DriveAuthException("Drive non accetta il token di $email")
+        throw DriveAuthException(L10n.str(R.string.drive_token_rejected, email))
     }
 
     /** Carica un file nella cartella [folderId] (upload multipart, va bene per file da pochi MB). */
@@ -143,14 +145,14 @@ class DriveClient(private val auth: DriveAuth) {
                 }
                 if (code !in 200..299) {
                     val body = connection.errorStream?.bufferedReader()?.use { it.readText() }.orEmpty()
-                    throw IOException("Drive ha rifiutato il caricamento ($code) ${body.take(200)}")
+                    throw IOException(L10n.str(R.string.drive_upload_rejected, code, body.take(200)))
                 }
                 return parseFile(JSONObject(connection.inputStream.bufferedReader().use { it.readText() }))
             } finally {
                 connection.disconnect()
             }
         }
-        throw DriveAuthException("Drive non accetta il token di $email")
+        throw DriveAuthException(L10n.str(R.string.drive_token_rejected, email))
     }
 
     private fun listChildren(email: String, parentId: String, foldersOnly: Boolean): List<DriveFile> {
@@ -184,7 +186,7 @@ class DriveClient(private val auth: DriveAuth) {
             }
             if (code !in 200..299) {
                 val body = connection.errorStream?.bufferedReader()?.use { it.readText() }.orEmpty()
-                throw IOException("Drive ha risposto $code ${body.take(200)}")
+                throw IOException(L10n.str(R.string.drive_http_body, code, body.take(200)))
             }
             return connection.inputStream.bufferedReader().use { it.readText() }
         } finally {

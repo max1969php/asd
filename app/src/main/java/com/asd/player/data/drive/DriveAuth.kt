@@ -4,17 +4,19 @@ import android.accounts.Account
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.asd.player.L10n
+import com.asd.player.R
 import com.google.android.gms.auth.api.identity.AuthorizationRequest
 import com.google.android.gms.auth.api.identity.AuthorizationResult
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Tasks
-import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 class DriveAuthException(message: String) : IOException(message)
 
@@ -42,7 +44,7 @@ class DriveAuth(context: Context) {
     fun onConsentResult(email: String, data: Intent?): String {
         val result = client.getAuthorizationResultFromIntent(data)
         return (result.toOutcome(email) as? Outcome.Granted)?.token
-            ?: throw DriveAuthException("Consenso non concesso")
+            ?: throw DriveAuthException(L10n.str(R.string.consent_denied))
     }
 
     /** Bloccante, da chiamare solo fuori dal main thread (scansione, player). */
@@ -51,11 +53,11 @@ class DriveAuth(context: Context) {
         val result = try {
             Tasks.await(client.authorize(request(email)), 30, TimeUnit.SECONDS)
         } catch (e: Exception) {
-            throw DriveAuthException("Google non risponde: ${e.message}")
+            throw DriveAuthException(L10n.str(R.string.google_not_answering, e.message.orEmpty()))
         }
         return when (val outcome = result.toOutcome(email)) {
             is Outcome.Granted -> outcome.token
-            is Outcome.NeedsConsent -> throw DriveAuthException("Serve di nuovo il consenso per $email: SETUP → Google Drive → Riscansiona")
+            is Outcome.NeedsConsent -> throw DriveAuthException(L10n.str(R.string.consent_again, email))
         }
     }
 
@@ -71,7 +73,7 @@ class DriveAuth(context: Context) {
 
     private fun AuthorizationResult.toOutcome(email: String): Outcome {
         if (hasResolution()) return Outcome.NeedsConsent(pendingIntent!!)
-        val token = accessToken ?: throw DriveAuthException("Nessun token per $email")
+        val token = accessToken ?: throw DriveAuthException(L10n.str(R.string.no_token, email))
         // I token durano un'ora: li rinnoviamo un po' prima.
         cache[email] = token to System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(45)
         return Outcome.Granted(token)

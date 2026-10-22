@@ -4,6 +4,8 @@ import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DataSpec
 import androidx.media3.datasource.ResolvingDataSource
+import com.asd.player.L10n
+import com.asd.player.R
 import com.asd.player.data.drive.DriveAuth
 import com.asd.player.data.drive.DriveClient
 import com.asd.player.data.settings.SettingsStore
@@ -23,7 +25,7 @@ class CloudStreamResolver(
     override fun resolveDataSpec(dataSpec: DataSpec): DataSpec {
         DriveClient.fileIdOf(dataSpec.uri)?.let { fileId ->
             val email = settings.drive.state.value.defaultAccount
-                ?: throw IOException("Nessun account Google Drive selezionato")
+                ?: throw IOException(L10n.str(R.string.no_drive_account))
             return dataSpec.buildUpon()
                 .setUri(DriveClient.mediaUrl(fileId))
                 .setHttpRequestHeaders(dataSpec.httpRequestHeaders + ("Authorization" to "Bearer ${driveAuth.token(email)}"))

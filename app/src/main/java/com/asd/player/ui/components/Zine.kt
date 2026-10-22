@@ -114,21 +114,6 @@ fun TapeChip(text: String, selected: Boolean, onClick: () -> Unit, modifier: Mod
     )
 }
 
-object Slogans {
-    val all = listOf(
-        "0€ al mese. Per sempre.",
-        "Niente abbonamenti. Niente algoritmi. Niente padroni.",
-        "Il cloud è solo il computer di qualcun altro. Usalo tu.",
-        "La tua musica non è un servizio.",
-        "Nessun account. Nessuna traccia.",
-        "Offline è il nuovo punk.",
-        "Skippa le pubblicità: non ce ne sono.",
-        "Fatto in casa. Come le tue cassette.",
-    )
-
-    fun random(): String = all.random()
-}
-
 fun formatDuration(ms: Long): String {
     if (ms <= 0) return "--:--"
     val totalSec = ms / 1000

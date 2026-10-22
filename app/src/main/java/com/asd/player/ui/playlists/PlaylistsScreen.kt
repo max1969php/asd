@@ -1,8 +1,5 @@
 package com.asd.player.ui.playlists
 
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.DropdownMenu
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,11 +27,14 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Shuffle
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,8 +44,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.asd.player.R
 import com.asd.player.domain.model.Playlist
 import com.asd.player.domain.model.PlaylistWithSongs
 import com.asd.player.ui.components.PunkButton
@@ -78,20 +80,20 @@ private fun PlaylistList(playlists: List<Playlist>, viewModel: PlaylistsViewMode
         Column(Modifier.padding(16.dp)) {
             Text("MIXTAPE", style = MaterialTheme.typography.displayLarge)
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("fatti a mano, come una volta", style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
+                Text(stringResource(R.string.playlists_subtitle), style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
                 Spacer(Modifier.weight(1f))
-                Stamp("${playlists.size} nastri", color = Asd.Acid, rotation = -3f)
+                Stamp(stringResource(R.string.playlists_stamp, playlists.size), color = Asd.Acid, rotation = -3f)
             }
             Spacer(Modifier.height(12.dp))
-            PunkButton("Nuovo mixtape", onClick = { creating = true }, icon = Icons.Filled.Add)
+            PunkButton(stringResource(R.string.new_playlist), onClick = { creating = true }, icon = Icons.Filled.Add)
         }
         HorizontalDivider(thickness = 2.dp, color = Asd.Paper)
 
         if (playlists.isEmpty()) {
             Column(Modifier.fillMaxSize().padding(32.dp), verticalArrangement = Arrangement.Center) {
-                Text("ZERO NASTRI.", style = MaterialTheme.typography.headlineLarge, color = Asd.Spray)
+                Text(stringResource(R.string.playlists_none), style = MaterialTheme.typography.headlineLarge, color = Asd.Spray)
                 Text(
-                    "Creane uno qui, oppure tieni premuto un pezzo nella lista per buttarlo in un mixtape.",
+                    stringResource(R.string.playlists_none_hint),
                     style = MaterialTheme.typography.bodyLarge,
                 )
             }
@@ -106,8 +108,8 @@ private fun PlaylistList(playlists: List<Playlist>, viewModel: PlaylistsViewMode
 
     if (creating) {
         NameDialog(
-            title = "Nuovo mixtape",
-            confirmLabel = "Crea",
+            title = stringResource(R.string.new_playlist),
+            confirmLabel = stringResource(R.string.create),
             onConfirm = { viewModel.create(it); creating = false },
             onDismiss = { creating = false },
         )
@@ -139,7 +141,7 @@ private fun CassetteRow(playlist: Playlist, index: Int, onClick: () -> Unit) {
                     color = Asd.Toner,
                 )
                 Spacer(Modifier.height(6.dp))
-                Text("LATO A · ${playlist.songCount} PEZZI", style = MaterialTheme.typography.labelSmall, color = Asd.Smudge)
+                Text(stringResource(R.string.playlist_side_a, playlist.songCount), style = MaterialTheme.typography.labelSmall, color = Asd.Smudge)
             }
             // Le due bobine.
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -165,25 +167,25 @@ private fun PlaylistDetail(
     Column(modifier.fillMaxSize()) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 4.dp, vertical = 8.dp)) {
             IconButton(onClick = { viewModel.open(null) }) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Indietro", tint = Asd.Paper)
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back), tint = Asd.Paper)
             }
             Spacer(Modifier.weight(1f))
-            IconButton(onClick = { renaming = true }) { Icon(Icons.Filled.Edit, contentDescription = "Rinomina", tint = Asd.Paper) }
-            IconButton(onClick = { deleting = true }) { Icon(Icons.Filled.Delete, contentDescription = "Elimina", tint = Asd.Spray) }
+            IconButton(onClick = { renaming = true }) { Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.rename), tint = Asd.Paper) }
+            IconButton(onClick = { deleting = true }) { Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.delete_playlist), tint = Asd.Spray) }
         }
         Column(Modifier.padding(horizontal = 16.dp)) {
             Text(playlist.name.uppercase(), style = MaterialTheme.typography.headlineLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Text(
-                "${data.songs.size} PEZZI · ${formatDuration(data.songs.sumOf { it.durationMs })}",
+                stringResource(R.string.playlist_summary, data.songs.size, formatDuration(data.songs.sumOf { it.durationMs })),
                 style = MaterialTheme.typography.labelMedium,
                 color = Asd.Smudge,
             )
             Spacer(Modifier.height(12.dp))
             Row {
-                PunkButton("Play", onClick = { viewModel.play(data.songs) }, icon = Icons.Filled.PlayArrow, enabled = data.songs.isNotEmpty())
+                PunkButton(stringResource(R.string.play), onClick = { viewModel.play(data.songs) }, icon = Icons.Filled.PlayArrow, enabled = data.songs.isNotEmpty())
                 Spacer(Modifier.width(8.dp))
                 PunkButton(
-                    "Caos",
+                    stringResource(R.string.shuffle_button),
                     onClick = { viewModel.play(data.songs, data.songs.indices.random(), shuffle = true) },
                     icon = Icons.Filled.Shuffle,
                     container = Asd.Spray,
@@ -198,7 +200,7 @@ private fun PlaylistDetail(
 
         if (data.songs.isEmpty()) {
             Text(
-                "Nastro vergine. Vai in ROBA e tieni premuto un pezzo per aggiungerlo.",
+                stringResource(R.string.playlist_empty),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(32.dp),
             )
@@ -220,15 +222,15 @@ private fun PlaylistDetail(
                             modifier = if (isMoving) Modifier.border(2.dp, Asd.Acid) else Modifier,
                             trailing = if (!isMoving) null else {
                                 {
-                                    SmallIcon(Icons.Filled.KeyboardArrowUp, "Su", enabled = index > 0) {
+                                    SmallIcon(Icons.Filled.KeyboardArrowUp, stringResource(R.string.move_up), enabled = index > 0) {
                                         viewModel.move(playlist.id, index, index - 1)
                                         moving = index - 1
                                     }
-                                    SmallIcon(Icons.Filled.KeyboardArrowDown, "Giù", enabled = index < data.songs.lastIndex) {
+                                    SmallIcon(Icons.Filled.KeyboardArrowDown, stringResource(R.string.move_down), enabled = index < data.songs.lastIndex) {
                                         viewModel.move(playlist.id, index, index + 1)
                                         moving = index + 1
                                     }
-                                    TextButton(onClick = { moving = null }) { Text("OK", color = Asd.Acid) }
+                                    TextButton(onClick = { moving = null }) { Text(stringResource(R.string.ok), color = Asd.Acid) }
                                 }
                             },
                         )
@@ -238,11 +240,11 @@ private fun PlaylistDetail(
                             containerColor = Asd.Asphalt,
                         ) {
                             DropdownMenuItem(
-                                text = { Text("↕ Sposta", color = Asd.Paper) },
+                                text = { Text(stringResource(R.string.move), color = Asd.Paper) },
                                 onClick = { menuFor = null; moving = index },
                             )
                             DropdownMenuItem(
-                                text = { Text("✕ Togli dal mixtape", color = Asd.Spray) },
+                                text = { Text(stringResource(R.string.remove_from_playlist), color = Asd.Spray) },
                                 onClick = { menuFor = null; viewModel.removeAt(playlist.id, index) },
                             )
                         }
@@ -255,7 +257,7 @@ private fun PlaylistDetail(
 
     if (renaming) {
         NameDialog(
-            title = "Rinomina",
+            title = stringResource(R.string.rename),
             initial = playlist.name,
             onConfirm = { viewModel.rename(playlist.id, it); renaming = false },
             onDismiss = { renaming = false },
@@ -263,9 +265,9 @@ private fun PlaylistDetail(
     }
     if (deleting) {
         ConfirmDialog(
-            title = "Bruciare il nastro?",
-            message = "Il mixtape \"${playlist.name}\" sparisce. I file audio restano dove sono.",
-            confirmLabel = "Brucia",
+            title = stringResource(R.string.burn_title),
+            message = stringResource(R.string.burn_message, playlist.name),
+            confirmLabel = stringResource(R.string.burn),
             onConfirm = { viewModel.delete(playlist.id); deleting = false },
             onDismiss = { deleting = false },
         )

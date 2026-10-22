@@ -17,8 +17,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.asd.player.R
 import com.asd.player.ui.theme.Asd
 import java.util.Locale
 
@@ -31,7 +33,7 @@ fun DriveBrowser(state: DriveBrowserState, viewModel: TubeViewModel) {
         modifier = Modifier.border(2.dp, Asd.Acid),
         title = {
             Column {
-                Text("SCARICA DAL DRIVE", style = MaterialTheme.typography.headlineSmall)
+                Text(stringResource(R.string.download_from_drive_caps), style = MaterialTheme.typography.headlineSmall)
                 Text(state.email, style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
                 Text(
                     "/" + state.path.drop(1).joinToString("/") { it.name },
@@ -45,9 +47,9 @@ fun DriveBrowser(state: DriveBrowserState, viewModel: TubeViewModel) {
         text = {
             Column {
                 if (state.loading) LinearProgressIndicator(Modifier.fillMaxWidth(), color = Asd.Acid, trackColor = Asd.Concrete)
-                state.error?.let { Text("ERRORE: $it", style = MaterialTheme.typography.bodySmall, color = Asd.Spray) }
+                state.error?.let { Text(stringResource(R.string.error_colon, it), style = MaterialTheme.typography.bodySmall, color = Asd.Spray) }
                 Text(
-                    "tocca un pezzo per scaricarlo sul telefono",
+                    stringResource(R.string.browser_hint),
                     style = MaterialTheme.typography.bodySmall,
                     color = Asd.Smudge,
                 )
@@ -63,17 +65,17 @@ fun DriveBrowser(state: DriveBrowserState, viewModel: TubeViewModel) {
                         }
                     }
                     if (!state.loading && state.error == null && state.entries.isEmpty()) {
-                        item { Text("(niente audio qui)", style = MaterialTheme.typography.bodySmall, color = Asd.Smudge) }
+                        item { Text(stringResource(R.string.browser_no_audio), style = MaterialTheme.typography.bodySmall, color = Asd.Smudge) }
                     }
                 }
             }
         },
         confirmButton = {
             TextButton(onClick = viewModel::downloadFolder, enabled = !state.loading) {
-                Text("SCARICA TUTTA LA CARTELLA", color = Asd.Acid)
+                Text(stringResource(R.string.download_whole_folder), color = Asd.Acid)
             }
         },
-        dismissButton = { TextButton(onClick = viewModel::closeBrowser) { Text("CHIUDI", color = Asd.Smudge) } },
+        dismissButton = { TextButton(onClick = viewModel::closeBrowser) { Text(stringResource(R.string.close_caps), color = Asd.Smudge) } },
     )
 }
 

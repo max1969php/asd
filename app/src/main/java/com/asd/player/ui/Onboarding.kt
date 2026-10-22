@@ -16,7 +16,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.asd.player.R
 import com.asd.player.ui.components.AnarchyLogo
 import com.asd.player.ui.components.PunkButton
 import com.asd.player.ui.components.Stamp
@@ -38,21 +40,19 @@ fun Onboarding(
         Text("ANARCHIC\nSTREAMING\nDEVICE", style = MaterialTheme.typography.headlineLarge, color = Asd.Acid)
         Spacer(Modifier.height(16.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Stamp("0€/mese", rotation = -6f)
+            Stamp(stringResource(R.string.onboarding_stamp_free), rotation = -6f)
             Spacer(Modifier.width(12.dp))
-            Stamp("no account", color = Asd.Paper, rotation = 4f)
+            Stamp(stringResource(R.string.onboarding_stamp_no_account), color = Asd.Paper, rotation = 4f)
             Spacer(Modifier.width(12.dp))
-            Stamp("no cloud", color = Asd.Acid, rotation = -2f)
+            Stamp(stringResource(R.string.onboarding_stamp_no_cloud), color = Asd.Acid, rotation = -2f)
         }
         Spacer(Modifier.height(24.dp))
         Text(
-            "I tuoi MP3 sono già tuoi. Non devi pagare nessuno per ascoltarli.\n\n" +
-                "Scegli UNA cartella del telefono, o una del tuo Google Drive: ASD la setaccia, " +
-                "mette in fila i pezzi e ti lascia fare mixtape. Fine.",
+            stringResource(R.string.onboarding_intro),
             style = MaterialTheme.typography.bodyLarge,
         )
         Spacer(Modifier.height(32.dp))
-        PunkButton("Cartella del telefono", onClick = onPickDirectory, icon = Icons.Filled.Folder)
+        PunkButton(stringResource(R.string.phone_folder), onClick = onPickDirectory, icon = Icons.Filled.Folder)
         Spacer(Modifier.height(12.dp))
         PunkButton(
             "Google Drive",
@@ -62,6 +62,6 @@ fun Onboarding(
             shadow = Asd.Acid,
         )
         Spacer(Modifier.height(12.dp))
-        Text("Puoi aggiungere l'altra fonte quando vuoi da SETUP.", style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
+        Text(stringResource(R.string.onboarding_other_source), style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
     }
 }

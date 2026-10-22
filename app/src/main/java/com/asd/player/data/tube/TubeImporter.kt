@@ -1,6 +1,8 @@
 package com.asd.player.data.tube
 
 import android.net.Uri
+import com.asd.player.L10n
+import com.asd.player.R
 import com.asd.player.data.drive.DriveClient
 import com.asd.player.data.repository.MusicLibraryRepository
 import com.asd.player.data.scanner.AudioMetadata
@@ -11,6 +13,8 @@ import com.asd.player.data.settings.SettingsStore
 import com.asd.player.data.settings.TubeDestination
 import com.asd.player.domain.model.Song
 import com.asd.player.domain.model.SongSource
+import java.io.File
+import java.util.concurrent.atomic.AtomicLong
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -22,8 +26,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import java.io.File
-import java.util.concurrent.atomic.AtomicLong
 
 enum class TubeStatus { QUEUED, DOWNLOADING, UPLOADING, DONE, FAILED }
 
@@ -99,7 +101,7 @@ class TubeImporter(
     fun localTarget(): TubeTarget? {
         val dir = settings.directoryUri.value ?: return null
         if (!local.canWrite(dir)) return null
-        return TubeTarget(TubeDestination.LOCAL, null, dir.toString(), "Telefono · ${AudioScanner.readablePath(dir)}")
+        return TubeTarget(TubeDestination.LOCAL, null, dir.toString(), L10n.str(R.string.phone_target, AudioScanner.readablePath(dir)))
     }
 
     /** Copia sul telefono un brano di Drive già in libreria. Restituisce false se manca la cartella. */
@@ -135,7 +137,7 @@ class TubeImporter(
             edit(id) { it.copy(status = TubeStatus.DONE, progress = 1f) }
         } catch (e: SecurityException) {
             edit(id) {
-                it.copy(status = TubeStatus.FAILED, error = "Il telefono non mi lascia scrivere: riscegli la cartella in SETUP")
+                it.copy(status = TubeStatus.FAILED, error = L10n.str(R.string.phone_write_denied))
             }
         } catch (e: Exception) {
             edit(id) { it.copy(status = TubeStatus.FAILED, error = e.message ?: e.javaClass.simpleName) }

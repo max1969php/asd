@@ -2,6 +2,8 @@ package com.asd.player.ui.cloud
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.asd.player.L10n
+import com.asd.player.R
 import com.asd.player.data.repository.MusicLibraryRepository
 import com.asd.player.data.scanner.SourceScanner
 import com.asd.player.data.settings.CloudFolder
@@ -143,7 +145,7 @@ abstract class CloudViewModel(
             if (_picker.value?.path != state.path) return@launch
             _picker.value = result.fold(
                 onSuccess = { state.copy(folders = it, loading = false) },
-                onFailure = { state.copy(loading = false, error = it.message ?: "Cloud irraggiungibile") },
+                onFailure = { state.copy(loading = false, error = it.message ?: L10n.str(R.string.cloud_unreachable)) },
             )
         }
     }

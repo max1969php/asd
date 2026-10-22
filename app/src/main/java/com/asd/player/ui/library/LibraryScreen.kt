@@ -40,7 +40,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.asd.player.R
 import com.asd.player.data.repository.ScanState
 import com.asd.player.domain.model.Playlist
 import com.asd.player.domain.model.Song
@@ -77,15 +79,15 @@ fun LibraryScreen(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
         ) {
             Text(
-                "${state.songs.size} / ${state.totalCount} PEZZI",
+                stringResource(R.string.library_count, state.songs.size, state.totalCount),
                 style = MaterialTheme.typography.labelMedium,
                 color = Asd.Smudge,
                 modifier = Modifier.weight(1f),
             )
-            PunkButton("Tutto", onClick = { viewModel.play(state.songs, 0) }, icon = Icons.Filled.PlayArrow, enabled = state.songs.isNotEmpty())
+            PunkButton(stringResource(R.string.play_all), onClick = { viewModel.play(state.songs, 0) }, icon = Icons.Filled.PlayArrow, enabled = state.songs.isNotEmpty())
             Spacer(Modifier.width(8.dp))
             PunkButton(
-                "Caos",
+                stringResource(R.string.shuffle_button),
                 onClick = { viewModel.shuffle(state.songs) },
                 icon = Icons.Filled.Shuffle,
                 container = Asd.Spray,
@@ -138,7 +140,7 @@ private fun LibraryHeader(total: Int, slogan: String) {
             Spacer(Modifier.width(10.dp))
             Text("ASD", style = MaterialTheme.typography.displayLarge, color = Asd.Paper)
             Spacer(Modifier.weight(1f))
-            Stamp(if (total > 0) "$total pezzi · 0€" else "0€", color = Asd.Acid, rotation = 5f)
+            Stamp(if (total > 0) stringResource(R.string.library_stamp, total) else "0€", color = Asd.Acid, rotation = 5f)
         }
         Text(
             "ANARCHIC STREAMING DEVICE",
@@ -168,7 +170,7 @@ private fun SearchBox(text: String, onTextChange: (String) -> Unit) {
         Spacer(Modifier.width(8.dp))
         Box(Modifier.weight(1f).padding(vertical = 12.dp)) {
             if (text.isEmpty()) {
-                Text("titolo, artista, album, file…", style = MaterialTheme.typography.bodyLarge, color = Asd.Smudge)
+                Text(stringResource(R.string.search_hint), style = MaterialTheme.typography.bodyLarge, color = Asd.Smudge)
             }
             BasicTextField(
                 value = text,
@@ -181,7 +183,7 @@ private fun SearchBox(text: String, onTextChange: (String) -> Unit) {
         }
         if (text.isNotEmpty()) {
             IconButton(onClick = { onTextChange("") }) {
-                Icon(Icons.Filled.Clear, contentDescription = "Svuota", tint = Asd.Paper)
+                Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.clear), tint = Asd.Paper)
             }
         } else {
             Spacer(Modifier.size(12.dp))
@@ -205,10 +207,10 @@ private fun FilterBar(state: LibraryUiState, viewModel: LibraryViewModel) {
     ) {
         val q = state.query
         if (q.formats.isNotEmpty() || q.sources.isNotEmpty() || q.artist != null || q.text.isNotBlank()) {
-            TapeChip("✕ Azzera", selected = false, onClick = viewModel::clearFilters)
+            TapeChip(stringResource(R.string.filters_reset), selected = false, onClick = viewModel::clearFilters)
         }
         Box {
-            TapeChip("Ordina: ${sort.field.label()} ${if (sort.ascending) "↑" else "↓"}", selected = false, onClick = { sortMenu = true })
+            TapeChip(stringResource(R.string.sort_chip, sort.field.label(), if (sort.ascending) "↑" else "↓"), selected = false, onClick = { sortMenu = true })
             DropdownMenu(expanded = sortMenu, onDismissRequest = { sortMenu = false }, containerColor = Asd.Asphalt) {
                 SortField.entries.forEach { field ->
                     DropdownMenuItem(
@@ -226,12 +228,12 @@ private fun FilterBar(state: LibraryUiState, viewModel: LibraryViewModel) {
         }
         Box {
             TapeChip(
-                text = state.query.artist?.let { "Artista: $it" } ?: "Artista: tutti",
+                text = state.query.artist?.let { stringResource(R.string.artist_chip, it) } ?: stringResource(R.string.artist_chip_all),
                 selected = state.query.artist != null,
                 onClick = { artistMenu = true },
             )
             DropdownMenu(expanded = artistMenu, onDismissRequest = { artistMenu = false }, containerColor = Asd.Asphalt) {
-                DropdownMenuItem(text = { Text("TUTTI", color = Asd.Acid) }, onClick = { viewModel.setArtist(null); artistMenu = false })
+                DropdownMenuItem(text = { Text(stringResource(R.string.all_caps), color = Asd.Acid) }, onClick = { viewModel.setArtist(null); artistMenu = false })
                 state.artists.forEach { artist ->
                     DropdownMenuItem(text = { Text(artist) }, onClick = { viewModel.setArtist(artist); artistMenu = false })
                 }
@@ -254,8 +256,8 @@ private fun ScanBanner(scan: ScanState) {
     when (scan) {
         is ScanState.Scanning -> Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)) {
             Text(
-                if (scan.total == 0) "${scan.source.label()}: FRUGANDO NELLA CARTELLA…"
-                else "${scan.source.label()}: INDICIZZO ${scan.processed}/${scan.total}…",
+                if (scan.total == 0) stringResource(R.string.scan_listing, scan.source.label())
+                else stringResource(R.string.scan_indexing, scan.source.label(), scan.processed, scan.total),
                 style = MaterialTheme.typography.labelSmall,
                 color = Asd.Acid,
             )
@@ -272,7 +274,7 @@ private fun ScanBanner(scan: ScanState) {
             }
         }
         is ScanState.Failed -> Text(
-            "ERRORE ${scan.source.label()}: ${scan.reason}",
+            stringResource(R.string.scan_error, scan.source.label(), scan.reason),
             style = MaterialTheme.typography.labelSmall,
             color = Asd.Paper,
             modifier = Modifier.fillMaxWidth().background(Asd.Spray).padding(horizontal = 16.dp, vertical = 6.dp),
@@ -289,22 +291,22 @@ private fun EmptyLibrary(hasSongs: Boolean, scanning: Boolean, onClear: () -> Un
         verticalArrangement = Arrangement.Center,
     ) {
         when {
-            scanning -> Text("Sto contando i tuoi pezzi.\nPazienza, non è un abbonamento.", style = MaterialTheme.typography.bodyLarge)
+            scanning -> Text(stringResource(R.string.library_counting), style = MaterialTheme.typography.bodyLarge)
             hasSongs -> {
-                Text("NIENTE.", style = MaterialTheme.typography.headlineLarge, color = Asd.Spray)
-                Text("Nessun pezzo passa i tuoi filtri.", style = MaterialTheme.typography.bodyLarge)
+                Text(stringResource(R.string.library_nothing), style = MaterialTheme.typography.headlineLarge, color = Asd.Spray)
+                Text(stringResource(R.string.library_no_match), style = MaterialTheme.typography.bodyLarge)
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    "[ AZZERA FILTRI ]",
+                    stringResource(R.string.library_reset_filters),
                     style = MaterialTheme.typography.labelLarge,
                     color = Asd.Acid,
                     modifier = Modifier.clickable(onClick = onClear).padding(8.dp),
                 )
             }
             else -> {
-                Text("CARTELLA VUOTA.", style = MaterialTheme.typography.headlineLarge, color = Asd.Spray)
+                Text(stringResource(R.string.library_empty), style = MaterialTheme.typography.headlineLarge, color = Asd.Spray)
                 Text(
-                    "Buttaci dentro qualche MP3, WAV o FLAC (sul telefono o su Drive) e premi Riscansiona in SETUP.",
+                    stringResource(R.string.library_empty_hint),
                     style = MaterialTheme.typography.bodyLarge,
                 )
             }
@@ -312,15 +314,17 @@ private fun EmptyLibrary(hasSongs: Boolean, scanning: Boolean, onClear: () -> Un
     }
 }
 
+@Composable
 fun SongSource.label(): String = when (this) {
-    SongSource.LOCAL -> "Telefono"
-    SongSource.DRIVE -> "Drive"
+    SongSource.LOCAL -> stringResource(R.string.phone)
+    SongSource.DRIVE -> stringResource(R.string.drive)
 }
 
+@Composable
 fun SortField.label(): String = when (this) {
-    SortField.TITLE -> "Titolo"
-    SortField.ARTIST -> "Artista"
-    SortField.ALBUM -> "Album"
-    SortField.DURATION -> "Durata"
-    SortField.RECENT -> "Recenti"
+    SortField.TITLE -> stringResource(R.string.sort_title)
+    SortField.ARTIST -> stringResource(R.string.sort_artist)
+    SortField.ALBUM -> stringResource(R.string.sort_album)
+    SortField.DURATION -> stringResource(R.string.sort_duration)
+    SortField.RECENT -> stringResource(R.string.sort_recent)
 }

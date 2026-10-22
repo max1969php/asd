@@ -6,6 +6,8 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.asd.player.AppContainer
+import com.asd.player.L10n
+import com.asd.player.R
 import com.asd.player.data.drive.DriveAuth
 import com.asd.player.data.drive.DriveClient
 import com.asd.player.data.drive.DriveFile
@@ -63,7 +65,7 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
     ) { dir, drive ->
         listOf(
             localOption(dir != null),
-            cloudOption(TubeDestination.DRIVE, "Drive", drive),
+            cloudOption(TubeDestination.DRIVE, L10n.str(R.string.drive), drive),
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
@@ -92,7 +94,7 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
     fun onLoginClosed() {
         viewModelScope.launch {
             val ok = withContext(Dispatchers.IO) { importer.cookies.saveFromLogin() }
-            _messages.tryEmit(if (ok) "Dentro YouTube: niente più domande da bot." else "Accesso a YouTube non completato.")
+            _messages.tryEmit(if (ok) L10n.str(R.string.yt_login_ok) else L10n.str(R.string.yt_login_failed))
         }
     }
 
@@ -102,26 +104,26 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
                 withContext(Dispatchers.IO) {
                     container.contentResolver.openInputStream(uri)!!.use(importer.cookies::import)
                 }
-                _messages.tryEmit("Cookie di YouTube importati.")
+                _messages.tryEmit(L10n.str(R.string.yt_cookies_imported))
             } catch (e: Exception) {
-                _messages.tryEmit("Cookie non importati: ${e.message}")
+                _messages.tryEmit(L10n.str(R.string.yt_cookies_failed, e.message.orEmpty()))
             }
         }
     }
 
     fun logoutYoutube() {
         importer.cookies.clear()
-        _messages.tryEmit("Uscito da YouTube: ASD non ha più i tuoi cookie.")
+        _messages.tryEmit(L10n.str(R.string.yt_logged_out))
     }
 
     fun setDestination(destination: TubeDestination) = settings.setTubeDestination(destination)
 
     /** Invio sul campo URL. Restituisce true se il link è buono e il campo si può svuotare. */
     fun submit(input: String): Boolean {
-        val url = TubeLink.clean(input) ?: return false.also { _messages.tryEmit("Questo non è un link YouTube.") }
+        val url = TubeLink.clean(input) ?: return false.also { _messages.tryEmit(L10n.str(R.string.not_youtube_link)) }
         val option = options.value.find { it.destination == destination.value }
         val target = option?.target
-            ?: return false.also { _messages.tryEmit("Destinazione non pronta: ${option?.problem ?: "vai in SETUP"}.") }
+            ?: return false.also { _messages.tryEmit(L10n.str(R.string.destination_not_ready, option?.problem ?: L10n.str(R.string.go_to_setup_lower))) }
         if (target.destination != TubeDestination.DRIVE) {
             importer.enqueue(url, target)
             return true
@@ -137,7 +139,7 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
             auth.onConsentResult(email, data)
             action()
         } catch (e: Exception) {
-            _messages.tryEmit("Senza il permesso di Google non si tocca Drive.")
+            _messages.tryEmit(L10n.str(R.string.drive_needs_permission))
         }
     }
 
@@ -145,13 +147,13 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
 
     fun openBrowser() {
         if (importer.localTarget() == null) {
-            _messages.tryEmit("Serve una cartella del telefono in cui si può scrivere: sceglila in SETUP.")
+            _messages.tryEmit(L10n.str(R.string.need_writable_folder))
             return
         }
         val email = settings.drive.state.value.defaultAccount
-            ?: return run { _messages.tryEmit("Prima collega Google Drive in SETUP.") }
+            ?: return run { _messages.tryEmit(L10n.str(R.string.link_drive_first)) }
         withDrive(email) {
-            _browser.value = DriveBrowserState(email, listOf(CloudFolder(DriveClient.ROOT, "Il mio Drive")))
+            _browser.value = DriveBrowserState(email, listOf(CloudFolder(DriveClient.ROOT, L10n.str(R.string.my_drive))))
             loadBrowser()
         }
     }
@@ -177,7 +179,7 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
         val state = _browser.value ?: return
         val target = importer.localTarget() ?: return
         importer.enqueue(listOf(JobSource.DriveFile(state.email, file.id, file.name, emptyList(), file.size)), target)
-        _messages.tryEmit("In coda: ${file.name}")
+        _messages.tryEmit(L10n.str(R.string.queued, file.name))
     }
 
     /** Tutta la cartella corrente, sottocartelle comprese, ricreata dentro la cartella del telefono. */
@@ -192,7 +194,7 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
             result.fold(
                 onSuccess = { files ->
                     if (files.isEmpty()) {
-                        _messages.tryEmit("Nessun pezzo audio in ${folder.name}.")
+                        _messages.tryEmit(L10n.str(R.string.folder_no_audio, folder.name))
                     } else {
                         // La radice del Drive non diventa una cartella: i pezzi finiscono in quella del telefono.
                         val base = if (folder.id == DriveClient.ROOT) emptyList() else listOf(folder.name)
@@ -200,11 +202,11 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
                             files.map { (dirs, file) -> JobSource.DriveFile(state.email, file.id, file.name, base + dirs, file.size) },
                             target,
                         )
-                        _messages.tryEmit("${files.size} pezzi in coda: li trovi nel BOTTINO del TUBO.")
+                        _messages.tryEmit(L10n.str(R.string.queued_many, files.size))
                         _browser.value = null
                     }
                 },
-                onFailure = { _messages.tryEmit("Drive non risponde: ${it.message}") },
+                onFailure = { _messages.tryEmit(L10n.str(R.string.drive_not_answering, it.message.orEmpty())) },
             )
         }
     }
@@ -218,7 +220,7 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
             if (_browser.value?.path != state.path) return@launch
             _browser.value = result.fold(
                 onSuccess = { state.copy(entries = it, loading = false) },
-                onFailure = { state.copy(loading = false, error = it.message ?: "Drive irraggiungibile") },
+                onFailure = { state.copy(loading = false, error = it.message ?: L10n.str(R.string.drive_unreachable)) },
             )
         }
     }
@@ -235,7 +237,7 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
                     }
                 }
             } catch (e: Exception) {
-                _messages.tryEmit("Google ha detto no (${e.message}).")
+                _messages.tryEmit(L10n.str(R.string.google_said_no, e.message.orEmpty()))
             }
         }
     }
@@ -244,8 +246,8 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
         val target = importer.localTarget()
         return when {
             target != null -> DestinationOption(TubeDestination.LOCAL, target, null)
-            !hasFolder -> DestinationOption(TubeDestination.LOCAL, null, "nessuna cartella del telefono")
-            else -> DestinationOption(TubeDestination.LOCAL, null, "riscegli la cartella in SETUP per poterci scrivere")
+            !hasFolder -> DestinationOption(TubeDestination.LOCAL, null, L10n.str(R.string.no_phone_folder))
+            else -> DestinationOption(TubeDestination.LOCAL, null, L10n.str(R.string.repick_folder_to_write))
         }
     }
 
@@ -256,7 +258,7 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
     fun loadVersion() {
         if (_ytDlpVersion.value != null) return
         viewModelScope.launch {
-            _ytDlpVersion.value = withContext(Dispatchers.IO) { importer.ytDlpVersion() } ?: "quello di serie"
+            _ytDlpVersion.value = withContext(Dispatchers.IO) { importer.ytDlpVersion() } ?: L10n.str(R.string.ytdlp_bundled)
         }
     }
 
@@ -267,9 +269,9 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
             try {
                 val version = withContext(Dispatchers.IO) { importer.updateYtDlp() }
                 _ytDlpVersion.value = version
-                _messages.tryEmit("yt-dlp aggiornato: $version")
+                _messages.tryEmit(L10n.str(R.string.ytdlp_updated, version))
             } catch (e: Exception) {
-                _messages.tryEmit("Aggiornamento fallito: ${e.message}")
+                _messages.tryEmit(L10n.str(R.string.ytdlp_update_failed, e.message.orEmpty()))
             } finally {
                 _updating.value = false
             }
@@ -277,8 +279,8 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
     }
 
     private fun cloudOption(destination: TubeDestination, name: String, state: CloudSettings): DestinationOption {
-        val email = state.defaultAccount ?: return DestinationOption(destination, null, "nessun account $name collegato")
-        val folder = state.folder ?: return DestinationOption(destination, null, "nessuna cartella $name scelta")
+        val email = state.defaultAccount ?: return DestinationOption(destination, null, L10n.str(R.string.no_cloud_account, name))
+        val folder = state.folder ?: return DestinationOption(destination, null, L10n.str(R.string.no_cloud_folder, name))
         return DestinationOption(destination, TubeTarget(destination, email, folder.id, "$name · $email · ${folder.name}"), null)
     }
 }

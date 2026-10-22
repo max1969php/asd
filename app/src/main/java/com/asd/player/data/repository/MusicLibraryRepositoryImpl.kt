@@ -1,5 +1,7 @@
 package com.asd.player.data.repository
 
+import com.asd.player.L10n
+import com.asd.player.R
 import com.asd.player.data.database.SongDao
 import com.asd.player.data.database.SongEntity
 import com.asd.player.data.drive.DriveAuthException
@@ -8,6 +10,7 @@ import com.asd.player.data.scanner.ScannedFile
 import com.asd.player.data.scanner.SourceScanner
 import com.asd.player.domain.model.Song
 import com.asd.player.domain.model.SongSource
+import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -22,7 +25,6 @@ import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
-import java.util.concurrent.atomic.AtomicInteger
 
 class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRepository {
 
@@ -68,10 +70,10 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
                 _scanState.value = ScanState.Done(source, toInsert.size, toUpdate.size, toDelete.size)
                 true
             } catch (e: SecurityException) {
-                _scanState.value = ScanState.Failed(source, "Accesso alla cartella revocato. Sceglila di nuovo.")
+                _scanState.value = ScanState.Failed(source, L10n.str(R.string.folder_access_revoked))
                 false
             } catch (e: DriveAuthException) {
-                _scanState.value = ScanState.Failed(source, e.message ?: "Accesso a Drive negato")
+                _scanState.value = ScanState.Failed(source, e.message ?: L10n.str(R.string.drive_access_denied))
                 false
             } catch (e: Exception) {
                 _scanState.value = ScanState.Failed(source, e.message ?: e.javaClass.simpleName)

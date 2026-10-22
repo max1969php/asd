@@ -10,6 +10,8 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
+import com.asd.player.L10n
+import com.asd.player.R
 import com.asd.player.domain.model.Song
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,7 +58,7 @@ class PlaybackController(private val context: Context) {
         override fun onEvents(player: Player, events: Player.Events) = publish(player)
 
         override fun onPlayerError(error: PlaybackException) {
-            _errors.tryEmit("File illeggibile, sparito o Drive irraggiungibile. Salto.")
+            _errors.tryEmit(L10n.str(R.string.playback_skip))
             controller?.let { c ->
                 if (c.hasNextMediaItem()) {
                     c.seekToNextMediaItem()

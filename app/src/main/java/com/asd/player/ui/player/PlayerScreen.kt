@@ -48,10 +48,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player
+import com.asd.player.R
 import com.asd.player.playback.PlaybackState
 import com.asd.player.ui.components.AnarchyLogo
 import com.asd.player.ui.components.Stamp
@@ -77,10 +79,10 @@ fun PlayerScreen(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             IconButton(onClick = onClose) {
-                Icon(Icons.Filled.KeyboardArrowDown, contentDescription = "Chiudi", tint = Asd.Paper, modifier = Modifier.size(32.dp))
+                Icon(Icons.Filled.KeyboardArrowDown, contentDescription = stringResource(R.string.close), tint = Asd.Paper, modifier = Modifier.size(32.dp))
             }
             Spacer(Modifier.weight(1f))
-            Stamp(if (state.isPlaying) "on air" else "in pausa", color = if (state.isPlaying) Asd.Spray else Asd.Smudge, rotation = 3f)
+            Stamp(if (state.isPlaying) stringResource(R.string.on_air) else stringResource(R.string.paused), color = if (state.isPlaying) Asd.Spray else Asd.Smudge, rotation = 3f)
         }
 
         Spacer(Modifier.weight(0.5f))
@@ -88,7 +90,7 @@ fun PlayerScreen(
         Spacer(Modifier.weight(0.5f))
 
         Text(
-            (now?.title ?: "Silenzio").uppercase(),
+            (now?.title ?: stringResource(R.string.silence)).uppercase(),
             style = MaterialTheme.typography.headlineLarge,
             textAlign = TextAlign.Center,
             maxLines = 2,
@@ -96,7 +98,7 @@ fun PlayerScreen(
         )
         Spacer(Modifier.height(6.dp))
         Text(
-            listOfNotNull(now?.artist ?: "Anonimo", now?.album).joinToString(" // "),
+            listOfNotNull(now?.artist ?: stringResource(R.string.unknown_artist), now?.album).joinToString(" // "),
             style = MaterialTheme.typography.bodyMedium,
             color = Asd.Acid,
             textAlign = TextAlign.Center,
@@ -113,17 +115,17 @@ fun PlayerScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            ToggleIcon(Icons.Filled.Shuffle, "Casuale", active = state.shuffle, onClick = viewModel::toggleShuffle)
+            ToggleIcon(Icons.Filled.Shuffle, stringResource(R.string.shuffle), active = state.shuffle, onClick = viewModel::toggleShuffle)
             IconButton(onClick = viewModel::previous, modifier = Modifier.size(56.dp)) {
-                Icon(Icons.Filled.SkipPrevious, contentDescription = "Precedente", tint = Asd.Paper, modifier = Modifier.size(40.dp))
+                Icon(Icons.Filled.SkipPrevious, contentDescription = stringResource(R.string.previous), tint = Asd.Paper, modifier = Modifier.size(40.dp))
             }
             BigPlayButton(isPlaying = state.isPlaying, onClick = viewModel::togglePlayPause)
             IconButton(onClick = viewModel::next, modifier = Modifier.size(56.dp)) {
-                Icon(Icons.Filled.SkipNext, contentDescription = "Successivo", tint = Asd.Paper, modifier = Modifier.size(40.dp))
+                Icon(Icons.Filled.SkipNext, contentDescription = stringResource(R.string.next), tint = Asd.Paper, modifier = Modifier.size(40.dp))
             }
             ToggleIcon(
                 if (state.repeatMode == Player.REPEAT_MODE_ONE) Icons.Filled.RepeatOne else Icons.Filled.Repeat,
-                "Ripeti",
+                stringResource(R.string.repeat),
                 active = state.repeatMode != Player.REPEAT_MODE_OFF,
                 onClick = viewModel::cycleRepeat,
             )
@@ -213,7 +215,7 @@ private fun BigPlayButton(isPlaying: Boolean, onClick: () -> Unit) {
         ) {
             Icon(
                 if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                contentDescription = if (isPlaying) "Pausa" else "Play",
+                contentDescription = if (isPlaying) stringResource(R.string.pause) else stringResource(R.string.play),
                 tint = Asd.Toner,
                 modifier = Modifier.size(48.dp),
             )
@@ -252,7 +254,7 @@ fun MiniPlayer(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    now.artist ?: "Anonimo",
+                    now.artist ?: stringResource(R.string.unknown_artist),
                     style = MaterialTheme.typography.bodySmall,
                     color = Asd.Toner,
                     maxLines = 1,
@@ -262,12 +264,12 @@ fun MiniPlayer(
             IconButton(onClick = onToggle) {
                 Icon(
                     if (state.isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                    contentDescription = if (state.isPlaying) "Pausa" else "Play",
+                    contentDescription = if (state.isPlaying) stringResource(R.string.pause) else stringResource(R.string.play),
                     tint = Asd.Toner,
                 )
             }
             IconButton(onClick = onNext, enabled = state.hasNext) {
-                Icon(Icons.Filled.SkipNext, contentDescription = "Successivo", tint = if (state.hasNext) Asd.Toner else Color.DarkGray)
+                Icon(Icons.Filled.SkipNext, contentDescription = stringResource(R.string.next), tint = if (state.hasNext) Asd.Toner else Color.DarkGray)
             }
         }
     }

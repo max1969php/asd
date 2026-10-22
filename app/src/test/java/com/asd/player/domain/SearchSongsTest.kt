@@ -79,7 +79,7 @@ class SearchSongsTest {
 
     @Test
     fun `brani senza artista finiscono sotto Anonimo`() {
-        val q = LibraryQuery(artist = Song.UNKNOWN_ARTIST)
+        val q = LibraryQuery(artist = Song.unknownArtist)
         assertEquals(listOf(4L), search(songs, q).map { it.id })
     }
 

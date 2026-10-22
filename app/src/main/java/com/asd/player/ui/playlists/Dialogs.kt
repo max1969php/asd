@@ -20,7 +20,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.asd.player.R
 import com.asd.player.domain.model.Playlist
 import com.asd.player.domain.model.Song
 import com.asd.player.ui.theme.Asd
@@ -29,7 +31,7 @@ import com.asd.player.ui.theme.Asd
 fun NameDialog(
     title: String,
     initial: String = "",
-    confirmLabel: String = "Fatto",
+    confirmLabel: String = stringResource(R.string.done),
     onConfirm: (String) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -44,7 +46,7 @@ fun NameDialog(
                 value = name,
                 onValueChange = { name = it },
                 singleLine = true,
-                placeholder = { Text("es. roba da corriera") },
+                placeholder = { Text(stringResource(R.string.playlist_name_hint)) },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Asd.Acid,
                     unfocusedBorderColor = Asd.Paper,
@@ -57,7 +59,7 @@ fun NameDialog(
                 Text(confirmLabel.uppercase(), color = if (name.isNotBlank()) Asd.Acid else Asd.Smudge)
             }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("LASCIA STARE", color = Asd.Smudge) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel), color = Asd.Smudge) } },
     )
 }
 
@@ -73,7 +75,7 @@ fun AddToPlaylistDialog(
 ) {
     var creating by remember { mutableStateOf(false) }
     if (creating) {
-        NameDialog(title = "Nuovo mixtape", confirmLabel = "Crea e aggiungi", onConfirm = onCreate, onDismiss = onDismiss)
+        NameDialog(title = stringResource(R.string.new_playlist), confirmLabel = stringResource(R.string.create_and_add), onConfirm = onCreate, onDismiss = onDismiss)
         return
     }
     AlertDialog(
@@ -82,7 +84,7 @@ fun AddToPlaylistDialog(
         modifier = Modifier.border(2.dp, Asd.Acid),
         title = {
             Column {
-                Text("METTI IN UN MIXTAPE", style = MaterialTheme.typography.headlineSmall)
+                Text(stringResource(R.string.add_to_playlist), style = MaterialTheme.typography.headlineSmall)
                 Text(song.title, style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
             }
         },
@@ -91,7 +93,7 @@ fun AddToPlaylistDialog(
                 if (onDownload != null) {
                     item {
                         Text(
-                            "↓ SCARICA SUL TELEFONO",
+                            stringResource(R.string.download_to_phone),
                             style = MaterialTheme.typography.labelLarge,
                             color = Asd.Paper,
                             modifier = Modifier.fillMaxWidth().clickable(onClick = onDownload).padding(vertical = 12.dp),
@@ -100,7 +102,7 @@ fun AddToPlaylistDialog(
                 }
                 item {
                     Text(
-                        "+ NUOVO MIXTAPE",
+                        stringResource(R.string.new_playlist_caps),
                         style = MaterialTheme.typography.labelLarge,
                         color = Asd.Acid,
                         modifier = Modifier.fillMaxWidth().clickable { creating = true }.padding(vertical = 12.dp),
@@ -115,7 +117,7 @@ fun AddToPlaylistDialog(
                 }
             }
         },
-        confirmButton = { TextButton(onClick = onDismiss) { Text("CHIUDI", color = Asd.Smudge) } },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.close_caps), color = Asd.Smudge) } },
     )
 }
 
@@ -128,6 +130,6 @@ fun ConfirmDialog(title: String, message: String, confirmLabel: String, onConfir
         title = { Text(title.uppercase(), style = MaterialTheme.typography.headlineSmall) },
         text = { Text(message, style = MaterialTheme.typography.bodyMedium) },
         confirmButton = { TextButton(onClick = onConfirm) { Text(confirmLabel.uppercase(), color = Asd.Spray) } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("NO", color = Asd.Smudge) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.no), color = Asd.Smudge) } },
     )
 }

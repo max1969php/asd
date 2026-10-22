@@ -4,6 +4,7 @@ import android.accounts.AccountManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -33,13 +34,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.launch
+import com.asd.player.R
 import com.asd.player.data.drive.DriveAuth
-import com.asd.player.ui.components.Slogans
 import com.asd.player.ui.cloud.DriveViewModel
 import com.asd.player.ui.cloud.FolderPicker
 import com.asd.player.ui.library.LibraryScreen
@@ -53,8 +55,11 @@ import com.asd.player.ui.settings.SettingsScreen
 import com.asd.player.ui.theme.Asd
 import com.asd.player.ui.tube.TubeScreen
 import com.asd.player.ui.tube.TubeViewModel
+import kotlinx.coroutines.launch
 
-private enum class Tab(val label: String) { LIBRARY("Roba"), PLAYLISTS("Mixtape"), TUBE("Tubo"), SETTINGS("Setup") }
+private enum class Tab(@StringRes val label: Int) {
+    LIBRARY(R.string.tab_library), PLAYLISTS(R.string.tab_playlists), TUBE(R.string.tab_tube), SETTINGS(R.string.tab_settings)
+}
 
 @Composable
 fun AsdApp() {
@@ -81,7 +86,8 @@ fun AsdApp() {
 
     var tab by rememberSaveable { mutableStateOf(Tab.LIBRARY) }
     var playerExpanded by rememberSaveable { mutableStateOf(false) }
-    val slogan = remember { Slogans.random() }
+    val slogans = stringArrayResource(R.array.slogans)
+    val slogan = remember(slogans) { slogans.random() }
     val snackbar = remember { SnackbarHostState() }
 
     val pickDirectory = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
@@ -126,7 +132,7 @@ fun AsdApp() {
         }
     }
 
-    driveFolderPicker?.let { FolderPicker("CARTELLA SU DRIVE", it, drive.defaultAccount, driveVm) }
+    driveFolderPicker?.let { FolderPicker(stringResource(R.string.drive_folder_title), it, drive.defaultAccount, driveVm) }
 
     // Finché non c'è almeno una fonte, mostriamo il manifesto.
     if (libraryState.loaded && libraryState.directoryUri == null && drive.defaultAccount == null) {
@@ -237,8 +243,9 @@ private fun TabBar(selected: Tab, onSelect: (Tab) -> Unit) {
                     .background(if (active) Asd.Acid else Asd.Toner)
                     .clickable { onSelect(tab) },
             ) {
+                val label = stringResource(tab.label).uppercase()
                 Text(
-                    text = if (active) "[${tab.label.uppercase()}]" else tab.label.uppercase(),
+                    text = if (active) "[$label]" else label,
                     // Quattro schede su un telefono stretto: "[MIXTAPE]" deve stare su una riga.
                     style = MaterialTheme.typography.labelMedium,
                     color = if (active) Asd.Toner else Asd.Paper,
