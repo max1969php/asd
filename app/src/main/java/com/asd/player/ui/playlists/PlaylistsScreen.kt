@@ -1,5 +1,8 @@
 package com.asd.player.ui.playlists
 
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DropdownMenu
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,7 +24,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -201,26 +203,50 @@ private fun PlaylistDetail(
                 modifier = Modifier.padding(32.dp),
             )
         } else {
+            // Riordino a frecce, niente trascinamento: tieni premuto → "Sposta" → ↑ ↓ solo su quel pezzo.
+            var moving by remember(playlist.id) { mutableStateOf<Int?>(null) }
+            var menuFor by remember(playlist.id) { mutableStateOf<Int?>(null) }
             LazyColumn {
                 // Le chiavi includono l'indice: lo stesso brano può comparire più volte.
                 itemsIndexed(data.songs, key = { index, song -> "$index-${song.id}" }) { index, song ->
-                    SongRow(
-                        song = song,
-                        index = index,
-                        isCurrent = song.uri == currentMediaId,
-                        onClick = { viewModel.play(data.songs, index) },
-                        trailing = {
-                            Column {
-                                SmallIcon(Icons.Filled.KeyboardArrowUp, "Su", enabled = index > 0) {
-                                    viewModel.move(playlist.id, index, index - 1)
+                    val isMoving = moving == index
+                    Box {
+                        SongRow(
+                            song = song,
+                            index = index,
+                            isCurrent = song.uri == currentMediaId,
+                            onClick = { if (moving == null) viewModel.play(data.songs, index) },
+                            onLongClick = { if (moving == null) menuFor = index },
+                            modifier = if (isMoving) Modifier.border(2.dp, Asd.Acid) else Modifier,
+                            trailing = if (!isMoving) null else {
+                                {
+                                    SmallIcon(Icons.Filled.KeyboardArrowUp, "Su", enabled = index > 0) {
+                                        viewModel.move(playlist.id, index, index - 1)
+                                        moving = index - 1
+                                    }
+                                    SmallIcon(Icons.Filled.KeyboardArrowDown, "Giù", enabled = index < data.songs.lastIndex) {
+                                        viewModel.move(playlist.id, index, index + 1)
+                                        moving = index + 1
+                                    }
+                                    TextButton(onClick = { moving = null }) { Text("OK", color = Asd.Acid) }
                                 }
-                                SmallIcon(Icons.Filled.KeyboardArrowDown, "Giù", enabled = index < data.songs.lastIndex) {
-                                    viewModel.move(playlist.id, index, index + 1)
-                                }
-                            }
-                            SmallIcon(Icons.Filled.Close, "Togli") { viewModel.removeAt(playlist.id, index) }
-                        },
-                    )
+                            },
+                        )
+                        DropdownMenu(
+                            expanded = menuFor == index,
+                            onDismissRequest = { menuFor = null },
+                            containerColor = Asd.Asphalt,
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("↕ Sposta", color = Asd.Paper) },
+                                onClick = { menuFor = null; moving = index },
+                            )
+                            DropdownMenuItem(
+                                text = { Text("✕ Togli dal mixtape", color = Asd.Spray) },
+                                onClick = { menuFor = null; viewModel.removeAt(playlist.id, index) },
+                            )
+                        }
+                    }
                     HorizontalDivider(color = Asd.Concrete)
                 }
             }
