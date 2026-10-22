@@ -11,8 +11,9 @@ ogni push su `main` ripubblica il sito, gli altri branch danno un'anteprima.
 `vercel.json` serve gli script come file da scaricare (`Content-Disposition: attachment`).
 
 Il bottone "Scarica l'APK" punta a
-`https://github.com/max1969php/asd/releases/latest/download/asd-arm64.apk` (e `asd-armv7.apk`):
-a ogni versione dell'app si crea una Release con i due APK con questi nomi esatti
+`https://github.com/max1969php/asd/releases/latest/download/asd.apk` (universale), con sotto i link
+ad `asd-arm64.apk` e `asd-armv7.apk`: a ogni versione dell'app si crea una Release con i tre APK
+con questi nomi esatti
 (vedi "Rilasciare una versione" nel README principale).
 
 Prova in locale: `python3 -m http.server -d site 8000` e apri http://localhost:8000.

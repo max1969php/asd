@@ -6,7 +6,6 @@
   "hero.stamp2": "bez konta",
   "hero.stamp3": "bez reklāmām",
   "hero.download": "Lejupielādēt APK",
-  "hero.download_note": "Gandrīz visiem tālruņiem: <strong>arm64</strong>. Ļoti veciem vai lētiem tālruņiem: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">armv7 versija</a>.",
   "hero.source": "Pirmkods",
   "asd.intro": "ASD ir Android mūzikas atskaņotājs. Tas atskaņo failus no <strong>vienas tālruņa mapes</strong> un/vai no <strong>vienas tava Google Drive mapes</strong>. Nekāda ASD konta, reklāmu vai izsekošanas: tīkls tiek izmantots tikai Google Drive un TUBO, un tikai tad, ja tu tos izmanto.",
   "install.title": "Instalēšana",

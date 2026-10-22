@@ -6,7 +6,6 @@
   "hero.stamp2": "कोई अकाउंट नहीं",
   "hero.stamp3": "कोई विज्ञापन नहीं",
   "hero.download": "APK डाउनलोड करें",
-  "hero.download_note": "लगभग सभी फ़ोनों के लिए: <strong>arm64</strong>। बहुत पुराने या सस्ते फ़ोन: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">armv7 संस्करण</a>।",
   "hero.source": "सोर्स कोड",
   "asd.intro": "ASD Android के लिए एक म्यूज़िक प्लेयर है। यह <strong>फ़ोन के एक फ़ोल्डर</strong> और/या <strong>आपके Google Drive के एक फ़ोल्डर</strong> की फ़ाइलें चलाता है। कोई ASD अकाउंट नहीं, कोई विज्ञापन नहीं, कोई ट्रैकिंग नहीं: नेटवर्क का उपयोग केवल Google Drive और TUBO के लिए होता है, और तभी जब आप उन्हें इस्तेमाल करें।",
   "install.title": "इंस्टॉल करना",

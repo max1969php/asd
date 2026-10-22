@@ -6,7 +6,6 @@
   "hero.stamp2": "bez účtu",
   "hero.stamp3": "bez reklám",
   "hero.download": "Stiahnuť APK",
-  "hero.download_note": "Pre takmer všetky telefóny: <strong>arm64</strong>. Veľmi staré alebo lacné telefóny: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">verzia armv7</a>.",
   "hero.source": "Zdrojový kód",
   "asd.intro": "ASD je hudobný prehrávač pre Android. Prehráva súbory z <strong>jedného priečinka v telefóne</strong> a/alebo z <strong>jedného priečinka na tvojom Disku Google</strong>. Žiadny účet ASD, žiadne reklamy, žiadne sledovanie: sieť sa používa len pre Disk Google a TUBO, a len ak ich používaš.",
   "install.title": "Inštalácia",

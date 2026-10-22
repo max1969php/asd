@@ -6,7 +6,6 @@
   "hero.stamp2": "без акаунт",
   "hero.stamp3": "без реклами",
   "hero.download": "Изтегли APK",
-  "hero.download_note": "За почти всички телефони: <strong>arm64</strong>. Много стари или евтини телефони: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">версия armv7</a>.",
   "hero.source": "Изходен код",
   "asd.intro": "ASD е музикален плейър за Android. Пуска файловете от <strong>папка в телефона</strong> и/или от <strong>папка в твоя Google Drive</strong>. Без акаунт в ASD, без реклами, без проследяване: мрежата се ползва само за Google Drive и TUBO и само ако ги използваш.",
   "install.title": "Инсталиране",

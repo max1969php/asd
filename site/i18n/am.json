@@ -6,7 +6,6 @@
   "hero.stamp2": "መለያ የለም",
   "hero.stamp3": "ማስታወቂያ የለም",
   "hero.download": "APK አውርድ",
-  "hero.download_note": "ለአብዛኞቹ ስልኮች: <strong>arm64</strong>። በጣም ያረጁ ወይም ርካሽ ስልኮች: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">armv7 ስሪት</a>።",
   "hero.source": "የምንጭ ኮድ",
   "asd.intro": "ASD የአንድሮይድ ሙዚቃ ማጫወቻ ነው። የ<strong>አንድ የስልክ አቃፊ</strong> እና/ወይም የ<strong>አንድ የ Google Drive አቃፊ</strong> ፋይሎችን ያጫውታል። የ ASD መለያ የለም፣ ማስታወቂያ የለም፣ ክትትል የለም፦ አውታረ መረብ ጥቅም ላይ የሚውለው ለ Google Drive እና ለ TUBO ብቻ ነው፣ እነሱንም ከተጠቀሙ ብቻ።",
   "install.title": "መጫን",

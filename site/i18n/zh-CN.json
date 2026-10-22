@@ -6,7 +6,6 @@
   "hero.stamp2": "无需账号",
   "hero.stamp3": "无广告",
   "hero.download": "下载 APK",
-  "hero.download_note": "适用于几乎所有手机：<strong>arm64</strong>。非常旧或低端的手机：<a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">armv7 版本</a>。",
   "hero.source": "源代码",
   "asd.intro": "ASD 是一款 Android 音乐播放器。它播放<strong>手机上某个文件夹</strong>和/或<strong>你的 Google 云端硬盘中某个文件夹</strong>里的文件。没有 ASD 账号，没有广告，没有跟踪：网络只用于 Google 云端硬盘和 TUBO，而且只有在你使用它们时才会联网。",
   "install.title": "安装",

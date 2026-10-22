@@ -6,7 +6,6 @@
   "hero.stamp2": "gan chuntas",
   "hero.stamp3": "gan fógraí",
   "hero.download": "Íoslódáil an APK",
-  "hero.download_note": "Do bheagnach gach fón: <strong>arm64</strong>. Fóin an-sean nó saor: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">leagan armv7</a>.",
   "hero.source": "Cód foinse",
   "asd.intro": "Is seinnteoir ceoil é ASD do Android. Seinneann sé na comhaid i <strong>bhfillteán ar an bhfón</strong> agus/nó i <strong>bhfillteán i do Google Drive</strong>. Gan chuntas ASD, gan fógraí, gan rianú: ní úsáidtear an líonra ach do Google Drive agus TUBO, agus ach amháin má úsáideann tú iad.",
   "install.title": "Suiteáil",

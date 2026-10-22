@@ -6,7 +6,6 @@
   "hero.stamp2": "بلا حساب",
   "hero.stamp3": "بلا إعلانات",
   "hero.download": "نزّل ملف APK",
-  "hero.download_note": "لمعظم الهواتف تقريبًا: <strong>arm64</strong>. الهواتف القديمة جدًا أو الاقتصادية: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">نسخة armv7</a>.",
   "hero.source": "الشيفرة المصدرية",
   "asd.intro": "ASD مشغّل موسيقى لأندرويد. يشغّل الملفات الموجودة في <strong>مجلد على الهاتف</strong> و/أو في <strong>مجلد على Google Drive الخاص بك</strong>. لا حساب لـ ASD، ولا إعلانات، ولا تتبّع: لا تُستخدم الشبكة إلا لـ Google Drive وTUBO، وفقط إذا استخدمتهما أنت.",
   "install.title": "التثبيت",

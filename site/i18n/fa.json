@@ -6,7 +6,6 @@
   "hero.stamp2": "بدون حساب",
   "hero.stamp3": "بدون تبلیغ",
   "hero.download": "دانلود APK",
-  "hero.download_note": "برای تقریباً همهٔ گوشی‌ها: <strong>arm64</strong>. گوشی‌های خیلی قدیمی یا ارزان: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">نسخهٔ armv7</a>.",
   "hero.source": "کد منبع",
   "asd.intro": "ASD یک پخش‌کنندهٔ موسیقی برای اندروید است. فایل‌های <strong>یک پوشه در گوشی</strong> و/یا <strong>یک پوشه در Google Drive شما</strong> را پخش می‌کند. بدون حساب ASD، بدون تبلیغ، بدون ردیابی: شبکه فقط برای Google Drive و TUBO استفاده می‌شود، آن هم فقط اگر خودتان از آن‌ها استفاده کنید.",
   "install.title": "نصب",

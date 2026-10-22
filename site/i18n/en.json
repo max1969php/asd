@@ -6,7 +6,6 @@
   "hero.stamp2": "no account",
   "hero.stamp3": "no ads",
   "hero.download": "Download the APK",
-  "hero.download_note": "For almost all phones: <strong>arm64</strong>. Very old or low-end phones: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">armv7 version</a>.",
   "hero.source": "Source code",
   "asd.intro": "ASD is a music player for Android. It plays the files in <strong>a folder on your phone</strong> and/or <strong>a folder on your Google Drive</strong>. No ASD account, no ads, no tracking: the network is only used for Google Drive and for TUBO, and only if you use them.",
   "install.title": "Installing",

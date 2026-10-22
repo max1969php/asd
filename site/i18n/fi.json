@@ -6,7 +6,6 @@
   "hero.stamp2": "ei tiliä",
   "hero.stamp3": "ei mainoksia",
   "hero.download": "Lataa APK",
-  "hero.download_note": "Lähes kaikille puhelimille: <strong>arm64</strong>. Hyvin vanhat tai halvat puhelimet: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">armv7-versio</a>.",
   "hero.source": "Lähdekoodi",
   "asd.intro": "ASD on Android-musiikkisoitin. Se soittaa tiedostot <strong>puhelimen kansiosta</strong> ja/tai <strong>Google Drivesi kansiosta</strong>. Ei ASD-tiliä, ei mainoksia, ei seurantaa: verkkoa käytetään vain Google Driveen ja TUBOon, ja vain jos käytät niitä.",
   "install.title": "Asennus",

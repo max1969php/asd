@@ -6,7 +6,6 @@
   "hero.stamp2": "fiók nélkül",
   "hero.stamp3": "reklám nélkül",
   "hero.download": "APK letöltése",
-  "hero.download_note": "Szinte minden telefonhoz: <strong>arm64</strong>. Nagyon régi vagy olcsó telefonokhoz: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">armv7 verzió</a>.",
   "hero.source": "Forráskód",
   "asd.intro": "Az ASD egy Android zenelejátszó. A <strong>telefon egyik mappájának</strong> és/vagy a <strong>Google Drive-od egyik mappájának</strong> fájljait játssza le. Nincs ASD-fiók, nincs reklám, nincs követés: a hálózatot csak a Google Drive és a TUBO használja, és csak ha te használod őket.",
   "install.title": "Telepítés",

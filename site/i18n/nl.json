@@ -6,7 +6,6 @@
   "hero.stamp2": "geen account",
   "hero.stamp3": "geen reclame",
   "hero.download": "Download de APK",
-  "hero.download_note": "Voor bijna alle telefoons: <strong>arm64</strong>. Hele oude of simpele telefoons: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">armv7-versie</a>.",
   "hero.source": "Broncode",
   "asd.intro": "ASD is een muziekspeler voor Android. Hij speelt de bestanden uit <strong>een map op je telefoon</strong> en/of uit <strong>een map in je Google Drive</strong>. Geen ASD-account, geen reclame, geen tracking: het netwerk wordt alleen gebruikt voor Google Drive en TUBO, en alleen als jij ze gebruikt.",
   "install.title": "Installeren",

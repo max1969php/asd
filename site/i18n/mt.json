@@ -6,7 +6,6 @@
   "hero.stamp2": "bla account",
   "hero.stamp3": "bla reklami",
   "hero.download": "Niżżel l-APK",
-  "hero.download_note": "Għal kważi t-telefons kollha: <strong>arm64</strong>. Telefons qodma ħafna jew irħas: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">verżjoni armv7</a>.",
   "hero.source": "Kodiċi sors",
   "asd.intro": "ASD huwa plejer tal-mużika għall-Android. Jdoqq il-fajls ta' <strong>folder tat-telefon</strong> u/jew ta' <strong>folder tal-Google Drive tiegħek</strong>. L-ebda account ASD, l-ebda reklami, l-ebda traċċar: in-netwerk jintuża biss għall-Google Drive u għat-TUBO, u biss jekk tużahom int.",
   "install.title": "Installazzjoni",

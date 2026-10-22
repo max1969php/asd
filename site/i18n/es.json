@@ -6,7 +6,6 @@
   "hero.stamp2": "sin cuenta",
   "hero.stamp3": "sin publicidad",
   "hero.download": "Descargar el APK",
-  "hero.download_note": "Para casi todos los teléfonos: <strong>arm64</strong>. Teléfonos muy antiguos o básicos: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">versión armv7</a>.",
   "hero.source": "Código fuente",
   "asd.intro": "ASD es un reproductor de música para Android. Reproduce los archivos de <strong>una carpeta del teléfono</strong> y/o de <strong>una carpeta de tu Google Drive</strong>. Sin cuenta de ASD, sin publicidad, sin rastreo: la red solo se usa para Google Drive y para TUBO, y solo si tú los usas.",
   "install.title": "Instalar",

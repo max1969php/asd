@@ -6,7 +6,6 @@
   "hero.stamp2": "bila akaunti",
   "hero.stamp3": "bila matangazo",
   "hero.download": "Pakua APK",
-  "hero.download_note": "Kwa simu karibu zote: <strong>arm64</strong>. Simu za zamani sana au za bei nafuu: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">toleo la armv7</a>.",
   "hero.source": "Msimbo chanzi",
   "asd.intro": "ASD ni kicheza muziki cha Android. Kinacheza faili za <strong>folda moja ya simu</strong> na/au za <strong>folda moja ya Google Drive yako</strong>. Hakuna akaunti ya ASD, matangazo wala ufuatiliaji: mtandao hutumika kwa Google Drive na TUBO pekee, na ukivitumia tu.",
   "install.title": "Kusakinisha",

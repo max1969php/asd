@@ -6,7 +6,6 @@
   "hero.stamp2": "bez računa",
   "hero.stamp3": "bez reklama",
   "hero.download": "Preuzmi APK",
-  "hero.download_note": "Za gotovo sve telefone: <strong>arm64</strong>. Vrlo stari ili jeftini telefoni: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">verzija armv7</a>.",
   "hero.source": "Izvorni kod",
   "asd.intro": "ASD je glazbeni player za Android. Svira datoteke iz <strong>jedne mape na telefonu</strong> i/ili iz <strong>jedne mape na tvom Google Disku</strong>. Nema ASD računa, reklama ni praćenja: mreža služi samo za Google Disk i TUBO, i to samo ako ih koristiš.",
   "install.title": "Instalacija",

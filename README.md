@@ -6,7 +6,7 @@ La rete viene usata solo per Google Drive, e solo se lo colleghi.
 
 - **Sito** (istruzioni, guida a yt-dlp, script per PC): https://asd-eight-rust.vercel.app
 - **Scarica l'APK**: [ultima Release](https://github.com/max1969php/asd/releases/latest)
-  (`asd-arm64.apk` per quasi tutti i telefoni, `asd-armv7.apk` per i più vecchi).
+  (`asd.apk` va su tutti i telefoni; `asd-arm64.apk` e `asd-armv7.apk` sono più leggeri, per una sola CPU).
 
 Il ragionamento architetturale di partenza è in [`a.md`](a.md).
 
@@ -138,29 +138,32 @@ Apri il progetto con Android Studio, oppure da terminale:
 ```bash
 ./gradlew testDebugUnitTest   # test unitari (ricerca/filtri, whitelist formati, loudness, TUBO)
 ./gradlew assembleDebug       # app/build/outputs/apk/debug/
-./gradlew assembleRelease     # app/build/outputs/apk/release/app-arm64-v8a-release.apk e app-armeabi-v7a-release.apk
+./gradlew assembleRelease     # app/build/outputs/apk/release/: app-universal, app-arm64-v8a, app-armeabi-v7a
 ```
 
 La release è minificata e firmata con la chiave debug (così l'impronta SHA-1 registrata per
 Google Drive resta la stessa): si installa sopra le versioni precedenti.
 
 Servono JDK 17 e l'Android SDK con la piattaforma 34 (`ANDROID_HOME` oppure `local.properties`).
-L'APK include solo le librerie native ARM (`arm64-v8a`, `armeabi-v7a`), quelle dei telefoni veri.
-Per un emulatore x86_64 aggiungi `x86_64` ad `abiFilters` in `app/build.gradle.kts` (+15 MB).
+La release ha solo le librerie native ARM (`arm64-v8a`, `armeabi-v7a`), quelle dei telefoni veri:
+un APK per CPU più uno universale con entrambe. L'universale è il download principale perché alcuni
+telefoni con CPU a 64 bit hanno Android a 32 bit (es. Galaxy A13 SM-A137F) e rifiutano l'APK arm64
+come "non compatibile". La build di debug tiene anche x86/x86_64, per gli emulatori.
 
 ## Rilasciare una versione
 
 1. Alza `versionCode` e `versionName` in `app/build.gradle.kts`, poi `./gradlew assembleRelease`.
-2. Crea una Release su GitHub con tag `v<versionName>` e allega i due APK con questi nomi esatti:
-   `asd-arm64.apk` e `asd-armv7.apk`. Con la CLI di GitHub:
+2. Crea una Release su GitHub con tag `v<versionName>` e allega i tre APK con questi nomi esatti:
+   `asd.apk` (universale), `asd-arm64.apk` e `asd-armv7.apk`. Con la CLI di GitHub:
 
    ```bash
+   cp app/build/outputs/apk/release/app-universal-release.apk asd.apk
    cp app/build/outputs/apk/release/app-arm64-v8a-release.apk asd-arm64.apk
    cp app/build/outputs/apk/release/app-armeabi-v7a-release.apk asd-armv7.apk
-   gh release create v0.2.0 --target main --title "ASD 0.2.0" --notes "..." asd-arm64.apk asd-armv7.apk
+   gh release create v0.2.0 --target main --title "ASD 0.2.0" --notes "..." asd.apk asd-arm64.apk asd-armv7.apk
    ```
 
-I bottoni del sito puntano a `releases/latest/download/asd-arm64.apk` (e `asd-armv7.apk`): prendono
+Il sito punta a `releases/latest/download/asd.apk` (bottone) e ai due APK per CPU: prendono
 sempre l'ultima Release, il sito non va toccato.
 
 ## Sito

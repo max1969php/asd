@@ -18,14 +18,15 @@ android {
 
     }
 
-    // Python e yt-dlp (TUBO) sono librerie native da ~15 MB per CPU: un APK per CPU invece di uno con
-    // tutte. arm64-v8a va su quasi tutti i telefoni dal 2017; armeabi-v7a per quelli vecchi a 32 bit.
+    // Python e yt-dlp (TUBO) sono librerie native da ~15 MB per CPU: un APK per CPU, più uno universale.
+    // Quello universale è il download principale: alcuni telefoni con CPU a 64 bit hanno Android a
+    // 32 bit (es. Galaxy A13 SM-A137F) e rifiutano l'APK arm64 come "non compatibile".
     splits {
         abi {
             isEnable = true
             reset()
             include("arm64-v8a", "armeabi-v7a")
-            isUniversalApk = false
+            isUniversalApk = true
         }
     }
 
@@ -64,6 +65,13 @@ android {
 
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
+}
+
+// x86 serve solo agli emulatori del PC: fuori dalla release, così l'APK universale ha solo ARM.
+androidComponents {
+    onVariants(selector().withBuildType("release")) { variant ->
+        variant.packaging.jniLibs.excludes.addAll("lib/x86/**", "lib/x86_64/**")
+    }
 }
 
 dependencies {

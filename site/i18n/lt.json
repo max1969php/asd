@@ -6,7 +6,6 @@
   "hero.stamp2": "be paskyros",
   "hero.stamp3": "be reklamų",
   "hero.download": "Atsisiųsti APK",
-  "hero.download_note": "Beveik visiems telefonams: <strong>arm64</strong>. Labai seniems ar pigiems telefonams: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">armv7 versija</a>.",
   "hero.source": "Šaltinio kodas",
   "asd.intro": "ASD yra „Android“ muzikos grotuvas. Jis groja failus iš <strong>vieno telefono aplanko</strong> ir (arba) iš <strong>vieno tavo „Google Drive“ aplanko</strong>. Jokios ASD paskyros, reklamų ar sekimo: tinklas naudojamas tik „Google Drive“ ir TUBO, ir tik jei jais naudojiesi.",
   "install.title": "Diegimas",

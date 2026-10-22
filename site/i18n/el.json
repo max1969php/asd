@@ -6,7 +6,6 @@
   "hero.stamp2": "χωρίς λογαριασμό",
   "hero.stamp3": "χωρίς διαφημίσεις",
   "hero.download": "Λήψη του APK",
-  "hero.download_note": "Για σχεδόν όλα τα κινητά: <strong>arm64</strong>. Πολύ παλιά ή φθηνά κινητά: <a href=\"https://github.com/max1969php/asd/releases/latest/download/asd-armv7.apk\">έκδοση armv7</a>.",
   "hero.source": "Πηγαίος κώδικας",
   "asd.intro": "Το ASD είναι ένας αναπαραγωγέας μουσικής για Android. Παίζει τα αρχεία <strong>ενός φακέλου του κινητού</strong> και/ή <strong>ενός φακέλου του Google Drive σου</strong>. Χωρίς λογαριασμό ASD, χωρίς διαφημίσεις, χωρίς παρακολούθηση: το δίκτυο χρησιμεύει μόνο για το Google Drive και το TUBO, και μόνο αν τα χρησιμοποιήσεις.",
   "install.title": "Εγκατάσταση",
