@@ -109,35 +109,40 @@ class OwnGoogleClient(private val context: Context) {
                 .build()
             val results = LinkedBlockingQueue<Result<String>>()
             serve(server, state, results)
-            // Senza il servizio Android congela ASD mentre si è nel browser, e il server non risponde.
+            // Senza il servizio Android congela ASD mentre si è nel browser (il server non risponde)
+            // e gli toglie la rete (lo scambio del codice fallisce): resta acceso fino ai token.
             DriveLoginService.start(context)
-            val code = try {
+            try {
                 context.startActivity(Intent(Intent.ACTION_VIEW, url).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-                runInterruptible {
+                val code = runInterruptible {
                     results.poll(LOGIN_TIMEOUT_MS, TimeUnit.MILLISECONDS)
                         ?: throw DriveAuthException(L10n.str(R.string.drive_login_timeout))
                 }.getOrThrow()
+                exchange(config, code, verifier, redirect)
             } finally {
                 DriveLoginService.stop(context)
             }
-            val json = post(
-                mapOf(
-                    "client_id" to config.clientId,
-                    "client_secret" to config.clientSecret,
-                    "code" to code,
-                    "code_verifier" to verifier,
-                    "redirect_uri" to redirect,
-                    "grant_type" to "authorization_code",
-                ),
-                null,
-            )
-            val email = emailFrom(json.getString("id_token"))
-            val refreshToken = json.optString("refresh_token").ifEmpty {
-                throw DriveAuthException(L10n.str(R.string.drive_login_refused, "no refresh_token"))
-            }
-            prefs.edit().putString(refreshKey(email), refreshToken).apply()
-            Login(email, json.getString("access_token"), expiresAt(json))
         }
+    }
+
+    private fun exchange(config: Config, code: String, verifier: String, redirect: String): Login {
+        val json = post(
+            mapOf(
+                "client_id" to config.clientId,
+                "client_secret" to config.clientSecret,
+                "code" to code,
+                "code_verifier" to verifier,
+                "redirect_uri" to redirect,
+                "grant_type" to "authorization_code",
+            ),
+            null,
+        )
+        val email = emailFrom(json.getString("id_token"))
+        val refreshToken = json.optString("refresh_token").ifEmpty {
+            throw DriveAuthException(L10n.str(R.string.drive_login_refused, "no refresh_token"))
+        }
+        prefs.edit().putString(refreshKey(email), refreshToken).apply()
+        return Login(email, json.getString("access_token"), expiresAt(json))
     }
 
     /**

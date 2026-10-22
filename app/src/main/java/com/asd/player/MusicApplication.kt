@@ -9,6 +9,7 @@ class MusicApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         L10n.init(this)
+        AppForeground.init(this)
         container = AppContainer(this)
     }
 }

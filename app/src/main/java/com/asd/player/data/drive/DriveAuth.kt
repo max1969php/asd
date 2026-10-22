@@ -4,6 +4,7 @@ import android.accounts.Account
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.asd.player.AppForeground
 import com.asd.player.L10n
 import com.asd.player.R
 import com.google.android.gms.auth.api.identity.AuthorizationRequest
@@ -57,6 +58,9 @@ class DriveAuth(context: Context, val own: OwnGoogleClient) {
     suspend fun browserLogin(hint: String?): String {
         val login = own.login(hint)
         cache[login.email] = login.accessToken to login.expiresAt
+        // Finché l'utente resta nel browser ASD è in background e può non avere rete: chi chiama
+        // parla subito con Drive (cartelle, caricamenti), quindi aspettiamo che torni.
+        AppForeground.await()
         return login.email
     }
 
