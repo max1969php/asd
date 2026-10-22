@@ -1,0 +1,4 @@
+# Script del sito: fine riga giusti per ciascun sistema, qualunque sia il PC che fa il commit.
+site/downloads/linux/*.sh text eol=lf
+site/downloads/windows/*.bat text eol=crlf
+site/downloads/windows/*.ps1 text eol=crlf

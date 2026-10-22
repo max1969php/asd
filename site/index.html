@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="it" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ASD — Anarchic Streaming Device</title>
+  <meta name="description" content="Lettore musicale Android per la tua musica, senza abbonamenti. Istruzioni, download e guida a yt-dlp per scaricare solo l'audio." data-i18n-attr="content:meta.description">
+  <meta name="theme-color" content="#0B0B0B">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- I testi stanno in i18n/<lingua>.json: qui ci sono solo le chiavi (data-i18n) e i comandi, che non si traducono. -->
+  <header class="top">
+    <a class="brand" href="#top" aria-label="ASD">
+      <svg class="logo" viewBox="0 0 108 108" aria-hidden="true"><circle cx="54" cy="54" r="18"/><path d="M54,32 L37,76 M54,32 L71,76 M33,61 L75,59"/></svg>
+      <span>ASD</span>
+    </a>
+    <nav>
+      <a href="#asd" data-i18n="nav.asd"></a>
+      <a href="#ytdlp" data-i18n="nav.ytdlp"></a>
+      <a href="#linux" data-i18n="nav.linux"></a>
+      <a href="#windows" data-i18n="nav.windows"></a>
+    </nav>
+    <label class="lang">
+      <span class="sr" data-i18n="nav.language"></span>
+      <select id="lang"></select>
+    </label>
+  </header>
+
+  <noscript><p class="box" data-i18n="noscript">Questa pagina ha bisogno di JavaScript per mostrare i testi nella tua lingua.</p></noscript>
+
+  <main id="top">
+    <section class="hero">
+      <h1>ASD</h1>
+      <p class="tagline" data-i18n="hero.tagline"></p>
+      <p class="lead" data-i18n="hero.lead"></p>
+      <p class="stamps">
+        <span class="stamp spray" data-i18n="hero.stamp1"></span>
+        <span class="stamp paper" data-i18n="hero.stamp2"></span>
+        <span class="stamp acid" data-i18n="hero.stamp3"></span>
+      </p>
+      <p class="actions">
+        <a class="button" href="https://github.com/max1969php/asd/releases/latest/download/asd-arm64.apk" data-i18n="hero.download"></a>
+        <a class="button ghost" href="https://github.com/max1969php/asd" data-i18n="hero.source"></a>
+      </p>
+      <p class="small" data-i18n="hero.download_note"></p>
+    </section>
+
+    <section id="asd">
+      <h2 data-i18n="asd.title"></h2>
+      <p data-i18n="asd.intro"></p>
+
+      <h3 data-i18n="install.title"></h3>
+      <ol>
+        <li data-i18n="install.step1"></li>
+        <li data-i18n="install.step2"></li>
+        <li data-i18n="install.step3"></li>
+      </ol>
+      <p class="small" data-i18n="install.note"></p>
+
+      <h3 data-i18n="start.title"></h3>
+      <p data-i18n="start.text"></p>
+
+      <h3 data-i18n="tabs.title"></h3>
+      <ul>
+        <li data-i18n="tabs.roba"></li>
+        <li data-i18n="tabs.mixtape"></li>
+        <li data-i18n="tabs.tubo"></li>
+        <li data-i18n="tabs.setup"></li>
+      </ul>
+
+      <h3 data-i18n="drive.title"></h3>
+      <p data-i18n="drive.text"></p>
+
+      <h3 data-i18n="tube.title"></h3>
+      <p data-i18n="tube.text"></p>
+
+      <h3 data-i18n="volume.title"></h3>
+      <p data-i18n="volume.text"></p>
+
+      <h3 data-i18n="rules.title"></h3>
+      <ul>
+        <li data-i18n="rules.nodelete"></li>
+        <li data-i18n="rules.legal"></li>
+      </ul>
+    </section>
+
+    <section id="ytdlp">
+      <h2 data-i18n="yt.title"></h2>
+      <p data-i18n="yt.intro"></p>
+
+      <h3 data-i18n="yt.needs.title"></h3>
+      <ul>
+        <li data-i18n="yt.needs.ytdlp"></li>
+        <li data-i18n="yt.needs.ffmpeg"></li>
+        <li data-i18n="yt.needs.deno"></li>
+      </ul>
+
+      <h3 data-i18n="yt.eff.title"></h3>
+      <p data-i18n="yt.eff.text"></p>
+      <p data-i18n="yt.eff.m4a"></p>
+      <pre><code>yt-dlp -f "ba[ext=m4a]/ba" -o "%(artist,uploader)s - %(title)s.%(ext)s" "LINK"</code></pre>
+      <p data-i18n="yt.eff.mp3"></p>
+      <pre><code>yt-dlp -f ba -x --audio-format mp3 --audio-quality 128K "LINK"</code></pre>
+      <p data-i18n="yt.eff.one"></p>
+      <pre><code>yt-dlp --no-playlist -f "ba[ext=m4a]/ba" "LINK"</code></pre>
+      <p data-i18n="yt.eff.some"></p>
+      <pre><code>yt-dlp --playlist-items 1,3,5-7 -f "ba[ext=m4a]/ba" "LINK_PLAYLIST"</code></pre>
+      <p data-i18n="yt.eff.archive"></p>
+      <pre><code>yt-dlp --download-archive archivio.txt -f "ba[ext=m4a]/ba" "LINK_PLAYLIST"</code></pre>
+      <p data-i18n="yt.eff.tags"></p>
+      <pre><code>yt-dlp -f ba -x --audio-format mp3 --embed-metadata --embed-thumbnail "LINK"</code></pre>
+      <p data-i18n="yt.eff.cookies"></p>
+      <pre><code>yt-dlp --cookies-from-browser firefox -f "ba[ext=m4a]/ba" "LINK"</code></pre>
+      <p data-i18n="yt.eff.update"></p>
+      <pre><code>yt-dlp -U</code></pre>
+      <p class="small" data-i18n="yt.eff.update_winget"></p>
+      <pre><code>winget upgrade yt-dlp.yt-dlp</code></pre>
+
+      <h3 data-i18n="scripts.title"></h3>
+      <ul>
+        <li data-i18n="scripts.url"></li>
+        <li data-i18n="scripts.playlist"></li>
+      </ul>
+      <p data-i18n="scripts.output"></p>
+    </section>
+
+    <section id="linux">
+      <h2 data-i18n="linux.title"></h2>
+      <h3 data-i18n="linux.install"></h3>
+      <p data-i18n="linux.install_text"></p>
+      <pre><code>sudo apt install ffmpeg curl unzip python3
+mkdir -p ~/.local/bin
+curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o ~/.local/bin/yt-dlp
+chmod a+rx ~/.local/bin/yt-dlp
+curl -fsSL https://deno.land/install.sh | sh</code></pre>
+
+      <h3 data-i18n="linux.download"></h3>
+      <p class="downloads">
+        <a class="file" href="downloads/linux/scarica_url.sh" download><span data-i18n="dl.label"></span> scarica_url.sh</a>
+        <a class="file" href="downloads/linux/seleziona_playlist.sh" download><span data-i18n="dl.label"></span> seleziona_playlist.sh</a>
+      </p>
+
+      <h3 data-i18n="linux.run"></h3>
+      <p data-i18n="linux.run_text"></p>
+      <pre><code>chmod +x scarica_url.sh seleziona_playlist.sh
+./scarica_url.sh
+./seleziona_playlist.sh</code></pre>
+      <p class="small" data-i18n="linux.ctrl_d"></p>
+    </section>
+
+    <section id="windows">
+      <h2 data-i18n="win.title"></h2>
+      <h3 data-i18n="win.install"></h3>
+      <p data-i18n="win.install_text"></p>
+      <p class="downloads">
+        <a class="file" href="downloads/windows/installa_programmi.bat" download><span data-i18n="dl.label"></span> installa_programmi.bat</a>
+      </p>
+      <pre><code>winget install yt-dlp.yt-dlp
+winget install Gyan.FFmpeg
+winget install DenoLand.Deno</code></pre>
+      <p class="small" data-i18n="win.manual"></p>
+
+      <h3 data-i18n="win.download"></h3>
+      <p data-i18n="win.download_text"></p>
+      <p class="downloads">
+        <a class="file" href="downloads/windows/scarica_url.bat" download><span data-i18n="dl.label"></span> scarica_url.bat</a>
+        <a class="file" href="downloads/windows/scarica_url.ps1" download><span data-i18n="dl.label"></span> scarica_url.ps1</a>
+        <a class="file" href="downloads/windows/seleziona_playlist.bat" download><span data-i18n="dl.label"></span> seleziona_playlist.bat</a>
+        <a class="file" href="downloads/windows/seleziona_playlist.ps1" download><span data-i18n="dl.label"></span> seleziona_playlist.ps1</a>
+      </p>
+
+      <h3 data-i18n="win.run"></h3>
+      <p data-i18n="win.run_text"></p>
+      <p class="small" data-i18n="win.smartscreen"></p>
+    </section>
+  </main>
+
+  <footer>
+    <p data-i18n="footer.suggestions"></p>
+    <p><span class="stamp acid" data-i18n="footer.copy"></span></p>
+  </footer>
+
+  <script src="i18n.js"></script>
+</body>
+</html>
