@@ -24,7 +24,7 @@ import com.asd.player.ui.theme.Asd
 
 /**
  * La "select" dell'account predefinito di una fonte cloud. Elenca gli account già collegati;
- * l'ultima voce ne collega un altro (selettore di sistema per Google, login per Dropbox).
+ * l'ultima voce ne collega un altro (selettore di sistema di Android).
  */
 @Composable
 fun AccountSelect(

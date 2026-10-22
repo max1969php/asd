@@ -31,7 +31,6 @@ import com.asd.player.domain.model.SortField
 import com.asd.player.ui.cloud.AccountSelect
 import com.asd.player.ui.cloud.CloudViewModel
 import com.asd.player.ui.cloud.DriveViewModel
-import com.asd.player.ui.cloud.DropboxViewModel
 import com.asd.player.ui.components.PunkButton
 import com.asd.player.ui.components.Stamp
 import com.asd.player.ui.components.TapeChip
@@ -48,10 +47,8 @@ fun SettingsScreen(
     state: LibraryUiState,
     viewModel: LibraryViewModel,
     driveViewModel: DriveViewModel,
-    dropboxViewModel: DropboxViewModel,
     onPickDirectory: () -> Unit,
     onAddGoogleAccount: () -> Unit,
-    onAddDropboxAccount: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -106,16 +103,6 @@ fun SettingsScreen(
             onAddAccount = onAddGoogleAccount,
         )
 
-        CloudSection(
-            title = "Dropbox",
-            name = "Dropbox",
-            source = SongSource.DROPBOX,
-            state = state,
-            viewModel = dropboxViewModel,
-            addLabel = "+ COLLEGA UN ACCOUNT DROPBOX",
-            onAddAccount = onAddDropboxAccount,
-        )
-
         Section("Volume uniforme") {
             val normalize by viewModel.normalizeVolume.collectAsStateWithLifecycle()
             val progress by viewModel.loudnessProgress.collectAsStateWithLifecycle()
@@ -138,7 +125,7 @@ fun SettingsScreen(
             Text(
                 "Ogni pezzo viene misurato una volta (EBU R128, come ReplayGain 2.0) e suonato a -18 LUFS: " +
                     "niente più salti di volume tra un MP3 e l'altro. I pezzi più forti vengono abbassati, " +
-                    "quindi alza un po' il volume del telefono. I file su Drive e Dropbox si misurano solo in Wi-Fi.",
+                    "quindi alza un po' il volume del telefono. I file su Drive si misurano solo in Wi-Fi.",
                 style = MaterialTheme.typography.bodySmall,
                 color = Asd.Smudge,
             )
@@ -176,7 +163,7 @@ fun SettingsScreen(
                 ASD = Anarchic Streaming Device.
                 Lo "streaming" è dalla tua memoria alle tue orecchie, e basta.
 
-                · La rete serve solo a Drive, Dropbox e TUBO, e solo se li usi tu.
+                · La rete serve solo a Google Drive e al TUBO, e solo se li usi tu.
                 · Nessun account, nessuna pubblicità, nessun tracciamento.
                 · Le playlist vivono sul telefono. Cancellarle non tocca i file.
                 · Costo: 0€. Per sempre.
@@ -205,7 +192,7 @@ private fun Section(title: String, content: @Composable () -> Unit) {
     }
 }
 
-/** Account predefinito, cartella e bottoni di una fonte cloud: uguale per Drive e Dropbox. */
+/** Account predefinito, cartella e bottoni di una fonte cloud: oggi Google Drive. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun CloudSection(

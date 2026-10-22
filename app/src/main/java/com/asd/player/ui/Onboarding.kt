@@ -26,7 +26,6 @@ import com.asd.player.ui.theme.Asd
 fun Onboarding(
     onPickDirectory: () -> Unit,
     onConnectDrive: () -> Unit,
-    onConnectDropbox: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -48,7 +47,7 @@ fun Onboarding(
         Spacer(Modifier.height(24.dp))
         Text(
             "I tuoi MP3 sono già tuoi. Non devi pagare nessuno per ascoltarli.\n\n" +
-                "Scegli UNA cartella del telefono, del tuo Google Drive o del tuo Dropbox: ASD la setaccia, " +
+                "Scegli UNA cartella del telefono, o una del tuo Google Drive: ASD la setaccia, " +
                 "mette in fila i pezzi e ti lascia fare mixtape. Fine.",
             style = MaterialTheme.typography.bodyLarge,
         )
@@ -63,14 +62,6 @@ fun Onboarding(
             shadow = Asd.Acid,
         )
         Spacer(Modifier.height(12.dp))
-        PunkButton(
-            "Dropbox",
-            onClick = onConnectDropbox,
-            icon = Icons.Filled.Cloud,
-            container = Asd.Paper,
-            shadow = Asd.Spray,
-        )
-        Spacer(Modifier.height(12.dp))
-        Text("Puoi aggiungere le altre fonti quando vuoi da SETUP.", style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
+        Text("Puoi aggiungere l'altra fonte quando vuoi da SETUP.", style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
     }
 }

@@ -71,7 +71,6 @@ fun SongRow(
                 when (song.source) {
                     SongSource.LOCAL -> song.format
                     SongSource.DRIVE -> "☁ ${song.format}"
-                    SongSource.DROPBOX -> "◆ ${song.format}"
                 },
                 style = MaterialTheme.typography.labelSmall,
                 color = faded,

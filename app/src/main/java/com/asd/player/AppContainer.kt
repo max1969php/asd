@@ -7,8 +7,6 @@ import com.asd.player.data.drive.DriveAuth
 import com.asd.player.data.drive.DriveClient
 import com.asd.player.data.loudness.LoudnessAnalyzer
 import com.asd.player.data.loudness.LoudnessQueue
-import com.asd.player.data.dropbox.DropboxAuth
-import com.asd.player.data.dropbox.DropboxClient
 import com.asd.player.data.repository.MusicLibraryRepository
 import com.asd.player.data.repository.MusicLibraryRepositoryImpl
 import com.asd.player.data.repository.PlaylistRepository
@@ -35,16 +33,14 @@ class AppContainer(context: Context) {
 
     val driveAuth = DriveAuth(context)
     val driveClient = DriveClient(driveAuth)
-    val dropboxAuth = DropboxAuth(context)
-    val dropboxClient = DropboxClient(dropboxAuth)
-    val streamResolver = CloudStreamResolver(driveAuth, dropboxClient, settings)
+    val streamResolver = CloudStreamResolver(driveAuth, settings)
     val playlistRepository: PlaylistRepository = PlaylistRepositoryImpl(database.playlistDao())
     private val tubeCookies = TubeCookies(context)
     val tubeImporter = TubeImporter(
-        TubeDownloader(context, tubeCookies), tubeCookies, audioScanner, driveClient, dropboxClient, libraryRepository, settings,
+        TubeDownloader(context, tubeCookies), tubeCookies, audioScanner, driveClient, libraryRepository, settings,
     )
     val loudnessQueue = LoudnessQueue(
-        context, LoudnessAnalyzer(context), libraryRepository, settings, driveAuth, dropboxClient,
+        context, LoudnessAnalyzer(context), libraryRepository, settings, driveAuth,
     ).also { it.start() }
     val playbackController = PlaybackController(context)
     val searchSongs = SearchSongs()

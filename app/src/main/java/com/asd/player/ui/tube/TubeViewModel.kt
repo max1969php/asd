@@ -46,8 +46,7 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
     val options: StateFlow<List<DestinationOption>> = combine(
         settings.directoryUri,
         settings.drive.state,
-        settings.dropbox.state,
-    ) { dir, drive, dropbox ->
+    ) { dir, drive ->
         listOf(
             when {
                 dir == null -> DestinationOption(TubeDestination.LOCAL, null, "nessuna cartella del telefono")
@@ -60,7 +59,6 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
                 )
             },
             cloudOption(TubeDestination.DRIVE, "Drive", drive),
-            cloudOption(TubeDestination.DROPBOX, "Dropbox", dropbox),
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 

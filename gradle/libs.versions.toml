@@ -13,8 +13,6 @@ junit = "4.13.2"
 playServicesAuth = "21.2.0"
 orgJson = "20240303"
 youtubedlAndroid = "0.18.1"
-# La 8.x richiede Kotlin 2.4 e bytecode Java 21: restiamo sulla 7.
-dropbox = "7.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,8 +33,6 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
 youtubedl-android = { group = "io.github.junkfood02.youtubedl-android", name = "library", version.ref = "youtubedlAndroid" }
-dropbox-core = { group = "com.dropbox.core", name = "dropbox-core-sdk", version.ref = "dropbox" }
-dropbox-android = { group = "com.dropbox.core", name = "dropbox-android-sdk", version.ref = "dropbox" }
 org-json = { group = "org.json", name = "json", version.ref = "orgJson" }
 
 [plugins]

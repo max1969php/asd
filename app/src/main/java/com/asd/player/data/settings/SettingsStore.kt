@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 data class CloudFolder(val id: String, val name: String)
 
-/** Stato di una fonte cloud (Drive o Dropbox): account collegati, predefinito e la sua cartella. */
+/** Stato di una fonte cloud (Google Drive): account collegati, predefinito e la sua cartella. */
 data class CloudSettings(
     val accounts: List<String> = emptyList(),
     val defaultAccount: String? = null,
@@ -20,7 +20,7 @@ data class CloudSettings(
 )
 
 /** Dove il TUBO salva l'audio scaricato. */
-enum class TubeDestination { LOCAL, DRIVE, DROPBOX }
+enum class TubeDestination { LOCAL, DRIVE }
 
 /** Poche preferenze, niente DataStore: SharedPreferences + StateFlow bastano. */
 class SettingsStore(context: Context) {
@@ -44,7 +44,6 @@ class SettingsStore(context: Context) {
 
     /** Le chiavi di Drive restano quelle di prima ("drive_…"): niente da migrare. */
     val drive = CloudPrefs("drive")
-    val dropbox = CloudPrefs("dropbox")
 
     private val _tubeDestination = MutableStateFlow(
         prefs.getString(KEY_TUBE_DESTINATION, null)

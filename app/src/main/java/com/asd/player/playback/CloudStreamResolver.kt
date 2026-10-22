@@ -6,19 +6,17 @@ import androidx.media3.datasource.DataSpec
 import androidx.media3.datasource.ResolvingDataSource
 import com.asd.player.data.drive.DriveAuth
 import com.asd.player.data.drive.DriveClient
-import com.asd.player.data.dropbox.DropboxClient
 import com.asd.player.data.settings.SettingsStore
 import java.io.IOException
 
 /**
  * Trasforma gli URI interni dei brani cloud in richieste HTTPS vere, un attimo prima che
- * ExoPlayer apra lo stream: `gdrive://` con il token OAuth, `dropbox://` con un link temporaneo.
+ * ExoPlayer apra lo stream: `gdrive://` diventa HTTPS con il token OAuth.
  * Gli URI locali passano intatti.
  */
 @OptIn(UnstableApi::class)
 class CloudStreamResolver(
     private val driveAuth: DriveAuth,
-    private val dropbox: DropboxClient,
     private val settings: SettingsStore,
 ) : ResolvingDataSource.Resolver {
 
@@ -30,11 +28,6 @@ class CloudStreamResolver(
                 .setUri(DriveClient.mediaUrl(fileId))
                 .setHttpRequestHeaders(dataSpec.httpRequestHeaders + ("Authorization" to "Bearer ${driveAuth.token(email)}"))
                 .build()
-        }
-        DropboxClient.fileIdOf(dataSpec.uri)?.let { fileId ->
-            val email = settings.dropbox.state.value.defaultAccount
-                ?: throw IOException("Nessun account Dropbox selezionato")
-            return dataSpec.withUri(android.net.Uri.parse(dropbox.temporaryLink(email, fileId)))
         }
         return dataSpec
     }

@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [SongEntity::class, PlaylistEntity::class, PlaylistEntryEntity::class],
-    version = 3,
+    version = 4,
     exportSchema = true,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -19,7 +19,7 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         fun build(context: Context): AppDatabase =
             Room.databaseBuilder(context, AppDatabase::class.java, "asd.db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                 .build()
 
         /** v2: arriva Google Drive, ogni brano ricorda da quale fonte viene. */
@@ -34,6 +34,13 @@ abstract class AppDatabase : RoomDatabase() {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE songs ADD COLUMN loudnessLufs REAL")
                 db.execSQL("ALTER TABLE songs ADD COLUMN peakDb REAL")
+            }
+        }
+
+        /** v4: Dropbox esce dall'app base (vive nel branch "dropbox"): via i suoi brani. */
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("DELETE FROM songs WHERE source = 'DROPBOX'")
             }
         }
     }

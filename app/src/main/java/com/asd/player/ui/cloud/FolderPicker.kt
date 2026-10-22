@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.asd.player.ui.theme.Asd
 
-/** Navigazione tra le cartelle di Drive o Dropbox per scegliere quella da indicizzare. */
+/** Navigazione tra le cartelle di Drive per scegliere quella da indicizzare. */
 @Composable
 fun FolderPicker(title: String, state: FolderPickerState, account: String?, viewModel: CloudViewModel) {
     AlertDialog(

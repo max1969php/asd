@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Process
 import com.asd.player.data.drive.DriveAuth
 import com.asd.player.data.drive.DriveClient
-import com.asd.player.data.dropbox.DropboxClient
 import com.asd.player.data.repository.MusicLibraryRepository
 import com.asd.player.data.settings.SettingsStore
 import com.asd.player.domain.model.Song
@@ -26,7 +25,7 @@ data class LoudnessProgress(val pending: Int = 0, val running: Boolean = false)
 
 /**
  * Misura in sottofondo, un brano alla volta, il volume dei pezzi nuovi o cambiati.
- * I file locali subito; quelli su Drive e Dropbox vanno scaricati interi, quindi solo su
+ * I file locali subito; quelli su Drive vanno scaricati interi, quindi solo su
  * rete non a consumo (Wi-Fi). Il brano in riproduzione passa davanti agli altri.
  */
 class LoudnessQueue(
@@ -35,7 +34,6 @@ class LoudnessQueue(
     private val library: MusicLibraryRepository,
     private val settings: SettingsStore,
     private val driveAuth: DriveAuth,
-    private val dropbox: DropboxClient,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO.limitedParallelism(1))
@@ -86,11 +84,6 @@ class LoudnessQueue(
             val email = settings.drive.state.value.defaultAccount ?: error("Nessun account Drive")
             val fileId = DriveClient.fileIdOf(Uri.parse(song.uri)) ?: error("URI Drive non valido")
             analyzer.analyzeRemote(DriveClient.mediaUrl(fileId), mapOf("Authorization" to "Bearer ${driveAuth.token(email)}"))
-        }
-        SongSource.DROPBOX -> {
-            val email = settings.dropbox.state.value.defaultAccount ?: error("Nessun account Dropbox")
-            val fileId = DropboxClient.fileIdOf(Uri.parse(song.uri)) ?: error("URI Dropbox non valido")
-            analyzer.analyzeRemote(dropbox.temporaryLink(email, fileId), emptyMap())
         }
     }
 

@@ -19,19 +19,18 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
   e sulle cuffie.
 - **Tubo**: incolli un link YouTube e premi invio. Del link si tiene solo la parte prima di `&list`
   (un brano, mai la playlist) e si scarica solo l'audio con **yt-dlp**. Una select **SALVA IN** sceglie
-  la destinazione: cartella del telefono, Google Drive o Dropbox (la cartella scelta in SETUP per
-  ciascuno). Il brano compare subito in ROBA.
+  la destinazione: cartella del telefono o Google Drive (la cartella scelta in SETUP). Il brano compare subito in ROBA.
 - **Volume uniforme**: niente salti di volume tra un brano e l'altro. Ogni brano viene misurato
   una volta secondo **EBU R128 / ITU-R BS.1770-4** (lo standard di ReplayGain 2.0 e della
   normalizzazione di Spotify e YouTube) e suonato a **-18 LUFS**, il riferimento ReplayGain.
   La misura gira in sottofondo un brano alla volta (prima quello in riproduzione) e resta salvata;
-  i file di Drive e Dropbox si misurano solo su rete non a consumo. Il guadagno passa dal volume del
+  i file di Drive si misurano solo su rete non a consumo. Il guadagno passa dal volume del
   player, che può solo abbassare: i brani più bassi di -18 LUFS restano com'erano (niente clipping,
   niente limiter). Si spegne in SETUP.
 - **Setup**: per cambiare cartella, riscansionare e scegliere l'ordinamento predefinito.
-- **Tre fonti**: la cartella del telefono (SAF), una cartella di **Google Drive** e una di **Dropbox**.
-  La libreria le unisce; il filtro TELEFONO / DRIVE / DROPBOX compare quando ne usi più d'una.
-  I brani di Drive hanno il simbolo ☁, quelli di Dropbox ◆.
+- **Due fonti**: la cartella del telefono (SAF) e una cartella di **Google Drive**. La libreria le
+  unisce; il filtro TELEFONO / DRIVE compare quando le usi entrambe, e i brani di Drive hanno il simbolo ☁.
+- **Dropbox** è un'estensione che non fa parte dell'app base: vive nel branch `dropbox`.
 
 ### Google Drive
 
@@ -42,17 +41,6 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
   diventano quelli del nuovo account (e spariscono dai mixtape quelli del vecchio).
 - I file restano su Drive: si leggono i tag e si suonano **in streaming** con lo stesso Media3 ExoPlayer,
   aggiungendo il token OAuth al volo (`DriveStreamResolver`). Scope richiesto: `drive` (vedi sotto).
-
-### Dropbox
-
-- Funziona come Drive: select dell'account predefinito, una cartella per account, streaming.
-- Dropbox non è un account di sistema di Android: "+ COLLEGA UN ACCOUNT DROPBOX" apre il login
-  (app Dropbox se installata, altrimenti il browser). Per collegare un secondo account, nel login
-  esci dal primo e entra con l'altro.
-- Login OAuth **PKCE** con l'SDK ufficiale `dropbox-sdk-java` 7.0.0: nell'app c'è solo la app key
-  (pubblica, in `app/build.gradle.kts`), nessun app secret. Si conserva il refresh token per account,
-  quindi non c'è un consenso da rinnovare.
-- Lo streaming usa i link temporanei di Dropbox (durano 4 ore), che ExoPlayer apre direttamente.
 
 ### Tubo
 
@@ -88,7 +76,6 @@ Formati accettati (whitelist): MP3, WAV, FLAC, M4A, AAC, OGG, OPUS.
 | Catalogo e playlist | Room (SQLite) |
 | Accesso ai file | Storage Access Framework (`ACTION_OPEN_DOCUMENT_TREE`) con permesso persistente |
 | Google Drive | Drive REST API v3 + Google Identity `AuthorizationClient` (play-services-auth) |
-| Dropbox | `dropbox-core-sdk` + `dropbox-android-sdk` 7.0.0 (MIT), OAuth PKCE |
 | YouTube | `youtubedl-android` 0.18.1 (yt-dlp + Python + QuickJS sul telefono) |
 | DI | Manuale (`AppContainer`) |
 
@@ -100,7 +87,6 @@ app/src/main/java/com/asd/player/
 │   ├── database/     Room: entità, SongDao, PlaylistDao
 │   ├── scanner/      SourceScanner, AudioScanner (visita SAF), MetadataReader (tag)
 │   ├── drive/        DriveAuth (OAuth), DriveClient (REST), DriveSourceScanner, DriveStreamResolver
-│   ├── dropbox/      DropboxAuth (PKCE), DropboxClient, DropboxSourceScanner
 │   ├── loudness/     LoudnessMeter (BS.1770), LoudnessAnalyzer (MediaCodec), LoudnessQueue, VolumeLeveling
 │   ├── tube/         TubeLink, TubeTrack, TubeDownloader (yt-dlp), TubeImporter (coda → Drive)
 │   ├── repository/   MusicLibraryRepository, PlaylistRepository
@@ -168,16 +154,6 @@ Le modifiche in console possono richiedere qualche minuto prima di valere.
 
 `drive` è uno scope "restricted": in stato Test funziona per gli utenti di test, mostrando
 l'avviso "app non verificata". Per distribuire l'app a chiunque serve la verifica di Google.
-
-## Configurare Dropbox (una volta sola)
-
-1. Su https://www.dropbox.com/developers/apps → **Create app**: Scoped access, **Full Dropbox**.
-2. **Permissions**: spunta `files.metadata.read`, `files.content.read`, `files.content.write`
-   (più `account_info.read`, già attivo) e premi **Submit**.
-3. **Settings**: lascia "Allow public clients (PKCE)" su Allow; nessun Redirect URI da aggiungere.
-   Copia la **App key** in `dropboxAppKey` dentro `app/build.gradle.kts`. L'app secret non serve.
-4. Finché l'app è in sviluppo, Dropbox limita quanti utenti possono collegarsi
-   (Settings → Development users).
 
 ## Fuori dall'MVP
 

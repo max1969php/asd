@@ -28,7 +28,7 @@ data class FolderPickerState(
 }
 
 /**
- * Quello che Drive e Dropbox hanno in comune: account predefinito, scelta della cartella,
+ * La parte generica di una fonte cloud: account predefinito, scelta della cartella,
  * riscansione. Le sottoclassi sanno solo come si autorizza un account e come si leggono le cartelle.
  */
 abstract class CloudViewModel(

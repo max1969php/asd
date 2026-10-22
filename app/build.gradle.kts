@@ -16,10 +16,6 @@ android {
         versionCode = 1
         versionName = "0.1.0"
 
-        // App key Dropbox (App Console → Settings). Non è un segreto: il login usa PKCE, senza app secret.
-        val dropboxAppKey = "ubdflgsdzeo7bic"
-        buildConfigField("String", "DROPBOX_APP_KEY", "\"$dropboxAppKey\"")
-        manifestPlaceholders["dropboxAppKey"] = dropboxAppKey
     }
 
     // Python e yt-dlp (TUBO) sono librerie native da ~15 MB per CPU: un APK per CPU invece di uno con
@@ -60,7 +56,6 @@ android {
     }
     buildFeatures {
         compose = true
-        buildConfig = true
     }
     testOptions {
         unitTests.isReturnDefaultValues = true
@@ -96,8 +91,6 @@ dependencies {
         // La libreria dichiara appcompat ma non lo usa: sarebbero ~1 MB di risorse per niente.
         exclude(group = "androidx.appcompat")
     }
-    implementation(libs.dropbox.core)
-    implementation(libs.dropbox.android)
 
     testImplementation(libs.junit)
     // org.json reale nei test JVM (quello di android.jar è uno stub).

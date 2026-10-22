@@ -106,7 +106,7 @@ class AudioScanner(private val resolver: ContentResolver) {
             runCatching { DocumentsContract.getTreeDocumentId(treeUri).substringAfter(':').ifEmpty { "/" } }
                 .getOrDefault(treeUri.toString())
 
-        /** Per le fonti che non dicono il tipo dei file (Dropbox). */
+        /** Tipo MIME dall'estensione, per le fonti che non lo dicono. */
         fun mimeTypeOf(fileName: String): String? = MIME_TYPES[fileName.substringAfterLast('.', "").lowercase()]
 
         fun isSupported(fileName: String): Boolean =

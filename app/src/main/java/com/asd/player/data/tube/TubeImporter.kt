@@ -2,7 +2,6 @@ package com.asd.player.data.tube
 
 import android.net.Uri
 import com.asd.player.data.drive.DriveClient
-import com.asd.player.data.dropbox.DropboxClient
 import com.asd.player.data.repository.MusicLibraryRepository
 import com.asd.player.data.scanner.AudioMetadata
 import com.asd.player.data.scanner.AudioScanner
@@ -28,7 +27,7 @@ enum class TubeStatus { QUEUED, DOWNLOADING, UPLOADING, DONE, FAILED }
 
 /**
  * Dove finisce un download, fissato al momento dell'invio.
- * [folderId]: URI dell'albero SAF per il telefono, id della cartella Drive, percorso Dropbox.
+ * [folderId]: URI dell'albero SAF per il telefono, id della cartella Drive.
  */
 data class TubeTarget(
     val destination: TubeDestination,
@@ -49,7 +48,7 @@ data class TubeJob(
 
 /**
  * Coda del TUBO: scarica l'audio con yt-dlp, lo salva nella destinazione scelta (cartella del
- * telefono, Drive o Dropbox) e lo aggiunge subito alla libreria. Un lavoro alla volta,
+ * telefono o Drive) e lo aggiunge subito alla libreria. Un lavoro alla volta,
  * fuori dal ciclo di vita delle schermate.
  */
 class TubeImporter(
@@ -57,7 +56,6 @@ class TubeImporter(
     val cookies: TubeCookies,
     private val local: AudioScanner,
     private val drive: DriveClient,
-    private val dropbox: DropboxClient,
     private val library: MusicLibraryRepository,
     private val settings: SettingsStore,
 ) {
@@ -134,16 +132,11 @@ class TubeImporter(
                 lastModified = uploaded.modifiedAt,
             )
         }
-        TubeDestination.DROPBOX ->
-            SongSource.DROPBOX to dropbox.upload(target.account!!, target.folderId, track.fileName, file)
     }
 
     private fun isCurrent(target: TubeTarget): Boolean = when (target.destination) {
         TubeDestination.LOCAL -> settings.directoryUri.value?.toString() == target.folderId
         TubeDestination.DRIVE -> settings.drive.state.value.let {
-            it.defaultAccount == target.account && it.folder?.id == target.folderId
-        }
-        TubeDestination.DROPBOX -> settings.dropbox.state.value.let {
             it.defaultAccount == target.account && it.folder?.id == target.folderId
         }
     }
