@@ -4,6 +4,10 @@ Lettore musicale Android per la **tua** musica: una cartella del telefono e/o un
 tuo Google Drive, zero abbonamenti. Niente account ASD, niente pubblicità, niente tracciamento.
 La rete viene usata solo per Google Drive, e solo se lo colleghi.
 
+- **Sito** (istruzioni, guida a yt-dlp, script per PC): https://asd-eight-rust.vercel.app
+- **Scarica l'APK**: [ultima Release](https://github.com/max1969php/asd/releases/latest)
+  (`asd-arm64.apk` per quasi tutti i telefoni, `asd-armv7.apk` per i più vecchi).
+
 Il ragionamento architetturale di partenza è in [`a.md`](a.md).
 
 ## Cosa fa
@@ -103,8 +107,11 @@ app/src/main/java/com/asd/player/
 ├── playback/         PlaybackService (MediaSession), PlaybackController, CloudStreamResolver
 ├── ui/               theme, components, library, playlists, player, tube, cloud, settings
 ├── AppContainer.kt
+├── L10n.kt           lingua dell'app (LocaleManager da Android 13, pref prima)
 ├── MainActivity.kt
 └── MusicApplication.kt
+
+site/                 sito statico su Vercel (vedi "Sito" più sotto e site/README.md)
 ```
 
 La UI non vede mai ExoPlayer: passa da `PlaybackController`, che parla al servizio tramite
@@ -117,13 +124,39 @@ dal catalogo e, in cascata, dai mixtape che li contenevano.
 Apri il progetto con Android Studio, oppure da terminale:
 
 ```bash
-./gradlew testDebugUnitTest   # test unitari (ricerca/filtri, whitelist formati)
-./gradlew assembleDebug       # app/build/outputs/apk/debug/app-debug.apk
+./gradlew testDebugUnitTest   # test unitari (ricerca/filtri, whitelist formati, loudness, TUBO)
+./gradlew assembleDebug       # app/build/outputs/apk/debug/
+./gradlew assembleRelease     # app/build/outputs/apk/release/app-arm64-v8a-release.apk e app-armeabi-v7a-release.apk
 ```
+
+La release è minificata e firmata con la chiave debug (così l'impronta SHA-1 registrata per
+Google Drive resta la stessa): si installa sopra le versioni precedenti.
 
 Servono JDK 17 e l'Android SDK con la piattaforma 34 (`ANDROID_HOME` oppure `local.properties`).
 L'APK include solo le librerie native ARM (`arm64-v8a`, `armeabi-v7a`), quelle dei telefoni veri.
 Per un emulatore x86_64 aggiungi `x86_64` ad `abiFilters` in `app/build.gradle.kts` (+15 MB).
+
+## Rilasciare una versione
+
+1. Alza `versionCode` e `versionName` in `app/build.gradle.kts`, poi `./gradlew assembleRelease`.
+2. Crea una Release su GitHub con tag `v<versionName>` e allega i due APK con questi nomi esatti:
+   `asd-arm64.apk` e `asd-armv7.apk`. Con la CLI di GitHub:
+
+   ```bash
+   cp app/build/outputs/apk/release/app-arm64-v8a-release.apk asd-arm64.apk
+   cp app/build/outputs/apk/release/app-armeabi-v7a-release.apk asd-armv7.apk
+   gh release create v0.2.0 --target main --title "ASD 0.2.0" --notes "..." asd-arm64.apk asd-armv7.apk
+   ```
+
+I bottoni del sito puntano a `releases/latest/download/asd-arm64.apk` (e `asd-armv7.apk`): prendono
+sempre l'ultima Release, il sito non va toccato.
+
+## Sito
+
+`site/` è una pagina statica, senza build: istruzioni di ASD, guida a yt-dlp per scaricare solo
+l'audio, script per Linux e Windows. È un progetto Vercel collegato a questo repo con
+**Root Directory `site`**: ogni push su `main` aggiorna il sito (gli altri branch producono
+anteprime). Testi, lingue e script sono spiegati in [`site/README.md`](site/README.md).
 
 ## Configurare Google Drive (una volta sola)
 

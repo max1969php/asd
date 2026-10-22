@@ -3,15 +3,17 @@
 Pagina statica con le istruzioni di ASD, la guida a yt-dlp e gli script per scaricare solo
 l'audio su Linux e Windows. Niente build: HTML, CSS e un po' di JavaScript.
 
-## Deploy su Vercel
+## Deploy
 
-1. *Add New → Project* e importa il repo `asd`.
-2. **Root Directory: `site`**. Framework Preset: *Other*. Build Command e Output Directory vuoti.
-3. Deploy. `vercel.json` serve gli script come file da scaricare (`Content-Disposition: attachment`).
+Online su https://asd-eight-rust.vercel.app. Il progetto Vercel `asd` è collegato al repo GitHub
+(branch di produzione `main`, **Root Directory `site`**, preset *Other*, nessun comando di build):
+ogni push su `main` ripubblica il sito, gli altri branch danno un'anteprima.
+`vercel.json` serve gli script come file da scaricare (`Content-Disposition: attachment`).
 
 Il bottone "Scarica l'APK" punta a
 `https://github.com/max1969php/asd/releases/latest/download/asd-arm64.apk` (e `asd-armv7.apk`):
-a ogni versione crea una Release su GitHub e allega i due APK con questi nomi esatti.
+a ogni versione dell'app si crea una Release con i due APK con questi nomi esatti
+(vedi "Rilasciare una versione" nel README principale).
 
 Prova in locale: `python3 -m http.server -d site 8000` e apri http://localhost:8000.
 
