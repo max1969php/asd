@@ -18,7 +18,7 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
   La riproduzione continua in background, con i controlli nella notifica, nella lock screen
   e sulle cuffie.
 - **Lingue**: italiano di base più inglese, spagnolo, francese, tedesco, portoghese, olandese,
-  polacco, rumeno, ceco, slovacco, sloveno, croato e ungherese. Si sceglie in SETUP → Lingua
+  polacco, rumeno, ceco, slovacco, sloveno, croato, ungherese e norvegese. Si sceglie in SETUP → Lingua
   (o, da Android 13, nelle impostazioni di sistema dell'app). Una nuova lingua è un
   `res/values-<codice>/strings.xml` con le stesse chiavi di `res/values/strings.xml`, più il codice
   in `L10n.SUPPORTED` e in `res/xml/locales_config.xml`.

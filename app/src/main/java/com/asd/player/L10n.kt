@@ -21,7 +21,7 @@ object L10n {
      * Va tenuta allineata con res/xml/locales_config.xml.
      */
     val SUPPORTED = listOf(
-        "it", "en", "cs", "de", "es", "fr", "hr", "hu", "nl", "pl", "pt", "ro", "sk", "sl",
+        "it", "en", "cs", "de", "es", "fr", "hr", "hu", "nb", "nl", "pl", "pt", "ro", "sk", "sl",
     )
 
     private const val PREFS = "asd_settings"
