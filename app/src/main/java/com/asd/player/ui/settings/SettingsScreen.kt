@@ -47,6 +47,7 @@ import com.asd.player.domain.model.SortField
 import com.asd.player.ui.cloud.AccountSelect
 import com.asd.player.ui.cloud.CloudViewModel
 import com.asd.player.ui.cloud.DriveViewModel
+import com.asd.player.ui.components.AsdLinks
 import com.asd.player.ui.components.PunkButton
 import com.asd.player.ui.components.Stamp
 import com.asd.player.ui.components.TapeChip
@@ -75,6 +76,8 @@ fun SettingsScreen(
     ) {
         Text("SETUP", style = MaterialTheme.typography.displayLarge)
         Text(stringResource(R.string.settings_subtitle), style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
+        Spacer(Modifier.height(8.dp))
+        AsdLinks()
 
         Section(stringResource(R.string.phone_folder)) {
             Text(

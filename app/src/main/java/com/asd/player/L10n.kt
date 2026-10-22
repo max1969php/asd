@@ -21,7 +21,24 @@ object L10n {
      * Va tenuta allineata con res/xml/locales_config.xml.
      */
     val SUPPORTED = listOf(
-        "it", "en", "cs", "de", "es", "fr", "hr", "hu", "nb", "nl", "pl", "pt", "ro", "sk", "sl",
+        "it", "en", "bg", "cs", "da", "de", "el", "es", "et", "fi", "fr", "ga", "hr", "hu", "lt", "lv", "mt",
+        "nl", "pl", "pt", "ro", "sk", "sl", "sv", "nb", "uk", "zh-CN", "hi", "ar", "fa", "sw", "wo", "ha",
+        "yo", "ig", "am", "ti", "so",
+    )
+
+    /**
+     * Nomi scritti nella lingua stessa, come sul sito. Non da Locale: sui telefoni vecchi lingue
+     * come wolof o tigrino ne uscirebbero come codice nudo.
+     */
+    private val NAMES = mapOf(
+        "it" to "Italiano", "en" to "English", "bg" to "Български", "cs" to "Čeština", "da" to "Dansk",
+        "de" to "Deutsch", "el" to "Ελληνικά", "es" to "Español", "et" to "Eesti", "fi" to "Suomi",
+        "fr" to "Français", "ga" to "Gaeilge", "hr" to "Hrvatski", "hu" to "Magyar", "lt" to "Lietuvių",
+        "lv" to "Latviešu", "mt" to "Malti", "nl" to "Nederlands", "pl" to "Polski", "pt" to "Português",
+        "ro" to "Română", "sk" to "Slovenčina", "sl" to "Slovenščina", "sv" to "Svenska", "nb" to "Norsk bokmål",
+        "uk" to "Українська", "zh-CN" to "简体中文", "hi" to "हिन्दी", "ar" to "العربية", "fa" to "فارسی",
+        "sw" to "Kiswahili", "wo" to "Wolof", "ha" to "Hausa", "yo" to "Yorùbá", "ig" to "Igbo", "am" to "አማርኛ",
+        "ti" to "ትግርኛ", "so" to "Soomaali",
     )
 
     private const val PREFS = "asd_settings"
@@ -66,10 +83,7 @@ object L10n {
         if (locale.language == "zh") "zh-CN" else locale.language
 
     /** Il nome di una lingua scritto in quella lingua ("Deutsch", "العربية"). */
-    fun nativeName(tag: String): String {
-        val locale = Locale.forLanguageTag(tag)
-        return locale.getDisplayLanguage(locale).replaceFirstChar { it.titlecase(locale) }
-    }
+    fun nativeName(tag: String): String = NAMES[tag] ?: tag
 
     /** Testi per chi non ha un contesto di UI sotto mano (ViewModel, download, errori). */
     fun str(@StringRes id: Int, vararg args: Any): String = localized().getString(id, *args)

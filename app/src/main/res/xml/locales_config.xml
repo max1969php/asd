@@ -2,13 +2,28 @@
 <!-- Generato con le traduzioni: deve contenere le lingue di L10n.SUPPORTED. -->
 <locale-config xmlns:android="http://schemas.android.com/apk/res/android">
     <locale android:name="it" />
+    <locale android:name="am" />
+    <locale android:name="ar" />
+    <locale android:name="bg" />
     <locale android:name="cs" />
+    <locale android:name="da" />
     <locale android:name="de" />
+    <locale android:name="el" />
     <locale android:name="en" />
     <locale android:name="es" />
+    <locale android:name="et" />
+    <locale android:name="fa" />
+    <locale android:name="fi" />
     <locale android:name="fr" />
+    <locale android:name="ga" />
+    <locale android:name="ha" />
+    <locale android:name="hi" />
     <locale android:name="hr" />
     <locale android:name="hu" />
+    <locale android:name="ig" />
+    <locale android:name="lt" />
+    <locale android:name="lv" />
+    <locale android:name="mt" />
     <locale android:name="nb" />
     <locale android:name="nl" />
     <locale android:name="pl" />
@@ -16,4 +31,12 @@
     <locale android:name="ro" />
     <locale android:name="sk" />
     <locale android:name="sl" />
+    <locale android:name="so" />
+    <locale android:name="sv" />
+    <locale android:name="sw" />
+    <locale android:name="ti" />
+    <locale android:name="uk" />
+    <locale android:name="wo" />
+    <locale android:name="yo" />
+    <locale android:name="zh-CN" />
 </locale-config>

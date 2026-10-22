@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Folder
@@ -20,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.asd.player.R
 import com.asd.player.ui.components.AnarchyLogo
+import com.asd.player.ui.components.AsdLinks
 import com.asd.player.ui.components.PunkButton
 import com.asd.player.ui.components.Stamp
 import com.asd.player.ui.theme.Asd
@@ -32,7 +35,7 @@ fun Onboarding(
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
-        modifier = modifier.fillMaxSize().padding(24.dp),
+        modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp),
     ) {
         AnarchyLogo(size = 120.dp)
         Spacer(Modifier.height(24.dp))
@@ -63,5 +66,7 @@ fun Onboarding(
         )
         Spacer(Modifier.height(12.dp))
         Text(stringResource(R.string.onboarding_other_source), style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
+        Spacer(Modifier.height(24.dp))
+        AsdLinks()
     }
 }

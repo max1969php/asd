@@ -27,6 +27,8 @@ Prova in locale: `python3 -m http.server -d site 8000` e apri http://localhost:8
   metti `ready: true` alla sua riga in `LANGUAGES`. Le chiavi mancanti restano in italiano.
 - La select compare da sola quando c'è più di una lingua pronta. Arabo e farsi girano già da
   destra a sinistra.
+- Oggi sono pronte tutte le 38 lingue dell'app. Restano in italiano solo le chiavi uguali ovunque
+  (`nav.*`, i titoli `// LINUX` ecc., `dl.label`, `meta.title`, `hero.tagline`).
 
 ## Script
 
