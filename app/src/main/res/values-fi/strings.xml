@@ -8,7 +8,7 @@
     <string name="onboarding_stamp_free">0€/kk</string>
     <string name="onboarding_stamp_no_account">ei tiliä</string>
     <string name="onboarding_stamp_no_cloud">ei pilveä</string>
-    <string name="onboarding_intro">MP3-tiedostosi ovat jo sinun. Kenellekään ei tarvitse maksaa niiden kuuntelusta.\n\nValitse YKSI kansio puhelimesta tai Google Drivestasi: ASD käy sen läpi, asettaa kappaleet jonoon ja antaa sinun tehdä mixtapeja. Siinä kaikki.</string>
+    <string name="onboarding_intro">MP3-tiedostosi ovat jo sinun. Kenellekään ei tarvitse maksaa niiden kuuntelusta. Eikä kenenkään pidä vakoilla sinua, kun kuuntelet niitä.\n\nValitse YKSI kansio puhelimesta tai Google Drivestasi: ASD käy sen läpi, asettaa kappaleet jonoon ja antaa sinun tehdä mixtapeja. Siinä kaikki.</string>
     <string name="phone_folder">Puhelimen kansio</string>
     <string name="onboarding_other_source">Voit lisätä toisen lähteen milloin tahansa ASETUKSISSA.</string>
     <string name="no_account">ei tiliä</string>

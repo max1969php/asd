@@ -235,6 +235,11 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
                         pending = email to action
                         _consentRequests.emit(outcome.intent)
                     }
+                    DriveAuth.Outcome.NeedsBrowser -> {
+                        _messages.tryEmit(L10n.str(R.string.drive_login_wait))
+                        auth.browserLogin(email)
+                        action()
+                    }
                 }
             } catch (e: Exception) {
                 _messages.tryEmit(L10n.str(R.string.google_said_no, e.message.orEmpty()))

@@ -8,7 +8,7 @@
     <string name="onboarding_stamp_free">0€/měsíc</string>
     <string name="onboarding_stamp_no_account">bez účtu</string>
     <string name="onboarding_stamp_no_cloud">bez cloudu</string>
-    <string name="onboarding_intro">Tvoje MP3 už jsou tvoje. Nemusíš nikomu platit, abys je poslouchal.\n\nVyber JEDNU složku v telefonu nebo na svém Google Drive: ASD ji prohrabe, seřadí skladby a nechá tě dělat mixtapy. Hotovo.</string>
+    <string name="onboarding_intro">Tvoje MP3 už jsou tvoje. Nemusíš nikomu platit, abys je poslouchal. A nikdo tě nesmí šmírovat, když je posloucháš.\n\nVyber JEDNU složku v telefonu nebo na svém Google Drive: ASD ji prohrabe, seřadí skladby a nechá tě dělat mixtapy. Hotovo.</string>
     <string name="phone_folder">Složka v telefonu</string>
     <string name="onboarding_other_source">Druhý zdroj můžeš kdykoli přidat v SETUP.</string>
     <string name="no_account">žádný účet</string>

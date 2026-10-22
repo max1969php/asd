@@ -8,7 +8,7 @@
     <string name="onboarding_stamp_free">0€/በወር</string>
     <string name="onboarding_stamp_no_account">መለያ አያስፈልግም</string>
     <string name="onboarding_stamp_no_cloud">ደመና የለም</string>
-    <string name="onboarding_intro">MP3ዎችህ አስቀድሞ የራስህ ናቸው። ለማዳመጥ ለማንም መክፈል አያስፈልግህም።\n\nበስልክህ ወይም በGoogle Drive ውስጥ አንድ አቃፊ ምረጥ፦ ASD ያበጥረዋል፣ ዘፈኖቹን ያሰልፋል፣ ሚክስቴፕ እንድትሠራም ይተውልሃል። ይኸው ነው።</string>
+    <string name="onboarding_intro">MP3ዎችህ አስቀድሞ የራስህ ናቸው። ለማዳመጥ ለማንም መክፈል አያስፈልግህም። ስታዳምጣቸውም ማንም ሊሰልልህ አይገባም።\n\nበስልክህ ወይም በGoogle Drive ውስጥ አንድ አቃፊ ምረጥ፦ ASD ያበጥረዋል፣ ዘፈኖቹን ያሰልፋል፣ ሚክስቴፕ እንድትሠራም ይተውልሃል። ይኸው ነው።</string>
     <string name="phone_folder">የስልክ አቃፊ</string>
     <string name="onboarding_other_source">ሌላውን ምንጭ በማንኛውም ጊዜ ከማዋቀሪያ ማከል ትችላለህ።</string>
     <string name="no_account">መለያ የለም</string>

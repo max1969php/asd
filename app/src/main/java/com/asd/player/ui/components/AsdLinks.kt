@@ -20,12 +20,16 @@ private const val GITHUB_URL = "https://github.com/max1969php/asd"
 /** Sito (istruzioni, yt-dlp, APK nuovi) e sorgenti. Gli indirizzi non si traducono. */
 @Composable
 fun AsdLinks(modifier: Modifier = Modifier) {
-    // Il sito si apre nella lingua dell'app; senza scelta decide il browser.
-    val lang = L10n.current()
     Column(modifier) {
-        Link(SITE_URL) { if (lang.isEmpty()) SITE_URL else "$SITE_URL/?lang=$lang" }
+        Link(SITE_URL) { siteUrl() }
         Link(GITHUB_URL) { GITHUB_URL }
     }
+}
+
+/** Il sito nella lingua dell'app (senza scelta decide il browser), eventualmente a una sezione. */
+fun siteUrl(anchor: String? = null): String {
+    val lang = L10n.current()
+    return SITE_URL + (if (lang.isEmpty()) "/" else "/?lang=$lang") + (anchor?.let { "#$it" } ?: "")
 }
 
 @Composable

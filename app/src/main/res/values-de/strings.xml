@@ -8,7 +8,7 @@
     <string name="onboarding_stamp_free">0€/Monat</string>
     <string name="onboarding_stamp_no_account">kein Konto</string>
     <string name="onboarding_stamp_no_cloud">keine Cloud</string>
-    <string name="onboarding_intro">Deine MP3s gehören schon dir. Du musst niemanden bezahlen, um sie zu hören.\n\nWähle EINEN Ordner auf dem Handy oder auf deinem Google Drive: ASD durchsucht ihn, reiht die Stücke auf und lässt dich Mixtapes machen. Fertig.</string>
+    <string name="onboarding_intro">Deine MP3s gehören schon dir. Du musst niemanden bezahlen, um sie zu hören. Und niemand soll dich ausspionieren, während du sie hörst.\n\nWähle EINEN Ordner auf dem Handy oder auf deinem Google Drive: ASD durchsucht ihn, reiht die Stücke auf und lässt dich Mixtapes machen. Fertig.</string>
     <string name="phone_folder">Ordner auf dem Handy</string>
     <string name="onboarding_other_source">Die andere Quelle kannst du jederzeit unter SETUP hinzufügen.</string>
     <string name="no_account">kein Konto</string>

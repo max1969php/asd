@@ -56,6 +56,15 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
   diventano quelli del nuovo account (e spariscono dai mixtape quelli del vecchio).
 - I file restano su Drive: si leggono i tag e si suonano **in streaming** con lo stesso Media3 ExoPlayer,
   aggiungendo il token OAuth al volo (`DriveStreamResolver`). Scope richiesto: `drive` (vedi sotto).
+- **Il tuo progetto Google** (SETUP → Google Drive): chi non è tra gli utenti di test del progetto di
+  ASD usa un suo progetto Google Cloud, in stato Test, con un client OAuth di tipo **App desktop**.
+  Un client Android non si può: Google vuole la coppia pacchetto + SHA-1 unica fra tutti i progetti,
+  e quella dell'APK pubblicato è già presa. Client ID e secret si incollano in SETUP; il login si fa
+  nel browser del telefono e torna ad ASD su un server locale `127.0.0.1` (redirect di loopback,
+  PKCE), poi ASD tiene il refresh token (`OwnGoogleClient`). Client e token stanno in
+  `asd_drive_own.xml`, escluso dal backup: a ogni reinstallazione si ricollega. In stato Test il
+  refresh token scade dopo 7 giorni: Riscansiona riapre il login. Guida per gli utenti sul sito,
+  sezione `#drive`.
 
 ### Tubo
 

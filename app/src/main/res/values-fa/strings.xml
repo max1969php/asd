@@ -8,7 +8,7 @@
     <string name="onboarding_stamp_free">۰€/ماه</string>
     <string name="onboarding_stamp_no_account">بدون حساب</string>
     <string name="onboarding_stamp_no_cloud">بدون ابر</string>
-    <string name="onboarding_intro">MP3هایت از قبل مال خودت است. لازم نیست برای گوش دادن به آن‌ها به کسی پول بدهی.\n\nیک پوشه روی گوشی‌ات یا روی Google Drive انتخاب کن: ASD آن را الک می‌کند، آهنگ‌ها را به صف می‌کند و اجازه می‌دهد میکس‌تیپ بسازی. همین.</string>
+    <string name="onboarding_intro">MP3هایت از قبل مال خودت است. لازم نیست برای گوش دادن به آن‌ها به کسی پول بدهی. و هیچ‌کس نباید وقتی به آن‌ها گوش می‌دهی جاسوسی‌ات را بکند.\n\nیک پوشه روی گوشی‌ات یا روی Google Drive انتخاب کن: ASD آن را الک می‌کند، آهنگ‌ها را به صف می‌کند و اجازه می‌دهد میکس‌تیپ بسازی. همین.</string>
     <string name="phone_folder">پوشه گوشی</string>
     <string name="onboarding_other_source">منبع دیگر را هر وقت خواستی از تنظیمات اضافه کن.</string>
     <string name="no_account">بدون حساب</string>

@@ -8,7 +8,7 @@
     <string name="onboarding_stamp_free">0€/hó</string>
     <string name="onboarding_stamp_no_account">nincs fiók</string>
     <string name="onboarding_stamp_no_cloud">nincs felhő</string>
-    <string name="onboarding_intro">Az MP3-aid már a tieid. Senkinek nem kell fizetned, hogy meghallgasd őket.\n\nVálassz EGY mappát a telefonon vagy a Google Drive-odon: az ASD átfésüli, sorba rakja a számokat, és hagyja, hogy mixtape-eket csinálj. Ennyi.</string>
+    <string name="onboarding_intro">Az MP3-aid már a tieid. Senkinek nem kell fizetned, hogy meghallgasd őket. És senki ne kémkedjen utánad, amíg hallgatod őket.\n\nVálassz EGY mappát a telefonon vagy a Google Drive-odon: az ASD átfésüli, sorba rakja a számokat, és hagyja, hogy mixtape-eket csinálj. Ennyi.</string>
     <string name="phone_folder">Mappa a telefonon</string>
     <string name="onboarding_other_source">A másik forrást bármikor hozzáadhatod a SETUP-ban.</string>
     <string name="no_account">nincs fiók</string>

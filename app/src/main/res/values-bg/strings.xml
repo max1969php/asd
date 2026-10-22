@@ -8,7 +8,7 @@
     <string name="onboarding_stamp_free">0€/месец</string>
     <string name="onboarding_stamp_no_account">без акаунт</string>
     <string name="onboarding_stamp_no_cloud">без облак</string>
-    <string name="onboarding_intro">Твоите MP3-та вече са твои. Не е нужно да плащаш на никого, за да ги слушаш.\n\nИзбери ЕДНА папка в телефона или в твоя Google Drive: ASD я пресява, подрежда песните и ти позволява да правиш миксейпове. Това е.</string>
+    <string name="onboarding_intro">Твоите MP3-та вече са твои. Не е нужно да плащаш на никого, за да ги слушаш. И никой не бива да те шпионира, докато ги слушаш.\n\nИзбери ЕДНА папка в телефона или в твоя Google Drive: ASD я пресява, подрежда песните и ти позволява да правиш миксейпове. Това е.</string>
     <string name="phone_folder">Папка в телефона</string>
     <string name="onboarding_other_source">Можеш да добавиш другия източник по всяко време от НАСТРОЙКИ.</string>
     <string name="no_account">без акаунт</string>

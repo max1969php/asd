@@ -8,7 +8,7 @@
     <string name="onboarding_stamp_free">0€/månad</string>
     <string name="onboarding_stamp_no_account">inget konto</string>
     <string name="onboarding_stamp_no_cloud">inget moln</string>
-    <string name="onboarding_intro">Dina MP3-filer är redan dina. Du behöver inte betala någon för att lyssna på dem.\n\nVälj EN mapp på telefonen eller på ditt Google Drive: ASD går igenom den, ställer upp låtarna på rad och låter dig göra mixtapes. Det var allt.</string>
+    <string name="onboarding_intro">Dina MP3-filer är redan dina. Du behöver inte betala någon för att lyssna på dem. Och ingen ska spionera på dig medan du lyssnar.\n\nVälj EN mapp på telefonen eller på ditt Google Drive: ASD går igenom den, ställer upp låtarna på rad och låter dig göra mixtapes. Det var allt.</string>
     <string name="phone_folder">Telefonmapp</string>
     <string name="onboarding_other_source">Du kan lägga till den andra källan när du vill under INSTÄLLNINGAR.</string>
     <string name="no_account">inget konto</string>

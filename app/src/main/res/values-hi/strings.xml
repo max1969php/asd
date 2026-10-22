@@ -8,7 +8,7 @@
     <string name="onboarding_stamp_free">0€/माह</string>
     <string name="onboarding_stamp_no_account">कोई अकाउंट नहीं</string>
     <string name="onboarding_stamp_no_cloud">कोई क्लाउड नहीं</string>
-    <string name="onboarding_intro">आपके MP3 पहले से ही आपके हैं। उन्हें सुनने के लिए किसी को पैसे देने की ज़रूरत नहीं।\n\nफ़ोन में या अपने Google Drive में सिर्फ़ एक फ़ोल्डर चुनिए: ASD उसे छानता है, गानों को कतार में लगाता है और आपको मिक्सटेप बनाने देता है। बस इतना ही।</string>
+    <string name="onboarding_intro">आपके MP3 पहले से ही आपके हैं। उन्हें सुनने के लिए किसी को पैसे देने की ज़रूरत नहीं। और जब आप उन्हें सुनें, तब किसी को आपकी जासूसी नहीं करनी चाहिए।\n\nफ़ोन में या अपने Google Drive में सिर्फ़ एक फ़ोल्डर चुनिए: ASD उसे छानता है, गानों को कतार में लगाता है और आपको मिक्सटेप बनाने देता है। बस इतना ही।</string>
     <string name="phone_folder">फ़ोन का फ़ोल्डर</string>
     <string name="onboarding_other_source">दूसरा स्रोत आप कभी भी सेटअप से जोड़ सकते हैं।</string>
     <string name="no_account">कोई अकाउंट नहीं</string>

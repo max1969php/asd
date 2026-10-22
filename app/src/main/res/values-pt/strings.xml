@@ -8,7 +8,7 @@
     <string name="onboarding_stamp_free">0€/mês</string>
     <string name="onboarding_stamp_no_account">sem conta</string>
     <string name="onboarding_stamp_no_cloud">sem nuvem</string>
-    <string name="onboarding_intro">Os teus MP3 já são teus. Não tens de pagar a ninguém para os ouvir.\n\nEscolhe UMA pasta do telemóvel, ou uma do teu Google Drive: o ASD vasculha-a, põe as músicas em fila e deixa-te fazer mixtapes. E pronto.</string>
+    <string name="onboarding_intro">Os teus MP3 já são teus. Não tens de pagar a ninguém para os ouvir. E ninguém tem de te espiar enquanto os ouves.\n\nEscolhe UMA pasta do telemóvel, ou uma do teu Google Drive: o ASD vasculha-a, põe as músicas em fila e deixa-te fazer mixtapes. E pronto.</string>
     <string name="phone_folder">Pasta do telemóvel</string>
     <string name="onboarding_other_source">Podes juntar a outra fonte quando quiseres em SETUP.</string>
     <string name="no_account">nenhuma conta</string>

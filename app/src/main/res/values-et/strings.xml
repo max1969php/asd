@@ -8,7 +8,7 @@
     <string name="onboarding_stamp_free">0€/kuu</string>
     <string name="onboarding_stamp_no_account">konto puudub</string>
     <string name="onboarding_stamp_no_cloud">pilve pole</string>
-    <string name="onboarding_intro">Sinu MP3-failid on juba sinu omad. Kellelegi ei pea nende kuulamise eest maksma.\n\nVali ÜKS kaust telefonis või oma Google Drive\'is: ASD sõelub selle läbi, seab lood ritta ja laseb sul teha mixtape\'e. Ongi kõik.</string>
+    <string name="onboarding_intro">Sinu MP3-failid on juba sinu omad. Kellelegi ei pea nende kuulamise eest maksma. Ja keegi ei tohi sind nuhkida, kui sa neid kuulad.\n\nVali ÜKS kaust telefonis või oma Google Drive\'is: ASD sõelub selle läbi, seab lood ritta ja laseb sul teha mixtape\'e. Ongi kõik.</string>
     <string name="phone_folder">Telefoni kaust</string>
     <string name="onboarding_other_source">Teise allika saad lisada igal ajal SEADETES.</string>
     <string name="no_account">konto puudub</string>

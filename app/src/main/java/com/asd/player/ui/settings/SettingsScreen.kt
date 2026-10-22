@@ -26,11 +26,14 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.asd.player.L10n
 import com.asd.player.R
+import com.asd.player.data.drive.OwnGoogleClient
 import com.asd.player.data.repository.ScanState
 import com.asd.player.data.scanner.AudioScanner
 import com.asd.player.domain.model.SongSource
@@ -51,6 +55,7 @@ import com.asd.player.ui.components.AsdLinks
 import com.asd.player.ui.components.PunkButton
 import com.asd.player.ui.components.Stamp
 import com.asd.player.ui.components.TapeChip
+import com.asd.player.ui.components.siteUrl
 import com.asd.player.ui.library.LibraryUiState
 import com.asd.player.ui.library.LibraryViewModel
 import com.asd.player.ui.library.label
@@ -112,15 +117,19 @@ fun SettingsScreen(
             }
         }
 
+        // Col progetto Google dell'utente gli account si collegano dal browser, non dal telefono.
+        val ownClient by driveViewModel.ownClient.collectAsStateWithLifecycle()
         CloudSection(
             title = "Google Drive",
             name = stringResource(R.string.drive),
             source = SongSource.DRIVE,
             state = state,
             viewModel = driveViewModel,
-            addLabel = stringResource(R.string.link_phone_account),
-            onAddAccount = onAddGoogleAccount,
-        )
+            addLabel = stringResource(if (ownClient != null) R.string.link_account_browser else R.string.link_phone_account),
+            onAddAccount = if (ownClient != null) driveViewModel::addAccountWithBrowser else onAddGoogleAccount,
+        ) {
+            OwnGoogleProject(ownClient, driveViewModel)
+        }
 
         Section(stringResource(R.string.volume_title)) {
             val normalize by viewModel.normalizeVolume.collectAsStateWithLifecycle()
@@ -229,6 +238,7 @@ private fun CloudSection(
     viewModel: CloudViewModel,
     addLabel: String,
     onAddAccount: () -> Unit,
+    extra: @Composable () -> Unit = {},
 ) {
     val cloud by viewModel.settings.collectAsStateWithLifecycle()
     val busy by viewModel.busy.collectAsStateWithLifecycle()
@@ -295,7 +305,75 @@ private fun CloudSection(
             style = MaterialTheme.typography.bodySmall,
             color = Asd.Smudge,
         )
+        extra()
     }
+}
+
+/** Il progetto Google dell'utente: client "App desktop" incollato qui (vedi OwnGoogleClient). */
+@Composable
+private fun OwnGoogleProject(config: OwnGoogleClient.Config?, viewModel: DriveViewModel) {
+    val context = LocalContext.current
+    Spacer(Modifier.height(16.dp))
+    Text(stringResource(R.string.drive_own_title), style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
+    if (config != null) {
+        Text(
+            stringResource(R.string.drive_own_active, config.clientId.substringBefore('-')),
+            style = MaterialTheme.typography.bodyMedium,
+            color = Asd.Acid,
+        )
+        Spacer(Modifier.height(8.dp))
+        PunkButton(
+            stringResource(R.string.drive_own_remove),
+            onClick = viewModel::clearOwnClient,
+            icon = Icons.Filled.LinkOff,
+            container = Asd.Paper,
+            shadow = Asd.Acid,
+        )
+    } else {
+        var clientId by rememberSaveable { mutableStateOf("") }
+        var secret by rememberSaveable { mutableStateOf("") }
+        var invalid by remember { mutableStateOf(false) }
+        val colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Asd.Acid,
+            unfocusedBorderColor = Asd.Paper,
+            cursorColor = Asd.Acid,
+        )
+        Text(stringResource(R.string.drive_own_hint), style = MaterialTheme.typography.bodySmall, color = Asd.Paper)
+        Spacer(Modifier.height(8.dp))
+        OutlinedTextField(
+            value = clientId,
+            onValueChange = { clientId = it; invalid = false },
+            singleLine = true,
+            label = { Text("Client ID") },
+            colors = colors,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        OutlinedTextField(
+            value = secret,
+            onValueChange = { secret = it; invalid = false },
+            singleLine = true,
+            label = { Text("Client secret") },
+            colors = colors,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        if (invalid) Text(stringResource(R.string.drive_own_invalid), style = MaterialTheme.typography.bodySmall, color = Asd.Spray)
+        Spacer(Modifier.height(8.dp))
+        PunkButton(
+            stringResource(R.string.drive_own_save),
+            onClick = { invalid = !viewModel.saveOwnClient(clientId, secret) },
+            icon = Icons.Filled.Cloud,
+            enabled = clientId.isNotBlank() && secret.isNotBlank(),
+        )
+    }
+    Spacer(Modifier.height(8.dp))
+    Text(
+        stringResource(R.string.drive_own_guide),
+        style = MaterialTheme.typography.bodyMedium,
+        color = Asd.Acid,
+        modifier = Modifier.clickable {
+            runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(siteUrl("drive")))) }
+        },
+    )
 }
 
 /** Select della lingua: ogni lingua scritta nella sua lingua, così la trova anche chi non legge l'italiano. */

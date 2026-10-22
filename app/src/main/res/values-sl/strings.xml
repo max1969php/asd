@@ -8,7 +8,7 @@
     <string name="onboarding_stamp_free">0€/mesec</string>
     <string name="onboarding_stamp_no_account">brez računa</string>
     <string name="onboarding_stamp_no_cloud">brez oblaka</string>
-    <string name="onboarding_intro">Tvoji MP3-ji so že tvoji. Nikomur ti ni treba plačati, da jih poslušaš.\n\nIzberi ENO mapo v telefonu ali na svojem Google Drive: ASD jo prebrska, postavi skladbe v vrsto in ti pusti delati mixtape. To je to.</string>
+    <string name="onboarding_intro">Tvoji MP3-ji so že tvoji. Nikomur ti ni treba plačati, da jih poslušaš. In nihče te ne sme vohuniti, medtem ko jih poslušaš.\n\nIzberi ENO mapo v telefonu ali na svojem Google Drive: ASD jo prebrska, postavi skladbe v vrsto in ti pusti delati mixtape. To je to.</string>
     <string name="phone_folder">Mapa v telefonu</string>
     <string name="onboarding_other_source">Drugi vir lahko kadarkoli dodaš v SETUP.</string>
     <string name="no_account">ni računa</string>

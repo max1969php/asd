@@ -8,7 +8,7 @@
     <string name="onboarding_stamp_free">0€/月</string>
     <string name="onboarding_stamp_no_account">无需账号</string>
     <string name="onboarding_stamp_no_cloud">无云端</string>
-    <string name="onboarding_intro">你的 MP3 本来就是你的。听它们,不用付钱给任何人。\n\n在手机或 Google Drive 里选一个文件夹:ASD 会把它筛一遍,把曲目排成一列,让你做混音带。就这么简单。</string>
+    <string name="onboarding_intro">你的 MP3 本来就是你的。听它们,不用付钱给任何人。也不该有人在你听歌时监视你。\n\n在手机或 Google Drive 里选一个文件夹:ASD 会把它筛一遍,把曲目排成一列,让你做混音带。就这么简单。</string>
     <string name="phone_folder">手机文件夹</string>
     <string name="onboarding_other_source">另一个来源随时可以在“设置”里添加。</string>
     <string name="no_account">无账号</string>
