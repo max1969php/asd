@@ -15,6 +15,7 @@ import com.asd.player.domain.model.Song
 import com.asd.player.domain.model.SongSource
 import java.io.File
 import java.util.concurrent.atomic.AtomicLong
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -145,8 +146,11 @@ class TubeImporter(
             edit(id) {
                 it.copy(status = TubeStatus.FAILED, error = L10n.str(R.string.phone_write_denied))
             }
-        } catch (e: Exception) {
-            edit(id) { it.copy(status = TubeStatus.FAILED, error = e.message ?: e.javaClass.simpleName) }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            // Anche gli Error (librerie native, classi mancanti): un download fallito non deve chiudere l'app.
+            edit(id) { it.copy(status = TubeStatus.FAILED, error = e.message?.let { m -> if (e is Error) "${e.javaClass.simpleName}: $m" else m } ?: e.javaClass.simpleName) }
         } finally {
             downloader.cleanup(id)
         }

@@ -19,6 +19,7 @@ import com.asd.player.data.tube.TubeCookies
 import com.asd.player.data.tube.TubeJob
 import com.asd.player.data.tube.TubeLink
 import com.asd.player.data.tube.TubeTarget
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -271,7 +272,9 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
                 val version = withContext(Dispatchers.IO) { importer.updateYtDlp() }
                 _ytDlpVersion.value = version
                 _messages.tryEmit(L10n.str(R.string.ytdlp_updated, version))
-            } catch (e: Exception) {
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
                 _messages.tryEmit(L10n.str(R.string.ytdlp_update_failed, e.message.orEmpty()))
             } finally {
                 _updating.value = false

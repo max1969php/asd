@@ -12,8 +12,8 @@ android {
     defaultConfig {
         minSdk = 26
         targetSdk = 34
-        versionCode = 6
-        versionName = "0.4.0"
+        versionCode = 7
+        versionName = "0.4.1"
     }
 
     // Due versioni dallo stesso codice:
@@ -26,6 +26,7 @@ android {
             dimension = "edition"
             applicationId = "com.asd.player"
             buildConfigField("boolean", "ONLINE", "true")
+            proguardFile("proguard-full.pro")
         }
         create("minimal") {
             dimension = "edition"
