@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">Tvoje MP3 sú už tvoje. Nemusíš nikomu platiť, aby si ich počúval. A nikto ťa nesmie špehovať, keď ich počúvaš.\n\nVyber JEDEN priečinok v telefóne: ASD ho preoseje, zoradí skladby a nechá ťa robiť mixtapy. Hotovo.</string>
     <string name="library_empty_hint">Hoď tam pár MP3, WAV alebo FLAC a v SETUP daj Znova prehľadať.</string>

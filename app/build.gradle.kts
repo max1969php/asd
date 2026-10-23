@@ -12,27 +12,42 @@ android {
     defaultConfig {
         minSdk = 26
         targetSdk = 34
-        versionCode = 7
-        versionName = "0.4.1"
+        versionCode = 8
+        versionName = "0.5.0"
     }
 
-    // Due versioni dallo stesso codice:
+    // Tre versioni dallo stesso codice:
     // - full: quella del titolare. Google Drive (client Android legato a pacchetto + SHA-1 della chiave
     //   debug) e TUBO (yt-dlp), che salva su Drive e nel telefono. Non va su Play Store.
-    // - minimal: solo lettore della cartella del telefono, senza rete. Quella del sito e di Play Store.
+    // - tubo: cartella del telefono + TUBO, che salva solo nel telefono. Niente Drive. Sul sito.
+    // - minimal: solo lettore della cartella del telefono, senza rete. Sul sito e su Play Store.
+    // DRIVE e TUBE accendono le parti della UI; yt-dlp sta in src/ytdlp (full e tubo).
     flavorDimensions += "edition"
     productFlavors {
         create("full") {
             dimension = "edition"
             applicationId = "com.asd.player"
-            buildConfigField("boolean", "ONLINE", "true")
-            proguardFile("proguard-full.pro")
+            buildConfigField("boolean", "DRIVE", "true")
+            buildConfigField("boolean", "TUBE", "true")
+            proguardFile("proguard-ytdlp.pro")
+        }
+        create("tube") {
+            dimension = "edition"
+            applicationId = "com.asd.player.tube"
+            buildConfigField("boolean", "DRIVE", "false")
+            buildConfigField("boolean", "TUBE", "true")
+            proguardFile("proguard-ytdlp.pro")
         }
         create("minimal") {
             dimension = "edition"
             applicationId = "com.asd.player.minimal"
-            buildConfigField("boolean", "ONLINE", "false")
+            buildConfigField("boolean", "DRIVE", "false")
+            buildConfigField("boolean", "TUBE", "false")
         }
+    }
+    sourceSets {
+        getByName("full").java.srcDir("src/ytdlp/java")
+        getByName("tube").java.srcDir("src/ytdlp/java")
     }
 
     // Python e yt-dlp (TUBO) sono librerie native da ~15 MB per CPU: un APK per CPU, più uno universale.
@@ -113,11 +128,10 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.play.services.auth)
-    // Solo la full: Python + yt-dlp sono quasi tutto il peso dell'APK.
-    "fullImplementation"(libs.youtubedl.android) {
-        // La libreria dichiara appcompat ma non lo usa: sarebbero ~1 MB di risorse per niente.
-        exclude(group = "androidx.appcompat")
-    }
+    // Solo full e tubo: Python + yt-dlp sono quasi tutto il peso dell'APK.
+    // La libreria dichiara appcompat ma non lo usa: sarebbero ~1 MB di risorse per niente.
+    "fullImplementation"(libs.youtubedl.android) { exclude(group = "androidx.appcompat") }
+    "tubeImplementation"(libs.youtubedl.android) { exclude(group = "androidx.appcompat") }
 
     testImplementation(libs.junit)
     // org.json reale nei test JVM (quello di android.jar è uno stub).

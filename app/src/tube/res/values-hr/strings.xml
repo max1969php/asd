@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">Tvoji MP3-ovi su već tvoji. Ne moraš nikome plaćati da ih slušaš. I nitko te ne smije špijunirati dok ih slušaš.\n\nOdaberi JEDNU mapu na mobitelu: ASD je prosije, poreda pjesme i pusti te da radiš mixtapeove. Kraj.</string>
+    <string name="library_empty_hint">Ubaci unutra nekoliko MP3, WAV ili FLAC i u SETUP pritisni Ponovno skeniraj.</string>
+    <string name="volume_hint">Svaka pjesma izmjeri se jednom (EBU R128, kao ReplayGain 2.0) i svira na -18 LUFS: nema više skokova glasnoće između MP3-ova. Glasnije pjesme se stišaju, pa malo pojačaj mobitel.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\n„Streaming\" ide iz tvoje memorije u tvoje uši, i to je to.\n\n· Mreža služi samo za CIJEV, i samo ako je koristiš.\n· Bez računa, bez reklama, bez praćenja.\n· Playliste žive na mobitelu. Brisanje ne dira datoteke.\n· ASD nikad ne briše tvoje datoteke: ako želiš ukloniti neku, koristi mobitel.\n· Cijena: 0€. Zauvijek.</string>
+</resources>

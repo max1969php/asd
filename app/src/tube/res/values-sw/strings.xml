@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">MP3 zako tayari ni zako. Huhitaji kumlipa mtu yeyote ili uzisikilize. Na hakuna anayepaswa kukupeleleza unapozisikiliza.\n\nChagua folda MOJA kwenye simu: ASD inaipekua, inapanga nyimbo na kukuacha utengeneze mixtape. Basi.</string>
+    <string name="library_empty_hint">Tupa faili chache za MP3, WAV au FLAC humo kisha bonyeza Skani tena kwenye MIPANGILIO.</string>
+    <string name="volume_hint">Kila wimbo hupimwa mara moja (EBU R128, kama ReplayGain 2.0) na huchezwa kwa -18 LUFS: hakuna tena miruko ya sauti kati ya MP3 moja na nyingine. Nyimbo zenye sauti kubwa hupunguzwa, kwa hiyo ongeza sauti ya simu kidogo.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device (Kifaa cha Kutiririsha cha Kiwazimu).\n\"Kutiririsha\" huanzia kumbukumbu yako hadi masikioni mwako, basi.\n\n· Mtandao ni kwa ajili ya TUBE tu, na tu ukiitumia.\n· Bila akaunti, bila matangazo, bila ufuatiliaji.\n· Orodha za kucheza huishi kwenye simu. Kuzifuta hakuguswi faili.\n· ASD haifuti kamwe faili zako: ukitaka kuondoa moja, tumia simu.\n· Gharama: 0€. Milele.</string>
+</resources>

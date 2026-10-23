@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">Fayilolin MP3 ɗinka naka ne tun tuni. Ba sai ka biya kowa don ka saurare su ba. Kuma babu wanda ya kamata ya yi maka leƙen asiri yayin da kake sauraron su.\n\nZaɓi fayil ƊAYA a wayarka: ASD zai tankaɗe shi, ya jera waƙoƙi kuma ya bar ka ka yi mixtape. Shi ke nan.</string>
     <string name="library_empty_hint">Jefa wasu fayilolin MP3, WAV ko FLAC a ciki sannan ka danna Sake bincika a SAITUNA.</string>

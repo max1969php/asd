@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.asd.player.BuildConfig
 import com.asd.player.R
 import com.asd.player.data.settings.TubeDestination
 import com.asd.player.data.tube.JobSource
@@ -99,7 +100,16 @@ fun TubeScreen(
                 Spacer(Modifier.height(12.dp))
                 Text(stringResource(R.string.save_to), style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
                 Spacer(Modifier.height(6.dp))
-                DestinationSelect(options, destination, onSelect = viewModel::setDestination)
+                if (BuildConfig.DRIVE) {
+                    DestinationSelect(options, destination, onSelect = viewModel::setDestination)
+                } else {
+                    // Senza Drive c'è solo il telefono: niente select, solo dove finisce.
+                    Text(
+                        selected?.target?.label ?: stringResource(R.string.phone),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = if (ready) Asd.Acid else Asd.Smudge,
+                    )
+                }
                 Spacer(Modifier.height(10.dp))
                 if (ready) {
                     PunkButton(stringResource(R.string.tube_steal), onClick = submit, icon = Icons.Filled.Download, enabled = url.isNotBlank())
@@ -138,16 +148,18 @@ fun TubeScreen(
         item {
             Column(Modifier.padding(16.dp)) {
                 Spacer(Modifier.height(12.dp))
-                Text(stringResource(R.string.tube_drive_to_phone), style = MaterialTheme.typography.labelLarge, color = Asd.Spray)
-                Spacer(Modifier.height(6.dp))
-                Text(
-                    stringResource(R.string.tube_drive_hint),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Asd.Smudge,
-                )
-                Spacer(Modifier.height(8.dp))
-                PunkButton(stringResource(R.string.download_from_drive), onClick = viewModel::openBrowser, icon = Icons.Filled.Download)
-                Spacer(Modifier.height(20.dp))
+                if (BuildConfig.DRIVE) {
+                    Text(stringResource(R.string.tube_drive_to_phone), style = MaterialTheme.typography.labelLarge, color = Asd.Spray)
+                    Spacer(Modifier.height(6.dp))
+                    Text(
+                        stringResource(R.string.tube_drive_hint),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Asd.Smudge,
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    PunkButton(stringResource(R.string.download_from_drive), onClick = viewModel::openBrowser, icon = Icons.Filled.Download)
+                    Spacer(Modifier.height(20.dp))
+                }
                 Text("// YOUTUBE", style = MaterialTheme.typography.labelLarge, color = Asd.Spray)
                 Spacer(Modifier.height(6.dp))
                 Text(

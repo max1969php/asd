@@ -30,7 +30,7 @@ import com.asd.player.ui.theme.Asd
 @Composable
 fun Onboarding(
     onPickDirectory: () -> Unit,
-    /** null nella versione minimal: niente Drive. */
+    /** null nelle versioni senza Drive. */
     onConnectDrive: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {

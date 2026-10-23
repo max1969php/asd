@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">Sa MP3 yi yaa leen moom ba noppi. Soxlawul nga fey kenn ngir déglu leen. Te kenn warul la wottu ci kumpa bi ngay leen déglu.\n\nTànnal BENN dossier ci sa telefon: ASD dina ko seet, def woy yi ci rang te may la nga def ay mixtape. Loolu rekk.</string>
+    <string name="library_empty_hint">Tàllal ci ay MP3, WAV walla FLAC te nga dëgg Scan ci SETUP.</string>
+    <string name="volume_hint">Benn woy bu nekk dañu koy natt ben yoon (EBU R128, ni ReplayGain 2.0) te di ko woyal ci -18 LUFS: du am yeneen tëb ci baat bi ci diggante MP3 yi. Woy yu ëpp kàttan dañuy leen suuxat, kon yokkal baat bi ci sa telefon tuuti.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\n\"Streaming\" bi dafay jóge ci sa xel ba ci sa nopp, te jeex na.\n\n· Rés bi dafay jëfandikoo ngir TUB rekk, te su ko la neexee rekk.\n· Amul compte, amul sàrt, amul toppatoo.\n· Playlist yi ci telefon lañu dëkk. Su ko faree, du jëli fichier yi.\n· ASD du far say fichier mukk: bu nga bëggee dindi benn, jëfandikool sa telefon.\n· Njëg: 0€. Ba fàww.</string>
+</resources>

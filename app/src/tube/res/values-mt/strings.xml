@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">L-MP3s tiegħek huma diġà tiegħek. M\'għandekx għalfejn tħallas lil ħadd biex tisma\' bihom. U ħadd m\'għandu jispjunak waqt li tisimgħhom.\n\nAgħżel FOLDER WIEĦED fit-telefon: ASD jgħarblu, jpoġġi l-biċċiet f\'ringiela u jħallik tagħmel mixtapes. Dak kollox.</string>
+    <string name="library_empty_hint">Armi xi fajls MP3, WAV jew FLAC fih u agħfas Skennja mill-ġdid f\'SETTINGS.</string>
+    <string name="volume_hint">Kull kanzunetta titkejjel darba (EBU R128, bħal ReplayGain 2.0) u tindaqq fuq -18 LUFS: ma jkunx hemm aktar qbiżiet fil-volum bejn MP3 u ieħor. Il-kanzunetti li jindaqqu b\'saħħa jitbaxxew, għalhekk għolli ftit it-telefon.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\nL-\"streaming\" imur mill-memorja tiegħek sal-widnejn tiegħek, u ma hemm xejn aktar.\n\n· In-netwerk jintuża biss għat-TUBE, u biss jekk tużah.\n· Bla kont, bla riklami, bla traċċar.\n· Il-playlists jgħixu fuq it-telefon. Li tħassarhom ma jmissx il-fajls.\n· ASD qatt ma jħassar il-fajls tiegħek: biex tneħħi wieħed, uża t-telefon.\n· Spiża: 0€. Għal dejjem.</string>
+</resources>

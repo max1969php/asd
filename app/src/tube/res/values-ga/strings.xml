@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">Is leatsa do chuid MP3anna cheana féin. Ní gá duit íoc le héinne chun éisteacht leo. Agus níor cheart d\'aon duine spiaireacht a dhéanamh ort agus tú ag éisteacht leo.\n\nRoghnaigh FILLTEÁN AMHÁIN ar an nguthán: criathraíonn ASD é, cuireann sé na rianta in ord agus ligeann sé duit mixtapes a dhéanamh. Sin é.</string>
+    <string name="library_empty_hint">Caith roinnt comhad MP3, WAV nó FLAC isteach ann agus brúigh Athscan i SOCRUITHE.</string>
+    <string name="volume_hint">Tomhaistear gach ceol uair amháin (EBU R128, cosúil le ReplayGain 2.0) agus seinntear ag -18 LUFS é: gan léimeanna airde fuaime idir MP3anna a thuilleadh. Íslítear na ceolta níos airde, mar sin cuir an guthán beagán níos airde.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\nÉiríonn an \"sruthú\" ó do chuimhne go dtí do chluasa, agus sin é.\n\n· Úsáidtear an líonra le haghaidh an TUBE amháin, agus má úsáideann tú é.\n· Gan chuntas, gan fógraí, gan rianú.\n· Maireann seinnliostaí ar an nguthán. Ní théann a scriosadh i bhfeidhm ar na comhaid.\n· Ní scriosann ASD do chomhaid riamh: chun ceann a bhaint, úsáid an guthán.\n· Costas: 0€. Go deo.</string>
+</resources>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">Τα MP3 σου είναι ήδη δικά σου. Δεν χρειάζεται να πληρώσεις κανέναν για να τα ακούσεις. Και κανείς δεν πρέπει να σε κατασκοπεύει όσο τα ακούς.\n\nΔιάλεξε ΕΝΑΝ φάκελο στο κινητό: το ASD τον κοσκινίζει, βάζει τα κομμάτια σε σειρά και σε αφήνει να φτιάχνεις mixtapes. Τέλος.</string>
     <string name="library_empty_hint">Πέτα εκεί μέσα μερικά αρχεία MP3, WAV ή FLAC και πάτα Νέα σάρωση στις ΡΥΘΜΙΣΕΙΣ.</string>

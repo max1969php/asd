@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">Àwọn MP3 rẹ ti jẹ́ tìrẹ tẹ́lẹ̀. O ò nílò láti san owó fún ẹnikẹ́ni kí o tó gbọ́ wọn. Kò sì sí ẹni tó yẹ kó máa ṣe amí rẹ nígbà tí o bá ń gbọ́ wọn.\n\nYan fódà KAN lórí fóònù rẹ: ASD á yẹ̀ ẹ́ wò, á tò àwọn orin lẹ́sẹẹsẹ, á sì jẹ́ kí o ṣe mixtape. Ìyẹn ni.</string>
     <string name="library_empty_hint">Ju àwọn fáìlì MP3, WAV tàbí FLAC sínú rẹ̀ kí o sì tẹ Ṣàyẹ̀wò lẹ́ẹ̀kan sí i nínú ÈTÒ.</string>

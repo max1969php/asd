@@ -58,12 +58,12 @@ import com.asd.player.ui.tube.TubeScreen
 import com.asd.player.ui.tube.TubeViewModel
 import kotlinx.coroutines.launch
 
-/** [online]: scheda solo della versione full (la minimal non va in rete). */
-private enum class Tab(@StringRes val label: Int, val online: Boolean = false) {
-    LIBRARY(R.string.tab_library), PLAYLISTS(R.string.tab_playlists), TUBE(R.string.tab_tube, online = true), SETTINGS(R.string.tab_settings);
+/** [enabled]: la scheda TUBO c'è solo nelle versioni con yt-dlp (full e tubo). */
+private enum class Tab(@StringRes val label: Int, val enabled: Boolean = true) {
+    LIBRARY(R.string.tab_library), PLAYLISTS(R.string.tab_playlists), TUBE(R.string.tab_tube, BuildConfig.TUBE), SETTINGS(R.string.tab_settings);
 
     companion object {
-        val visible = entries.filter { BuildConfig.ONLINE || !it.online }
+        val visible = entries.filter { it.enabled }
     }
 }
 
@@ -145,7 +145,7 @@ fun AsdApp() {
         Box(Modifier.fillMaxSize()) {
             Onboarding(
                 onPickDirectory = onPick,
-                onConnectDrive = onAddGoogleAccount.takeIf { BuildConfig.ONLINE },
+                onConnectDrive = onAddGoogleAccount.takeIf { BuildConfig.DRIVE },
                 modifier = Modifier.background(Asd.Toner).statusBarsPadding(),
             )
             SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding()) {

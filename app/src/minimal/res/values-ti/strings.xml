@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">MP3ታትካ ቀደም ኢሎም ናትካ እዮም። ንምስማዕ ንዝኾነ ሰብ ክትኸፍል ኣየድልየካን። ክትሰምዖም ከለኻ ድማ ሓደ እኳ ክስልየካ የብሉን።\n\nኣብ ተሌፎንካ ሓደ ፎልደር ምረጽ: ASD ይፍትሾ፣ ደረፍቲ ብተርታ የሰልፍ፣ ሚክስቴፕ ክትሰርሕ ድማ የፍቅደልካ። እዚ እዩ።</string>
     <string name="library_empty_hint">ገለ MP3፣ WAV ወይ FLAC ፋይላት ኣብኡ ድርብይ ድሕርዚ ኣብ ምድላው ደጊሙ ቃንዕ ጠውቕ።</string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">L-MP3s tiegħek huma diġà tiegħek. M\'għandekx għalfejn tħallas lil ħadd biex tisma\' bihom. U ħadd m\'għandu jispjunak waqt li tisimgħhom.\n\nAgħżel FOLDER WIEĦED fit-telefon: ASD jgħarblu, jpoġġi l-biċċiet f\'ringiela u jħallik tagħmel mixtapes. Dak kollox.</string>
     <string name="library_empty_hint">Armi xi fajls MP3, WAV jew FLAC fih u agħfas Skennja mill-ġdid f\'SETTINGS.</string>

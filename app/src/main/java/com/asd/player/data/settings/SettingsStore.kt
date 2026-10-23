@@ -2,6 +2,7 @@ package com.asd.player.data.settings
 
 import android.content.Context
 import android.net.Uri
+import com.asd.player.BuildConfig
 import com.asd.player.domain.model.SortField
 import com.asd.player.domain.model.SortOrder
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,8 +46,10 @@ class SettingsStore(context: Context) {
     /** Le chiavi di Drive restano quelle di prima ("drive_…"): niente da migrare. */
     val drive = CloudPrefs("drive")
 
+    // Senza Drive (versione tubo) il TUBO salva solo nel telefono, qualunque cosa ci sia salvato.
     private val _tubeDestination = MutableStateFlow(
-        prefs.getString(KEY_TUBE_DESTINATION, null)
+        if (!BuildConfig.DRIVE) TubeDestination.LOCAL
+        else prefs.getString(KEY_TUBE_DESTINATION, null)
             ?.let { runCatching { TubeDestination.valueOf(it) }.getOrNull() } ?: TubeDestination.BOTH
     )
     val tubeDestination: StateFlow<TubeDestination> = _tubeDestination.asStateFlow()

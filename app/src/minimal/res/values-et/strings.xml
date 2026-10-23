@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">Sinu MP3-failid on juba sinu omad. Kellelegi ei pea nende kuulamise eest maksma. Ja keegi ei tohi sind nuhkida, kui sa neid kuulad.\n\nVali telefonis ÜKS kaust: ASD sõelub selle läbi, seab lood ritta ja laseb sul mixtape\'e teha. Ongi kõik.</string>
     <string name="library_empty_hint">Viska sinna mõni MP3-, WAV- või FLAC-fail ja vajuta SEADETES Skaneeri uuesti.</string>

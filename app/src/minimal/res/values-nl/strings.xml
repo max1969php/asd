@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">Je MP3\'s zijn al van jou. Je hoeft niemand te betalen om ze te luisteren. En niemand hoort je te bespioneren terwijl je ernaar luistert.\n\nKies ÉÉN map op je telefoon: ASD zeeft hem door, zet de nummers op een rij en laat je mixtapes maken. Klaar.</string>
     <string name="library_empty_hint">Gooi er wat MP3, WAV of FLAC in en druk op Opnieuw scannen in SETUP.</string>

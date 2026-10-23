@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">MP3ዎችህ አስቀድሞ የራስህ ናቸው። ለማዳመጥ ለማንም መክፈል አያስፈልግህም። ስታዳምጣቸውም ማንም ሊሰልልህ አይገባም።\n\nበስልኩ ላይ አንድ አቃፊ ምረጥ: ASD ይፈትሸዋል፣ ዘፈኖቹን በተራ ያሰልፋል እና ሚክስቴፕ እንድትሠራ ያስችልሃል። ያው ነው።</string>
+    <string name="library_empty_hint">ጥቂት MP3፣ WAV ወይም FLAC ፋይሎችን ጣል አድርግበት እና ከማዋቀሪያ እንደገና ቃኝን ተጫን።</string>
+    <string name="volume_hint">እያንዳንዱ ዘፈን አንድ ጊዜ ይለካል (EBU R128፣ እንደ ReplayGain 2.0) እና በ-18 LUFS ይጫወታል፦ ከአንድ MP3 ወደ ሌላው የድምፅ መዝለል አይኖርም። ከፍተኛ ድምፅ ያላቸው ዘፈኖች ይቀነሳሉ፣ ስለዚህ የስልክህን ድምፅ ትንሽ ከፍ አድርግ።</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device።\n\"ስትሪሚንግ\" ከማህደረ ትውስታህ ወደ ጆሮህ ነው፣ ከዚያ ያለፈ የለም።\n\n· ኔትዎርኩ የሚያገለግለው ለቲዩብ ብቻ ነው፣ እሱንም ከተጠቀምህ ብቻ።\n· መለያ የለም፣ ማስታወቂያ የለም፣ ክትትል የለም።\n· አጫዋች ዝርዝሮች በስልክ ላይ ይኖራሉ። መሰረዛቸው ፋይሎቹን አይነካም።\n· ASD ፋይሎችህን በፍፁም አይሰርዝም: አንዱን ለማስወገድ ስልኩን ተጠቀም።\n· ዋጋ፦ 0€። ለዘላለም።</string>
+</resources>

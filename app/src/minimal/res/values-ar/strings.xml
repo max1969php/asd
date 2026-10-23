@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">ملفات MP3 ملكك أصلًا. لا تحتاج أن تدفع لأحد كي تستمع إليها. ولا يحقّ لأحد أن يتجسس عليك وأنت تستمع إليها.\n\nاختر مجلدًا واحدًا على الهاتف: يفرزه ASD ويصفّ المقطوعات ويتركك تصنع ميكستيبات. هذا كل شيء.</string>
     <string name="library_empty_hint">ارمِ فيه بعض ملفات MP3 أو WAV أو FLAC ثم اضغط إعادة المسح في الإعداد.</string>

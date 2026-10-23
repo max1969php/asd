@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.asd.player.AppContainer
+import com.asd.player.BuildConfig
 import com.asd.player.L10n
 import com.asd.player.R
 import com.asd.player.data.drive.DriveAuth
@@ -65,6 +66,7 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
         settings.drive.state,
     ) { dir, drive ->
         val local = localOption(dir != null)
+        if (!BuildConfig.DRIVE) return@combine listOf(local)
         val cloud = cloudOption(TubeDestination.DRIVE, L10n.str(R.string.drive), drive)
         listOf(bothOption(local, cloud), local, cloud)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())

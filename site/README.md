@@ -10,12 +10,13 @@ Online su https://asd-eight-rust.vercel.app. Il progetto Vercel `asd` è collega
 ogni push su `main` ripubblica il sito, gli altri branch danno un'anteprima.
 `vercel.json` serve gli script come file da scaricare (`Content-Disposition: attachment`).
 
-Il bottone "Scarica l'APK" punta a
-`https://github.com/max1969php/asd/releases/latest/download/asd.apk`: la versione **minimal**
-(solo cartella del telefono, niente rete). A ogni versione si crea una Release con quell'APK con
-questo nome esatto (vedi "Rilasciare una versione" nel README principale). Il sito descrive solo la
-minimal: niente Drive né TUBO; la musica si scarica dal computer con yt-dlp e si copia sul telefono
-(sezione `#phone`).
+I due bottoni di download puntano a
+`https://github.com/max1969php/asd/releases/latest/download/asd.apk` (versione **minimal**: solo
+cartella del telefono, niente rete) e `.../asd-tubo.apk` (versione **tube**: in più il TUBO, che
+salva solo nel telefono). A ogni versione si crea una Release con quegli APK con questi nomi esatti
+(vedi "Rilasciare una versione" nel README principale). Il sito non parla di Drive: la musica si
+scarica dal computer con yt-dlp e si copia sul telefono (sezione `#phone`), oppure col TUBO di ASD
+Tubo.
 
 Prova in locale: `python3 -m http.server -d site 8000` e apri http://localhost:8000.
 

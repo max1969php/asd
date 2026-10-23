@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">Àwọn MP3 rẹ ti jẹ́ tìrẹ tẹ́lẹ̀. O ò nílò láti san owó fún ẹnikẹ́ni kí o tó gbọ́ wọn. Kò sì sí ẹni tó yẹ kó máa ṣe amí rẹ nígbà tí o bá ń gbọ́ wọn.\n\nYan fódà KAN lórí fóònù rẹ: ASD á yẹ̀ ẹ́ wò, á tò àwọn orin lẹ́sẹẹsẹ, á sì jẹ́ kí o ṣe mixtape. Ìyẹn ni.</string>
+    <string name="library_empty_hint">Ju àwọn fáìlì MP3, WAV tàbí FLAC sínú rẹ̀ kí o sì tẹ Ṣàyẹ̀wò lẹ́ẹ̀kan sí i nínú ÈTÒ.</string>
+    <string name="volume_hint">A máa ń wọn orin kọ̀ọ̀kan lẹ́ẹ̀kan (EBU R128, bíi ReplayGain 2.0) a sì máa ń ṣe é ní -18 LUFS: kò ní sí ìfò ohùn mọ́ láti MP3 kan sí òmíràn. À ń dín àwọn orin tó ròkè kù, nítorí náà gbé ohùn fóònù rẹ sókè díẹ̀.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\n\"Streaming\" ń lọ láti ìrántí rẹ sí etí rẹ, ìyẹn nìkan ni.\n\n· A máa ń lo nẹ́tíwọ́ọ̀kì fún TUBE nìkan, àti bí o bá lò ó nìkan.\n· Kò sí àkántì, kò sí ìpolówó, kò sí ìtọpinpin.\n· Àwọn àtòjọ orin ń gbé lórí fóònù. Pípa wọ́n kò kan àwọn fáìlì.\n· ASD kì í pa àwọn fáìlì rẹ rẹ́ láé: tí o bá fẹ́ yọ ọ̀kan kúrò, lo fóònù.\n· Owó: 0€. Títí láé.</string>
+</resources>

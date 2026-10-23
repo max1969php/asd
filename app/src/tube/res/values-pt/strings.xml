@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">Os teus MP3 já são teus. Não tens de pagar a ninguém para os ouvir. E ninguém tem de te espiar enquanto os ouves.\n\nEscolhe UMA pasta do telemóvel: o ASD peneira-a, põe as faixas em fila e deixa-te fazer mixtapes. E pronto.</string>
+    <string name="library_empty_hint">Mete lá uns MP3, WAV ou FLAC e carrega em Voltar a analisar em SETUP.</string>
+    <string name="volume_hint">Cada música é medida uma vez (EBU R128, como ReplayGain 2.0) e tocada a -18 LUFS: acabaram-se os saltos de volume entre um MP3 e outro. As músicas mais fortes são baixadas, por isso sobe um pouco o volume do telemóvel.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\nO «streaming» vai da tua memória aos teus ouvidos, e mais nada.\n\n· A rede só serve para o TUBO, e só se tu o usares.\n· Sem conta, sem publicidade, sem rastreio.\n· As playlists vivem no telemóvel. Apagá-las não mexe nos ficheiros.\n· O ASD nunca apaga os teus ficheiros: para tirar um, usa o telemóvel.\n· Custo: 0€. Para sempre.</string>
+</resources>

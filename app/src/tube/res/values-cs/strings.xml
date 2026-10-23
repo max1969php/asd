@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">Tvoje MP3 už jsou tvoje. Nemusíš nikomu platit, abys je poslouchal. A nikdo tě nesmí šmírovat, když je posloucháš.\n\nVyber JEDNU složku v telefonu: ASD ji prosije, seřadí skladby a nechá tě dělat mixtapy. Hotovo.</string>
+    <string name="library_empty_hint">Hoď tam pár MP3, WAV nebo FLAC a v SETUP dej Znovu prohledat.</string>
+    <string name="volume_hint">Každá skladba se změří jednou (EBU R128, jako ReplayGain 2.0) a hraje na -18 LUFS: konec skoků hlasitosti mezi MP3. Hlasitější skladby se ztlumí, tak si telefon trochu zesil.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\n„Streaming\" vede z tvé paměti do tvých uší, a dost.\n\n· Síť je jen pro TRUBKU, a jen když ji používáš.\n· Žádný účet, žádné reklamy, žádné sledování.\n· Playlisty žijí v telefonu. Jejich smazání nesáhne na soubory.\n· ASD nikdy nemaže tvoje soubory: když nějaký chceš smazat, použij telefon.\n· Cena: 0€. Navždy.</string>
+</resources>

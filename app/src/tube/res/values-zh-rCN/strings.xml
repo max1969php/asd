@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">你的 MP3 本来就是你的。听它们,不用付钱给任何人。也不该有人在你听歌时监视你。\n\n在手机上选一个文件夹:ASD 会筛一遍,把曲目排好队,让你做混音带。就这样。</string>
+    <string name="library_empty_hint">往里面扔几个 MP3、WAV 或 FLAC 文件,然后在“设置”里点“重新扫描”。</string>
+    <string name="volume_hint">每首曲目只测量一次(EBU R128,类似 ReplayGain 2.0),并以 -18 LUFS 播放:MP3 之间不再忽大忽小。较响的曲目会被调低,所以请把手机音量调高一点。</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device(无政府流媒体设备)。\n“流媒体”只是从你的存储流到你的耳朵,仅此而已。\n\n· 网络只用于油管,而且只在你使用它时才用。\n· 无需账号,没有广告,不追踪。\n· 播放列表保存在手机上。删除它们不会动文件。\n· ASD 从不删除你的文件:想删掉某个,请在手机上自己删。\n· 费用:0€。永远。</string>
+</resources>

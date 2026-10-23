@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">Tavo MP3 jau yra tavo. Niekam nereikia mokėti, kad juos klausytum. Ir niekas neturi tavęs šnipinėti, kol jų klausaisi.\n\nPasirink VIENĄ aplanką telefone: ASD jį išsijoja, sudėlioja kūrinius ir leidžia tau kurti mixtape\'us. Tiek.</string>
     <string name="library_empty_hint">Įmesk ten keletą MP3, WAV ar FLAC failų ir spausk Skanuoti iš naujo skiltyje NUSTATYMAI.</string>

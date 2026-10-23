@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">Твої MP3 уже твої. Нікому не треба платити, щоб їх слухати. І ніхто не має шпигувати за тобою, поки ти їх слухаєш.\n\nОбери ОДНУ теку на телефоні: ASD її просіює, шикує треки в чергу й дає тобі робити мікстейпи. І все.</string>
     <string name="library_empty_hint">Кинь туди кілька файлів MP3, WAV або FLAC і натисни Сканувати знову в НАЛАШТУВАННЯХ.</string>

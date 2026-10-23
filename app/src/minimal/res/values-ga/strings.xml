@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">Is leatsa do chuid MP3anna cheana féin. Ní gá duit íoc le héinne chun éisteacht leo. Agus níor cheart d\'aon duine spiaireacht a dhéanamh ort agus tú ag éisteacht leo.\n\nRoghnaigh FILLTEÁN AMHÁIN ar an nguthán: criathraíonn ASD é, cuireann sé na rianta in ord agus ligeann sé duit mixtapes a dhéanamh. Sin é.</string>
     <string name="library_empty_hint">Caith roinnt comhad MP3, WAV nó FLAC isteach ann agus brúigh Athscan i SOCRUITHE.</string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">你的 MP3 本来就是你的。听它们,不用付钱给任何人。也不该有人在你听歌时监视你。\n\n在手机上选一个文件夹:ASD 会筛一遍,把曲目排好队,让你做混音带。就这样。</string>
     <string name="library_empty_hint">往里面扔几个 MP3、WAV 或 FLAC 文件,然后在“设置”里点“重新扫描”。</string>

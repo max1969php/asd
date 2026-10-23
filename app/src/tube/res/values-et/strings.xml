@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">Sinu MP3-failid on juba sinu omad. Kellelegi ei pea nende kuulamise eest maksma. Ja keegi ei tohi sind nuhkida, kui sa neid kuulad.\n\nVali telefonis ÜKS kaust: ASD sõelub selle läbi, seab lood ritta ja laseb sul mixtape\'e teha. Ongi kõik.</string>
+    <string name="library_empty_hint">Viska sinna mõni MP3-, WAV- või FLAC-fail ja vajuta SEADETES Skaneeri uuesti.</string>
+    <string name="volume_hint">Iga lugu mõõdetakse üks kord (EBU R128, nagu ReplayGain 2.0) ja mängitakse tasemel -18 LUFS: enam ei hüppa helitugevus ühelt MP3-lt teisele. Valjemaid lugusid vaigistatakse, nii et keera telefoni veidi valjemaks.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\n\"Voogedastus\" käib sinu mälust sinu kõrvadeni, ja ongi kõik.\n\n· Võrku kasutatakse ainult TUBE\'i jaoks, ja ainult siis, kui sa seda kasutad.\n· Pole kontot, pole reklaami, pole jälgimist.\n· Esitusloendid elavad telefonis. Nende kustutamine ei puuduta faile.\n· ASD ei kustuta kunagi sinu faile: kui tahad mõnda eemaldada, kasuta telefoni.\n· Hind: 0€. Igavesti.</string>
+</resources>

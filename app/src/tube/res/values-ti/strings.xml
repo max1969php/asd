@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">MP3ታትካ ቀደም ኢሎም ናትካ እዮም። ንምስማዕ ንዝኾነ ሰብ ክትኸፍል ኣየድልየካን። ክትሰምዖም ከለኻ ድማ ሓደ እኳ ክስልየካ የብሉን።\n\nኣብ ተሌፎንካ ሓደ ፎልደር ምረጽ: ASD ይፍትሾ፣ ደረፍቲ ብተርታ የሰልፍ፣ ሚክስቴፕ ክትሰርሕ ድማ የፍቅደልካ። እዚ እዩ።</string>
+    <string name="library_empty_hint">ገለ MP3፣ WAV ወይ FLAC ፋይላት ኣብኡ ድርብይ ድሕርዚ ኣብ ምድላው ደጊሙ ቃንዕ ጠውቕ።</string>
+    <string name="volume_hint">ነፍሲ ወከፍ ደርፊ ሓንሳብ ይለኸዕ (EBU R128፣ ከም ReplayGain 2.0) ብ-18 LUFS ድማ ይጫወት፦ ካብ ሓደ MP3 ናብ ካልእ ዝዘሉ ድምጺ ከቶ የለን። ዝለዓሉ ደርፍታት ይወሃሃዱ እዮም፣ ስለዚ ድምጺ ተሌፎንካ ቁሩብ ልዕል ግበሮ።</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device።\nእቲ \"ስትሪሚንግ\" ካብ ማህደረ ተዝካርካ ናብ እዝንኻ እዩ፣ እዚ ጥራይ።\n\n· እቲ መርበብ ንቲዩብ ጥራይ እዩ ዝሕገዝ፣ እንተተጠቒምካሉ ጥራይ።\n· ኣካውንት የለን፣ ማስታወቕያ የለን፣ ምክትታል የለን።\n· ዝርዝራት ምጽዋት ኣብ ተሌፎን እዮም ዝነብሩ። ምድምሳሶም ንፋይላት ኣይትንክፎን።\n· ASD ፋይላትካ ፈጺሙ ኣይድምስስን: ሓደ ከተወግድ እንተደሊኻ ተሌፎን ተጠቐም።\n· ዋጋ፦ 0€። ንዘለኣለም።</string>
+</resources>

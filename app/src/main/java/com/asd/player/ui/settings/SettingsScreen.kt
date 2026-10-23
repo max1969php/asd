@@ -113,7 +113,7 @@ fun SettingsScreen(
             }
         }
 
-        if (BuildConfig.ONLINE) CloudSection(
+        if (BuildConfig.DRIVE) CloudSection(
             title = "Google Drive",
             name = stringResource(R.string.drive),
             source = SongSource.DRIVE,

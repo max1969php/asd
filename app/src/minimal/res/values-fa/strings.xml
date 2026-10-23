@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">MP3هایت از قبل مال خودت است. لازم نیست برای گوش دادن به آن‌ها به کسی پول بدهی. و هیچ‌کس نباید وقتی به آن‌ها گوش می‌دهی جاسوسی‌ات را بکند.\n\nیک پوشه روی گوشی انتخاب کن: ASD آن را می‌گردد، آهنگ‌ها را ردیف می‌کند و می‌گذارد میکس‌تیپ بسازی. همین.</string>
     <string name="library_empty_hint">چند فایل MP3، WAV یا FLAC در آن بینداز و در تنظیمات اسکن مجدد را بزن.</string>

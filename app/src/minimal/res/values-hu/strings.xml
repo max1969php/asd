@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">Az MP3-aid már a tieid. Senkinek nem kell fizetned, hogy meghallgasd őket. És senki ne kémkedjen utánad, amíg hallgatod őket.\n\nVálassz EGY mappát a telefonon: az ASD átfésüli, sorba rakja a számokat, és hagyja, hogy mixtape-eket csinálj. Ennyi.</string>
     <string name="library_empty_hint">Dobj bele pár MP3-at, WAV-ot vagy FLAC-ot, és nyomd meg az Újraolvasást a SETUP-ban.</string>

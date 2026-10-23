@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">MP3ዎችህ አስቀድሞ የራስህ ናቸው። ለማዳመጥ ለማንም መክፈል አያስፈልግህም። ስታዳምጣቸውም ማንም ሊሰልልህ አይገባም።\n\nበስልኩ ላይ አንድ አቃፊ ምረጥ: ASD ይፈትሸዋል፣ ዘፈኖቹን በተራ ያሰልፋል እና ሚክስቴፕ እንድትሠራ ያስችልሃል። ያው ነው።</string>
     <string name="library_empty_hint">ጥቂት MP3፣ WAV ወይም FLAC ፋይሎችን ጣል አድርግበት እና ከማዋቀሪያ እንደገና ቃኝን ተጫን።</string>

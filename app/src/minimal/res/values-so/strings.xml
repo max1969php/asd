@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">MP3-yadaadu hore ayay adiga kuugu ahaayeen. Uma baahnid inaad qof u bixiso lacag si aad u dhegaysato. Qofna waa inuusan ku basaasin markaad dhegaysanayso.\n\nDooro HAL gal oo taleefanka ku jira: ASD way baartaa, heesaha way safaysaa waxayna kuu oggolaataa inaad samayso mixtape. Intaas weeye.</string>
     <string name="library_empty_hint">Ku tuur dhowr fayl oo MP3, WAV ama FLAC ah kadibna taabo Mar kale baar DEJINTA.</string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">Tvoji MP3-ji so že tvoji. Nikomur ti ni treba plačati, da jih poslušaš. In nihče te ne sme vohuniti, medtem ko jih poslušaš.\n\nIzberi ENO mapo v telefonu: ASD jo preseje, postavi skladbe v vrsto in ti pusti delati mixtape. To je to.</string>
     <string name="library_empty_hint">Vrzi vanjo nekaj MP3, WAV ali FLAC in v SETUP pritisni Ponovno preglej.</string>

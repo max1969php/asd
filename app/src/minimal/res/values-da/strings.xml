@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">Dine MP3-filer er allerede dine. Du skal ikke betale nogen for at lytte til dem. Og ingen skal udspionere dig, mens du lytter til dem.\n\nVælg ÉN mappe på telefonen: ASD sigter den igennem, stiller numrene op og lader dig lave mixtapes. Det er det.</string>
     <string name="library_empty_hint">Smid nogle MP3-, WAV- eller FLAC-filer derind, og tryk på Scan igen under OPSÆTNING.</string>

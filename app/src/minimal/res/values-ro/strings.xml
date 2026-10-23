@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">MP3-urile tale sunt deja ale tale. Nu trebuie să plătești pe nimeni ca să le asculți. Și nimeni nu trebuie să te spioneze cât timp le asculți.\n\nAlege UN folder de pe telefon: ASD îl cerne, pune piesele în ordine și te lasă să faci mixtape-uri. Atât.</string>
     <string name="library_empty_hint">Aruncă acolo niște MP3, WAV sau FLAC și apasă Rescanează în SETUP.</string>

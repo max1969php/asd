@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">Tavi MP3 jau ir tavi. Tev nav jāmaksā nevienam, lai tos klausītos. Un neviens nedrīkst tevi izspiegot, kamēr tu tos klausies.\n\nIzvēlies VIENU mapi tālrunī: ASD to izsijā, sakārto dziesmas rindā un ļauj tev veidot mixtapes. Viss.</string>
+    <string name="library_empty_hint">Iemet tur dažus MP3, WAV vai FLAC failus un nospied Skenēt vēlreiz sadaļā IESTATĪJUMI.</string>
+    <string name="volume_hint">Katrs ieraksts tiek izmērīts vienreiz (EBU R128, kā ReplayGain 2.0) un atskaņots ar -18 LUFS: vairs nekādu skaļuma lēcienu starp MP3. Skaļākie ieraksti tiek pieklusināti, tāpēc palielini tālruņa skaļumu.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\n\"Straumēšana\" iet no tavas atmiņas uz tavām ausīm, un tas ir viss.\n\n· Tīkls vajadzīgs tikai TUBE, un tikai tad, ja to lieto.\n· Nekādu kontu, reklāmu vai izsekošanas.\n· Atskaņošanas saraksti dzīvo tālrunī. To dzēšana neskar failus.\n· ASD nekad nedzēš tavus failus: lai kādu noņemtu, izmanto tālruni.\n· Cena: 0€. Mūžīgi.</string>
+</resources>

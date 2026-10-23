@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">MP3 zako tayari ni zako. Huhitaji kumlipa mtu yeyote ili uzisikilize. Na hakuna anayepaswa kukupeleleza unapozisikiliza.\n\nChagua folda MOJA kwenye simu: ASD inaipekua, inapanga nyimbo na kukuacha utengeneze mixtape. Basi.</string>
     <string name="library_empty_hint">Tupa faili chache za MP3, WAV au FLAC humo kisha bonyeza Skani tena kwenye MIPANGILIO.</string>

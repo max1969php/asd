@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">Je MP3\'s zijn al van jou. Je hoeft niemand te betalen om ze te luisteren. En niemand hoort je te bespioneren terwijl je ernaar luistert.\n\nKies ÉÉN map op je telefoon: ASD zeeft hem door, zet de nummers op een rij en laat je mixtapes maken. Klaar.</string>
+    <string name="library_empty_hint">Gooi er wat MP3, WAV of FLAC in en druk op Opnieuw scannen in SETUP.</string>
+    <string name="volume_hint">Elk nummer wordt één keer gemeten (EBU R128, zoals ReplayGain 2.0) en afgespeeld op -18 LUFS: geen volumesprongen meer tussen MP3\'s. Hardere nummers worden zachter gezet, dus zet je telefoon iets harder.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\nDe \"streaming\" gaat van jouw geheugen naar jouw oren, en dat is het.\n\n· Het netwerk is alleen voor de TUBE, en alleen als jij hem gebruikt.\n· Geen account, geen reclame, geen tracking.\n· Playlists leven op de telefoon. Ze verwijderen raakt de bestanden niet.\n· ASD wist nooit je bestanden: wil je er een weghalen, gebruik dan de telefoon.\n· Kosten: €0. Voor altijd.</string>
+</resources>

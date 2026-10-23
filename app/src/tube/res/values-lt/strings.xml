@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">Tavo MP3 jau yra tavo. Niekam nereikia mokėti, kad juos klausytum. Ir niekas neturi tavęs šnipinėti, kol jų klausaisi.\n\nPasirink VIENĄ aplanką telefone: ASD jį išsijoja, sudėlioja kūrinius ir leidžia tau kurti mixtape\'us. Tiek.</string>
+    <string name="library_empty_hint">Įmesk ten keletą MP3, WAV ar FLAC failų ir spausk Skanuoti iš naujo skiltyje NUSTATYMAI.</string>
+    <string name="volume_hint">Kiekvienas kūrinys išmatuojamas vieną kartą (EBU R128, kaip ReplayGain 2.0) ir grojamas -18 LUFS lygiu: nebebus garsumo šuolių tarp MP3. Garsesni kūriniai pritildomi, tad šiek tiek pagarsink telefoną.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\n„Srautinis perdavimas“ eina iš tavo atminties į tavo ausis, ir tiek.\n\n· Tinklas reikalingas tik TUBE, ir tik jei juo naudojiesi.\n· Jokių paskyrų, jokių reklamų, jokio sekimo.\n· Grojaraščiai gyvena telefone. Juos ištrynus failai neliečiami.\n· ASD niekada netrina tavo failų: norėdamas kurį nors pašalinti, naudok telefoną.\n· Kaina: 0€. Per amžius.</string>
+</resources>

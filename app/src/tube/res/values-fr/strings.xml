@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive. -->
+<resources>
+    <string name="onboarding_intro">Tes MP3 sont déjà à toi. Tu n\'as à payer personne pour les écouter. Et personne ne doit t\'espionner pendant que tu les écoutes.\n\nChoisis UN dossier du téléphone : ASD le passe au crible, aligne les morceaux et te laisse faire des mixtapes. C\'est tout.</string>
+    <string name="library_empty_hint">Mets-y quelques MP3, WAV ou FLAC et appuie sur Rescanner dans SETUP.</string>
+    <string name="volume_hint">Chaque morceau est mesuré une fois (EBU R128, comme ReplayGain 2.0) et joué à -18 LUFS : fini les sauts de volume d\'un MP3 à l\'autre. Les morceaux plus forts sont baissés, alors monte un peu le volume du téléphone.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\nLe « streaming », c\'est de ta mémoire à tes oreilles, et c\'est tout.\n\n· Le réseau ne sert qu\'au TUBE, et seulement si tu t\'en sers.\n· Aucun compte, aucune pub, aucun pistage.\n· Les playlists vivent sur le téléphone. Les supprimer ne touche pas aux fichiers.\n· ASD n\'efface jamais tes fichiers : pour en enlever un, utilise le téléphone.\n· Prix : 0€. Pour toujours.</string>
+</resources>

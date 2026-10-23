@@ -3,21 +3,22 @@
 Lettore musicale Android per la **tua** musica, zero abbonamenti. Niente account ASD, niente
 pubblicità, niente tracciamento.
 
-Due versioni dallo stesso codice (flavor Gradle):
+Tre versioni dallo stesso codice (flavor Gradle):
 
-| | **minimal** (`com.asd.player.minimal`, "ASD") | **full** (`com.asd.player`, "ASD+") |
-|---|---|---|
-| Fonti | cartella del telefono | cartella del telefono + Google Drive |
-| TUBO (yt-dlp) | no | sì: salva nel telefono **e** su Drive |
-| Rete | **nessuna** (niente permesso INTERNET) | Drive e YouTube |
-| Peso | ~3 MB | ~34 MB (universale) |
-| Dove | sito e Play Store | solo per uso personale |
+| | **minimal** (`com.asd.player.minimal`, "ASD") | **tube** (`com.asd.player.tube`, "ASD Tubo") | **full** (`com.asd.player`, "ASD+") |
+|---|---|---|---|
+| Fonti | cartella del telefono | cartella del telefono | cartella del telefono + Google Drive |
+| TUBO (yt-dlp) | no | sì: salva solo nel telefono | sì: salva nel telefono **e** su Drive |
+| Rete | **nessuna** (niente permesso INTERNET) | solo YouTube | Drive e YouTube |
+| Peso | ~3 MB | ~45 MB (universale) | ~45 MB (universale) |
+| Dove | sito (`asd.apk`) e Play Store | sito (`asd-tubo.apk`) | solo per uso personale |
 
 La full usa il client OAuth Android del progetto Google del titolare (pacchetto + SHA-1 della
 chiave debug) e non va su Play Store: scaricare da YouTube è contro le sue regole.
 
 - **Sito** (istruzioni, guida a yt-dlp, script per PC): https://asd-eight-rust.vercel.app
-- **Scarica l'APK** (minimal): [ultima Release](https://github.com/max1969php/asd/releases/latest), `asd.apk`.
+- **Scarica l'APK**: [ultima Release](https://github.com/max1969php/asd/releases/latest), `asd.apk`
+  (minimal) o `asd-tubo.apk` (tube).
 
 Il ragionamento architetturale di partenza è in [`a.md`](a.md).
 
@@ -68,7 +69,7 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
 - I file restano su Drive: si leggono i tag e si suonano **in streaming** con lo stesso Media3 ExoPlayer,
   aggiungendo il token OAuth al volo (`DriveStreamResolver`). Scope richiesto: `drive` (vedi sotto).
 
-### Tubo (solo full)
+### Tubo (tube e full)
 
 - yt-dlp gira sul telefono grazie a [youtubedl-android](https://github.com/JunkFood02/youtubedl-android)
   (GPL-3.0), che impacchetta Python, yt-dlp e QuickJS (serve a YouTube). Niente server di mezzo.
@@ -138,9 +139,11 @@ dal catalogo e, in cascata, dai mixtape che li contenevano.
 Apri il progetto con Android Studio, oppure da terminale:
 
 ```bash
-./gradlew testFullDebugUnitTest testMinimalDebugUnitTest   # test unitari
-./gradlew assembleFullDebug                                # app/build/outputs/apk/full/debug/
-./gradlew assembleFullRelease assembleMinimalRelease       # app/build/outputs/apk/{full,minimal}/release/
+./gradlew testFullDebugUnitTest testTubeDebugUnitTest testMinimalDebugUnitTest  # test unitari
+./gradlew assembleFullDebug                     # app/build/outputs/apk/full/debug/
+./gradlew assembleMinimalRelease                # app/build/outputs/apk/minimal/release/
+./gradlew assembleTubeRelease                   # app/build/outputs/apk/tube/release/
+./gradlew assembleFullRelease                   # app/build/outputs/apk/full/release/
 ./gradlew bundleMinimalRelease                             # AAB per Play Store
 ```
 
@@ -148,15 +151,19 @@ La release è minificata e firmata con la chiave debug (così l'impronta SHA-1 r
 Google Drive resta la stessa): si installa sopra le versioni precedenti.
 
 Il codice comune sta in `src/main`. Le differenze:
-- `src/full`: `TubeDownloader` vero (youtubedl-android è una dipendenza solo `fullImplementation`),
-  il permesso INTERNET, il nome "ASD+";
-- `src/minimal`: uno stub di `TubeDownloader` e i testi senza Drive né TUBO (intro, manifesto,
-  volume, libreria vuota), generati dalle traduzioni esistenti più tre frasi nuove;
-- `BuildConfig.ONLINE` nasconde nella minimal la scheda TUBO, la sezione Drive di SETUP e il bottone
-  Drive del primo avvio.
+- `src/ytdlp`: `TubeDownloader` vero, condiviso da full e tube (youtubedl-android è una dipendenza
+  solo `fullImplementation`/`tubeImplementation`); queste due hanno R8 senza shrink né
+  offuscamento (`proguard-ytdlp.pro`), altrimenti yt-dlp va in crash;
+- `src/full`, `src/tube`: il permesso INTERNET e il nome ("ASD+", "ASD Tubo");
+- `src/minimal`, `src/tube`: i testi senza Drive (intro, manifesto, volume, libreria vuota),
+  generati dalle traduzioni esistenti più qualche frase nuova; la minimal ha anche uno stub di
+  `TubeDownloader`;
+- `BuildConfig.DRIVE` nasconde la sezione Drive di SETUP, il bottone Drive del primo avvio e le
+  destinazioni Drive del TUBO (la tube salva solo nel telefono); `BuildConfig.TUBE` nasconde la
+  scheda TUBO nella minimal.
 
 Servono JDK 17 e l'Android SDK con la piattaforma 34 (`ANDROID_HOME` oppure `local.properties`).
-La full ha solo le librerie native ARM (`arm64-v8a`, `armeabi-v7a`), quelle dei telefoni veri:
+Full e tube hanno solo le librerie native ARM (`arm64-v8a`, `armeabi-v7a`), quelle dei telefoni veri:
 un APK per CPU più uno universale con entrambe. L'universale è il download principale perché alcuni
 telefoni con CPU a 64 bit hanno Android a 32 bit (es. Galaxy A13 SM-A137F) e rifiutano l'APK arm64
 come "non compatibile". La build di debug tiene anche x86/x86_64, per gli emulatori.
@@ -164,17 +171,19 @@ come "non compatibile". La build di debug tiene anche x86/x86_64, per gli emulat
 ## Rilasciare una versione
 
 1. Alza `versionCode` e `versionName` in `app/build.gradle.kts`, poi
-   `./gradlew assembleFullRelease assembleMinimalRelease`.
-2. Crea una Release su GitHub con tag `v<versionName>` e allega **solo la minimal**, con il nome
-   esatto `asd.apk` (la full resta privata):
+   `./gradlew assembleMinimalRelease`, poi `assembleTubeRelease` (uno alla volta: insieme possono
+   finire la memoria).
+2. Crea una Release su GitHub con tag `v<versionName>` e allega minimal e tube universali, con i
+   nomi esatti `asd.apk` e `asd-tubo.apk` (la full resta privata):
 
    ```bash
    cp app/build/outputs/apk/minimal/release/app-minimal-universal-release.apk asd.apk
-   gh release create v0.4.0 --target main --title "ASD 0.4.0" --notes "..." asd.apk
+   cp app/build/outputs/apk/tube/release/app-tube-universal-release.apk asd-tubo.apk
+   gh release create v0.5.0 --target main --title "ASD 0.5.0" --notes "..." asd.apk asd-tubo.apk
    ```
 
-Il sito punta a `releases/latest/download/asd.apk`: prende sempre l'ultima Release, il sito non va
-toccato.
+Il sito punta a `releases/latest/download/asd.apk` e `.../asd-tubo.apk`: prende sempre l'ultima
+Release, il sito non va toccato.
 
 ## Sito
 

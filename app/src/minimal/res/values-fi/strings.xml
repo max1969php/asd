@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">MP3-tiedostosi ovat jo sinun. Kenellekään ei tarvitse maksaa niiden kuuntelusta. Eikä kenenkään pidä vakoilla sinua, kun kuuntelet niitä.\n\nValitse YKSI kansio puhelimesta: ASD seuloo sen, laittaa kappaleet jonoon ja antaa sinun tehdä mixtapeja. Siinä kaikki.</string>
     <string name="library_empty_hint">Heitä sinne muutama MP3-, WAV- tai FLAC-tiedosto ja paina Skannaa uudelleen ASETUKSISSA.</string>

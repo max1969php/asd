@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">Tus MP3 ya son tuyos. No tienes que pagar a nadie para escucharlos. Y nadie tiene por qué espiarte mientras los escuchas.\n\nElige UNA carpeta del móvil: ASD la criba, pone en fila los temas y te deja hacer mixtapes. Y ya.</string>
     <string name="library_empty_hint">Mete algunos MP3, WAV o FLAC y pulsa Reescanear en SETUP.</string>

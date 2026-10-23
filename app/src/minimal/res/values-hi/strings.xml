@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<!-- Generato da minimal_strings.py: gli stessi testi senza Drive né TUBO. -->
 <resources>
     <string name="onboarding_intro">आपके MP3 पहले से ही आपके हैं। उन्हें सुनने के लिए किसी को पैसे देने की ज़रूरत नहीं। और जब आप उन्हें सुनें, तब किसी को आपकी जासूसी नहीं करनी चाहिए।\n\nफ़ोन में एक फ़ोल्डर चुनिए: ASD उसे छानता है, गानों को कतार में लगाता है और आपको मिक्सटेप बनाने देता है। बस।</string>
     <string name="library_empty_hint">इसमें कुछ MP3, WAV या FLAC फ़ाइलें डालिए और सेटअप में दोबारा स्कैन दबाइए।</string>
