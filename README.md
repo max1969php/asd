@@ -1,12 +1,23 @@
 # ASD — Anarchic Streaming Device
 
-Lettore musicale Android per la **tua** musica: una cartella del telefono e/o una cartella del
-tuo Google Drive, zero abbonamenti. Niente account ASD, niente pubblicità, niente tracciamento.
-La rete viene usata solo per Google Drive, e solo se lo colleghi.
+Lettore musicale Android per la **tua** musica, zero abbonamenti. Niente account ASD, niente
+pubblicità, niente tracciamento.
+
+Due versioni dallo stesso codice (flavor Gradle):
+
+| | **minimal** (`com.asd.player.minimal`, "ASD") | **full** (`com.asd.player`, "ASD+") |
+|---|---|---|
+| Fonti | cartella del telefono | cartella del telefono + Google Drive |
+| TUBO (yt-dlp) | no | sì: salva nel telefono **e** su Drive |
+| Rete | **nessuna** (niente permesso INTERNET) | Drive e YouTube |
+| Peso | ~3 MB | ~34 MB (universale) |
+| Dove | sito e Play Store | solo per uso personale |
+
+La full usa il client OAuth Android del progetto Google del titolare (pacchetto + SHA-1 della
+chiave debug) e non va su Play Store: scaricare da YouTube è contro le sue regole.
 
 - **Sito** (istruzioni, guida a yt-dlp, script per PC): https://asd-eight-rust.vercel.app
-- **Scarica l'APK**: [ultima Release](https://github.com/max1969php/asd/releases/latest)
-  (`asd.apk` va su tutti i telefoni; `asd-arm64.apk` e `asd-armv7.apk` sono più leggeri, per una sola CPU).
+- **Scarica l'APK** (minimal): [ultima Release](https://github.com/max1969php/asd/releases/latest), `asd.apk`.
 
 Il ragionamento architetturale di partenza è in [`a.md`](a.md).
 
@@ -47,7 +58,7 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
   unisce; il filtro TELEFONO / DRIVE compare quando le usi entrambe, e i brani di Drive hanno il simbolo ☁.
 - **Dropbox** è un'estensione che non fa parte dell'app base: vive nel branch `dropbox`.
 
-### Google Drive
+### Google Drive (solo full)
 
 - Si collega un account Google **presente sul telefono** tramite il selettore di sistema di Android.
 - In SETUP c'è una **select** con gli account collegati: lì scegli il predefinito ogni volta che vuoi.
@@ -56,17 +67,8 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
   diventano quelli del nuovo account (e spariscono dai mixtape quelli del vecchio).
 - I file restano su Drive: si leggono i tag e si suonano **in streaming** con lo stesso Media3 ExoPlayer,
   aggiungendo il token OAuth al volo (`DriveStreamResolver`). Scope richiesto: `drive` (vedi sotto).
-- **Il tuo progetto Google** (SETUP → Google Drive): chi non è tra gli utenti di test del progetto di
-  ASD usa un suo progetto Google Cloud, in stato Test, con un client OAuth di tipo **App desktop**.
-  Un client Android non si può: Google vuole la coppia pacchetto + SHA-1 unica fra tutti i progetti,
-  e quella dell'APK pubblicato è già presa. Client ID e secret si incollano in SETUP; il login si fa
-  nel browser del telefono e torna ad ASD su un server locale `127.0.0.1` (redirect di loopback,
-  PKCE), poi ASD tiene il refresh token (`OwnGoogleClient`). Client e token stanno in
-  `asd_drive_own.xml`, escluso dal backup: a ogni reinstallazione si ricollega. In stato Test il
-  refresh token scade dopo 7 giorni: Riscansiona riapre il login. Guida per gli utenti sul sito,
-  sezione `#drive`.
 
-### Tubo
+### Tubo (solo full)
 
 - yt-dlp gira sul telefono grazie a [youtubedl-android](https://github.com/JunkFood02/youtubedl-android)
   (GPL-3.0), che impacchetta Python, yt-dlp e QuickJS (serve a YouTube). Niente server di mezzo.
@@ -136,35 +138,43 @@ dal catalogo e, in cascata, dai mixtape che li contenevano.
 Apri il progetto con Android Studio, oppure da terminale:
 
 ```bash
-./gradlew testDebugUnitTest   # test unitari (ricerca/filtri, whitelist formati, loudness, TUBO)
-./gradlew assembleDebug       # app/build/outputs/apk/debug/
-./gradlew assembleRelease     # app/build/outputs/apk/release/: app-universal, app-arm64-v8a, app-armeabi-v7a
+./gradlew testFullDebugUnitTest testMinimalDebugUnitTest   # test unitari
+./gradlew assembleFullDebug                                # app/build/outputs/apk/full/debug/
+./gradlew assembleFullRelease assembleMinimalRelease       # app/build/outputs/apk/{full,minimal}/release/
+./gradlew bundleMinimalRelease                             # AAB per Play Store
 ```
 
 La release è minificata e firmata con la chiave debug (così l'impronta SHA-1 registrata per
 Google Drive resta la stessa): si installa sopra le versioni precedenti.
 
+Il codice comune sta in `src/main`. Le differenze:
+- `src/full`: `TubeDownloader` vero (youtubedl-android è una dipendenza solo `fullImplementation`),
+  il permesso INTERNET, il nome "ASD+";
+- `src/minimal`: uno stub di `TubeDownloader` e i testi senza Drive né TUBO (intro, manifesto,
+  volume, libreria vuota), generati dalle traduzioni esistenti più tre frasi nuove;
+- `BuildConfig.ONLINE` nasconde nella minimal la scheda TUBO, la sezione Drive di SETUP e il bottone
+  Drive del primo avvio.
+
 Servono JDK 17 e l'Android SDK con la piattaforma 34 (`ANDROID_HOME` oppure `local.properties`).
-La release ha solo le librerie native ARM (`arm64-v8a`, `armeabi-v7a`), quelle dei telefoni veri:
+La full ha solo le librerie native ARM (`arm64-v8a`, `armeabi-v7a`), quelle dei telefoni veri:
 un APK per CPU più uno universale con entrambe. L'universale è il download principale perché alcuni
 telefoni con CPU a 64 bit hanno Android a 32 bit (es. Galaxy A13 SM-A137F) e rifiutano l'APK arm64
 come "non compatibile". La build di debug tiene anche x86/x86_64, per gli emulatori.
 
 ## Rilasciare una versione
 
-1. Alza `versionCode` e `versionName` in `app/build.gradle.kts`, poi `./gradlew assembleRelease`.
-2. Crea una Release su GitHub con tag `v<versionName>` e allega i tre APK con questi nomi esatti:
-   `asd.apk` (universale), `asd-arm64.apk` e `asd-armv7.apk`. Con la CLI di GitHub:
+1. Alza `versionCode` e `versionName` in `app/build.gradle.kts`, poi
+   `./gradlew assembleFullRelease assembleMinimalRelease`.
+2. Crea una Release su GitHub con tag `v<versionName>` e allega **solo la minimal**, con il nome
+   esatto `asd.apk` (la full resta privata):
 
    ```bash
-   cp app/build/outputs/apk/release/app-universal-release.apk asd.apk
-   cp app/build/outputs/apk/release/app-arm64-v8a-release.apk asd-arm64.apk
-   cp app/build/outputs/apk/release/app-armeabi-v7a-release.apk asd-armv7.apk
-   gh release create v0.2.0 --target main --title "ASD 0.2.0" --notes "..." asd.apk asd-arm64.apk asd-armv7.apk
+   cp app/build/outputs/apk/minimal/release/app-minimal-universal-release.apk asd.apk
+   gh release create v0.4.0 --target main --title "ASD 0.4.0" --notes "..." asd.apk
    ```
 
-Il sito punta a `releases/latest/download/asd.apk` (bottone) e ai due APK per CPU: prendono
-sempre l'ultima Release, il sito non va toccato.
+Il sito punta a `releases/latest/download/asd.apk`: prende sempre l'ultima Release, il sito non va
+toccato.
 
 ## Sito
 

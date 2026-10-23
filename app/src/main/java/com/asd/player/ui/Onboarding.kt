@@ -30,7 +30,8 @@ import com.asd.player.ui.theme.Asd
 @Composable
 fun Onboarding(
     onPickDirectory: () -> Unit,
-    onConnectDrive: () -> Unit,
+    /** null nella versione minimal: niente Drive. */
+    onConnectDrive: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -56,16 +57,18 @@ fun Onboarding(
         )
         Spacer(Modifier.height(32.dp))
         PunkButton(stringResource(R.string.phone_folder), onClick = onPickDirectory, icon = Icons.Filled.Folder)
-        Spacer(Modifier.height(12.dp))
-        PunkButton(
-            "Google Drive",
-            onClick = onConnectDrive,
-            icon = Icons.Filled.Cloud,
-            container = Asd.Paper,
-            shadow = Asd.Acid,
-        )
-        Spacer(Modifier.height(12.dp))
-        Text(stringResource(R.string.onboarding_other_source), style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
+        if (onConnectDrive != null) {
+            Spacer(Modifier.height(12.dp))
+            PunkButton(
+                "Google Drive",
+                onClick = onConnectDrive,
+                icon = Icons.Filled.Cloud,
+                container = Asd.Paper,
+                shadow = Asd.Acid,
+            )
+            Spacer(Modifier.height(12.dp))
+            Text(stringResource(R.string.onboarding_other_source), style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
+        }
         Spacer(Modifier.height(24.dp))
         AsdLinks()
     }

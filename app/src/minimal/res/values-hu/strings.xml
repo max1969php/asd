@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<resources>
+    <string name="onboarding_intro">Az MP3-aid már a tieid. Senkinek nem kell fizetned, hogy meghallgasd őket. És senki ne kémkedjen utánad, amíg hallgatod őket.\n\nVálassz EGY mappát a telefonon: az ASD átfésüli, sorba rakja a számokat, és hagyja, hogy mixtape-eket csinálj. Ennyi.</string>
+    <string name="library_empty_hint">Dobj bele pár MP3-at, WAV-ot vagy FLAC-ot, és nyomd meg az Újraolvasást a SETUP-ban.</string>
+    <string name="volume_hint">Minden számot egyszer megmérünk (EBU R128, mint a ReplayGain 2.0), és -18 LUFS-on szól: vége a hangerőugrásoknak az MP3-ak között. A hangosabb számokat lehalkítjuk, úgyhogy hangosítsd fel kicsit a telefont.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\nA „streaming\" a memóriádtól a füledig tart, és kész.\n\n· Nincs hálózat: az ASD nem megy fel az internetre, és senkinek nem küld semmit.\n· Nincs fiók, nincs reklám, nincs követés.\n· A lejátszási listák a telefonon élnek. A törlésük nem nyúl a fájlokhoz.\n· Az ASD soha nem törli a fájljaidat: ha el akarsz távolítani egyet, használd a telefont.\n· Ár: 0€. Örökre.</string>
+</resources>

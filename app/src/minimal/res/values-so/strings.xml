@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<resources>
+    <string name="onboarding_intro">MP3-yadaadu hore ayay adiga kuugu ahaayeen. Uma baahnid inaad qof u bixiso lacag si aad u dhegaysato. Qofna waa inuusan ku basaasin markaad dhegaysanayso.\n\nDooro HAL gal oo taleefanka ku jira: ASD way baartaa, heesaha way safaysaa waxayna kuu oggolaataa inaad samayso mixtape. Intaas weeye.</string>
+    <string name="library_empty_hint">Ku tuur dhowr fayl oo MP3, WAV ama FLAC ah kadibna taabo Mar kale baar DEJINTA.</string>
+    <string name="volume_hint">Hees kasta mar bay cabbiraan (EBU R128, sida ReplayGain 2.0) waxaana lagu ciyaaraa -18 LUFS: weli kor-u-booday cod MP3 kasta u dhexeeya ma jirto. Heesaha ugu dheer waa la hoosaysiiyaa, sidaa darteed kor u qaad codka taleefankaaga wax yar.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\n\"Streaming\"-ku wuxuu ka bilaabmaa xusuustaada oo gaadhaa dhegahaaga, taasi waa wada.\n\n· Shabakad ma jirto: ASD internetka ma galo, qofna waxba uma diro.\n· Akoon la\'aan, xayaysiis la\'aan, raad-raac la\'aan.\n· Liisaska ciyaarta waxay ku nool yihiin taleefanka. Tirtiriddooda faylasha ma taabto.\n· ASD weligeed ma tirtirto faylashaada: si aad mid uga saarto, isticmaal taleefanka.\n· Qiimo: 0€. Weligaa.</string>
+</resources>

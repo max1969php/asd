@@ -212,17 +212,4 @@
         <item>Skip the ads: there aren\'t any.</item>
         <item>Homemade. Like your tapes.</item>
     </string-array>
-    <string name="link_account_browser">+ LINK AN ACCOUNT (BROWSER)</string>
-    <string name="drive_own_title">YOUR GOOGLE PROJECT</string>
-    <string name="drive_own_hint">To use Drive with YOUR Google Cloud project (free, in Testing status) create an OAuth client of type \"Desktop app\" and paste its ID and secret here. They stay on this phone only: if you reinstall ASD, paste them again.</string>
-    <string name="drive_own_save">USE MY PROJECT</string>
-    <string name="drive_own_active">Using your project (%1$s). Accounts are linked from the browser.</string>
-    <string name="drive_own_remove">REMOVE PROJECT</string>
-    <string name="drive_own_invalid">The client ID must end with .apps.googleusercontent.com, and the secret is needed too.</string>
-    <string name="drive_own_guide">↗ Step-by-step guide on the website</string>
-    <string name="drive_login_wait">Sign in to Google in the browser, then come back to ASD.</string>
-    <string name="drive_login_done">Done: Drive is linked. Go back to ASD.</string>
-    <string name="drive_login_timeout">Google sign-in not completed within 5 minutes.</string>
-    <string name="drive_login_refused">Google refused access (%1$s).</string>
-    <string name="drive_login_channel">Google sign-in</string>
 </resources>

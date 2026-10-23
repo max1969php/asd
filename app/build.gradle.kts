@@ -10,12 +10,28 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.asd.player"
         minSdk = 26
         targetSdk = 34
-        versionCode = 5
-        versionName = "0.3.2"
+        versionCode = 6
+        versionName = "0.4.0"
+    }
 
+    // Due versioni dallo stesso codice:
+    // - full: quella del titolare. Google Drive (client Android legato a pacchetto + SHA-1 della chiave
+    //   debug) e TUBO (yt-dlp), che salva su Drive e nel telefono. Non va su Play Store.
+    // - minimal: solo lettore della cartella del telefono, senza rete. Quella del sito e di Play Store.
+    flavorDimensions += "edition"
+    productFlavors {
+        create("full") {
+            dimension = "edition"
+            applicationId = "com.asd.player"
+            buildConfigField("boolean", "ONLINE", "true")
+        }
+        create("minimal") {
+            dimension = "edition"
+            applicationId = "com.asd.player.minimal"
+            buildConfigField("boolean", "ONLINE", "false")
+        }
     }
 
     // Python e yt-dlp (TUBO) sono librerie native da ~15 MB per CPU: un APK per CPU, più uno universale.
@@ -57,6 +73,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     testOptions {
         unitTests.isReturnDefaultValues = true
@@ -95,7 +112,8 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.play.services.auth)
-    implementation(libs.youtubedl.android) {
+    // Solo la full: Python + yt-dlp sono quasi tutto il peso dell'APK.
+    "fullImplementation"(libs.youtubedl.android) {
         // La libreria dichiara appcompat ma non lo usa: sarebbero ~1 MB di risorse per niente.
         exclude(group = "androidx.appcompat")
     }

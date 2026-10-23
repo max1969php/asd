@@ -32,13 +32,17 @@ enum class TubeStatus { QUEUED, DOWNLOADING, UPLOADING, DONE, FAILED }
 /**
  * Dove finisce un download, fissato al momento dell'invio.
  * [folderId]: URI dell'albero SAF per il telefono, id della cartella Drive.
+ * [also]: una seconda copia (telefono + Drive): il brano si scarica una volta e si salva in entrambi.
  */
 data class TubeTarget(
     val destination: TubeDestination,
     val account: String?,
     val folderId: String,
     val label: String,
-)
+    val also: TubeTarget? = null,
+) {
+    val needsDrive: Boolean get() = destination == TubeDestination.DRIVE || also?.needsDrive == true
+}
 
 /** Cosa scaricare: l'audio di un video YouTube oppure un file del proprio Google Drive. */
 sealed interface JobSource {
@@ -57,6 +61,8 @@ data class TubeJob(
     val progress: Float = 0f,
     val title: String? = null,
     val error: String? = null,
+    /** Le destinazioni già salvate: riprovando dopo un errore non si duplica il file. */
+    val savedTo: Set<TubeDestination> = emptySet(),
 )
 
 /**
@@ -165,16 +171,19 @@ class TubeImporter(
             downloader.download(source.url, id) { p -> edit(id) { it.copy(progress = p.coerceIn(0f, 100f) / 100f) } }
         }
         edit(id) { it.copy(status = TubeStatus.UPLOADING, title = listOfNotNull(track.artist, track.title).joinToString(" - ")) }
-        val (songSource, saved) = save(job.target, track, file)
-
-        // Se nel frattempo l'utente ha cambiato cartella o account, il brano è salvato ma non in questa libreria.
-        if (isCurrent(job.target)) {
-            library.add(saved, AudioMetadata(track.title, track.artist, null, track.durationMs), songSource)
+        for (target in generateSequence(job.target) { it.also }) {
+            if (target.destination in (_jobs.value.find { it.id == id }?.savedTo ?: emptySet())) continue
+            val (songSource, saved) = save(target, track, file)
+            edit(id) { it.copy(savedTo = it.savedTo + target.destination) }
+            // Se nel frattempo l'utente ha cambiato cartella o account, il brano è salvato ma non in questa libreria.
+            if (isCurrent(target)) {
+                library.add(saved, AudioMetadata(track.title, track.artist, null, track.durationMs), songSource)
+            }
         }
     }
 
     private fun save(target: TubeTarget, track: TubeTrack, file: File): Pair<SongSource, ScannedFile> = when (target.destination) {
-        TubeDestination.LOCAL ->
+        TubeDestination.LOCAL, TubeDestination.BOTH ->
             SongSource.LOCAL to local.write(Uri.parse(target.folderId), track.fileName, track.mimeType, file)
         TubeDestination.DRIVE -> {
             val uploaded = drive.upload(target.account!!, target.folderId, track.fileName, track.mimeType, file)
@@ -189,7 +198,7 @@ class TubeImporter(
     }
 
     private fun isCurrent(target: TubeTarget): Boolean = when (target.destination) {
-        TubeDestination.LOCAL -> settings.directoryUri.value?.toString() == target.folderId
+        TubeDestination.LOCAL, TubeDestination.BOTH -> settings.directoryUri.value?.toString() == target.folderId
         TubeDestination.DRIVE -> settings.drive.state.value.let {
             it.defaultAccount == target.account && it.folder?.id == target.folderId
         }

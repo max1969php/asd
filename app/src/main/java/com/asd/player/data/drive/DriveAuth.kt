@@ -4,7 +4,6 @@ import android.accounts.Account
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import com.asd.player.AppForeground
 import com.asd.player.L10n
 import com.asd.player.R
 import com.google.android.gms.auth.api.identity.AuthorizationRequest
@@ -17,54 +16,26 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 
-open class DriveAuthException(message: String) : IOException(message)
+class DriveAuthException(message: String) : IOException(message)
 
 /**
- * Token OAuth per Drive, sempre legati a un account preciso.
+ * Token OAuth per Drive, sempre legati a un account preciso del telefono.
  * Il consenso si chiede una volta (dalla UI), poi i token si rinnovano in silenzio.
- *
- * Due strade: il client di ASD (account del telefono, AuthorizationClient) oppure, se l'utente
- * ha messo il suo progetto Google in SETUP, [OwnGoogleClient] con il login nel browser.
  */
-class DriveAuth(context: Context, val own: OwnGoogleClient) {
+class DriveAuth(context: Context) {
 
     sealed interface Outcome {
         data class Granted(val token: String) : Outcome
         data class NeedsConsent(val intent: PendingIntent) : Outcome
-        /** Progetto dell'utente: serve il login nel browser ([browserLogin]). */
-        data object NeedsBrowser : Outcome
     }
 
     private val client = Identity.getAuthorizationClient(context)
     private val cache = ConcurrentHashMap<String, Pair<String, Long>>()
 
     /** Dalla UI: se Google vuole il consenso dell'utente, restituisce l'intent da lanciare. */
-    suspend fun authorize(email: String): Outcome {
-        if (own.config.value == null) return authorizeOnPhone(email)
-        return withContext(Dispatchers.IO) {
-            try {
-                Outcome.Granted(token(email))
-            } catch (e: NeedsLoginException) {
-                Outcome.NeedsBrowser
-            }
-        }
-    }
-
-    /** Login nel browser col progetto dell'utente. Restituisce l'account con cui è entrato. */
-    suspend fun browserLogin(hint: String?): String {
-        val login = own.login(hint)
-        cache[login.email] = login.accessToken to login.expiresAt
-        // Finché l'utente resta nel browser ASD è in background e può non avere rete: chi chiama
-        // parla subito con Drive (cartelle, caricamenti), quindi aspettiamo che torni.
-        AppForeground.await()
-        return login.email
-    }
-
-    private suspend fun authorizeOnPhone(email: String): Outcome = suspendCancellableCoroutine { cont ->
+    suspend fun authorize(email: String): Outcome = suspendCancellableCoroutine { cont ->
         client.authorize(request(email))
             .addOnSuccessListener { cont.resume(it.toOutcome(email)) }
             .addOnFailureListener { cont.resumeWithException(it) }
@@ -79,11 +50,6 @@ class DriveAuth(context: Context, val own: OwnGoogleClient) {
     /** Bloccante, da chiamare solo fuori dal main thread (scansione, player). */
     fun token(email: String): String {
         cache[email]?.let { (token, expiresAt) -> if (System.currentTimeMillis() < expiresAt) return token }
-        if (own.config.value != null) {
-            val login = own.refresh(email)
-            cache[email] = login.accessToken to login.expiresAt
-            return login.accessToken
-        }
         val result = try {
             Tasks.await(client.authorize(request(email)), 30, TimeUnit.SECONDS)
         } catch (e: Exception) {
@@ -91,7 +57,7 @@ class DriveAuth(context: Context, val own: OwnGoogleClient) {
         }
         return when (val outcome = result.toOutcome(email)) {
             is Outcome.Granted -> outcome.token
-            is Outcome.NeedsConsent, Outcome.NeedsBrowser -> throw DriveAuthException(L10n.str(R.string.consent_again, email))
+            is Outcome.NeedsConsent -> throw DriveAuthException(L10n.str(R.string.consent_again, email))
         }
     }
 
@@ -99,15 +65,6 @@ class DriveAuth(context: Context, val own: OwnGoogleClient) {
     fun invalidate(email: String) {
         cache.remove(email)
     }
-
-    /** Account scollegato: via anche il suo refresh token (solo progetto dell'utente). */
-    fun forget(email: String) {
-        cache.remove(email)
-        own.forget(email)
-    }
-
-    /** Cambio di client: i token in cache appartengono all'altro. */
-    fun clearCache() = cache.clear()
 
     private fun request(email: String) = AuthorizationRequest.Builder()
         .setRequestedScopes(listOf(Scope(DRIVE)))

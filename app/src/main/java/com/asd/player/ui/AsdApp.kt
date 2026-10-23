@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.asd.player.BuildConfig
 import com.asd.player.R
 import com.asd.player.data.drive.DriveAuth
 import com.asd.player.ui.cloud.DriveViewModel
@@ -57,8 +58,13 @@ import com.asd.player.ui.tube.TubeScreen
 import com.asd.player.ui.tube.TubeViewModel
 import kotlinx.coroutines.launch
 
-private enum class Tab(@StringRes val label: Int) {
-    LIBRARY(R.string.tab_library), PLAYLISTS(R.string.tab_playlists), TUBE(R.string.tab_tube), SETTINGS(R.string.tab_settings)
+/** [online]: scheda solo della versione full (la minimal non va in rete). */
+private enum class Tab(@StringRes val label: Int, val online: Boolean = false) {
+    LIBRARY(R.string.tab_library), PLAYLISTS(R.string.tab_playlists), TUBE(R.string.tab_tube, online = true), SETTINGS(R.string.tab_settings);
+
+    companion object {
+        val visible = entries.filter { BuildConfig.ONLINE || !it.online }
+    }
 }
 
 @Composable
@@ -139,7 +145,7 @@ fun AsdApp() {
         Box(Modifier.fillMaxSize()) {
             Onboarding(
                 onPickDirectory = onPick,
-                onConnectDrive = onAddGoogleAccount,
+                onConnectDrive = onAddGoogleAccount.takeIf { BuildConfig.ONLINE },
                 modifier = Modifier.background(Asd.Toner).statusBarsPadding(),
             )
             SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding()) {
@@ -233,7 +239,7 @@ private fun TabBar(selected: Tab, onSelect: (Tab) -> Unit) {
             .padding(top = 2.dp)
             .background(Asd.Toner)
     ) {
-        Tab.entries.forEach { tab ->
+        Tab.visible.forEach { tab ->
             val active = tab == selected
             Box(
                 contentAlignment = Alignment.Center,

@@ -63,10 +63,9 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
         settings.directoryUri,
         settings.drive.state,
     ) { dir, drive ->
-        listOf(
-            localOption(dir != null),
-            cloudOption(TubeDestination.DRIVE, L10n.str(R.string.drive), drive),
-        )
+        val local = localOption(dir != null)
+        val cloud = cloudOption(TubeDestination.DRIVE, L10n.str(R.string.drive), drive)
+        listOf(bothOption(local, cloud), local, cloud)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     private val _ytDlpVersion = MutableStateFlow<String?>(null)
@@ -124,11 +123,13 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
         val option = options.value.find { it.destination == destination.value }
         val target = option?.target
             ?: return false.also { _messages.tryEmit(L10n.str(R.string.destination_not_ready, option?.problem ?: L10n.str(R.string.go_to_setup_lower))) }
-        if (target.destination != TubeDestination.DRIVE) {
+        if (!target.needsDrive) {
             importer.enqueue(url, target)
             return true
         }
-        withDrive(target.account!!) { importer.enqueue(url, target) }
+        withDrive(generateSequence(target) { it.also }.first { it.destination == TubeDestination.DRIVE }.account!!) {
+            importer.enqueue(url, target)
+        }
         return true
     }
 
@@ -235,11 +236,6 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
                         pending = email to action
                         _consentRequests.emit(outcome.intent)
                     }
-                    DriveAuth.Outcome.NeedsBrowser -> {
-                        _messages.tryEmit(L10n.str(R.string.drive_login_wait))
-                        auth.browserLogin(email)
-                        action()
-                    }
                 }
             } catch (e: Exception) {
                 _messages.tryEmit(L10n.str(R.string.google_said_no, e.message.orEmpty()))
@@ -281,6 +277,17 @@ class TubeViewModel(private val container: AppContainer) : ViewModel() {
                 _updating.value = false
             }
         }
+    }
+
+    /** Telefono + Drive: pronta solo se lo sono tutte e due. */
+    private fun bothOption(local: DestinationOption, cloud: DestinationOption): DestinationOption {
+        val phone = local.target ?: return DestinationOption(TubeDestination.BOTH, null, local.problem)
+        val drive = cloud.target ?: return DestinationOption(TubeDestination.BOTH, null, cloud.problem)
+        return DestinationOption(
+            TubeDestination.BOTH,
+            phone.copy(destination = TubeDestination.BOTH, label = "${phone.label} + ${drive.label}", also = drive),
+            null,
+        )
     }
 
     private fun cloudOption(destination: TubeDestination, name: String, state: CloudSettings): DestinationOption {

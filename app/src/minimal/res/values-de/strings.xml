@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<resources>
+    <string name="onboarding_intro">Deine MP3s gehören schon dir. Du musst niemanden bezahlen, um sie zu hören. Und niemand soll dich ausspionieren, während du sie hörst.\n\nWähl EINEN Ordner auf dem Handy: ASD siebt ihn durch, reiht die Tracks auf und lässt dich Mixtapes machen. Fertig.</string>
+    <string name="library_empty_hint">Wirf ein paar MP3-, WAV- oder FLAC-Dateien rein und tippe unter SETUP auf Neu scannen.</string>
+    <string name="volume_hint">Jedes Stück wird einmal gemessen (EBU R128, wie ReplayGain 2.0) und mit -18 LUFS abgespielt: keine Lautstärkesprünge mehr zwischen MP3s. Lautere Stücke werden leiser gemacht, also dreh das Handy etwas lauter.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\nDas „Streaming\" geht von deinem Speicher zu deinen Ohren, und das war\'s.\n\n· Kein Netz: ASD geht nicht ins Internet und schickt niemandem etwas.\n· Kein Konto, keine Werbung, kein Tracking.\n· Playlists leben auf dem Handy. Sie zu löschen rührt die Dateien nicht an.\n· ASD löscht nie deine Dateien: Um eine zu entfernen, nimm das Handy.\n· Kosten: 0€. Für immer.</string>
+</resources>

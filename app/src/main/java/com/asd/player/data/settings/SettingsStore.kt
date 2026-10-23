@@ -19,8 +19,8 @@ data class CloudSettings(
     val lastScanAt: Long = 0,
 )
 
-/** Dove il TUBO salva l'audio scaricato. */
-enum class TubeDestination { LOCAL, DRIVE }
+/** Dove il TUBO salva l'audio scaricato: telefono, Drive o tutti e due (il predefinito). */
+enum class TubeDestination { LOCAL, DRIVE, BOTH }
 
 /** Poche preferenze, niente DataStore: SharedPreferences + StateFlow bastano. */
 class SettingsStore(context: Context) {
@@ -47,7 +47,7 @@ class SettingsStore(context: Context) {
 
     private val _tubeDestination = MutableStateFlow(
         prefs.getString(KEY_TUBE_DESTINATION, null)
-            ?.let { runCatching { TubeDestination.valueOf(it) }.getOrNull() } ?: TubeDestination.DRIVE
+            ?.let { runCatching { TubeDestination.valueOf(it) }.getOrNull() } ?: TubeDestination.BOTH
     )
     val tubeDestination: StateFlow<TubeDestination> = _tubeDestination.asStateFlow()
 

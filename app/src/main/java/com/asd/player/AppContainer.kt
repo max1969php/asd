@@ -5,7 +5,6 @@ import android.content.Context
 import com.asd.player.data.database.AppDatabase
 import com.asd.player.data.drive.DriveAuth
 import com.asd.player.data.drive.DriveClient
-import com.asd.player.data.drive.OwnGoogleClient
 import com.asd.player.data.loudness.LoudnessAnalyzer
 import com.asd.player.data.loudness.LoudnessQueue
 import com.asd.player.data.repository.MusicLibraryRepository
@@ -32,7 +31,7 @@ class AppContainer(context: Context) {
     val metadataReader = MetadataReader(context)
     val libraryRepository: MusicLibraryRepository = MusicLibraryRepositoryImpl(database.songDao())
 
-    val driveAuth = DriveAuth(context, OwnGoogleClient(context))
+    val driveAuth = DriveAuth(context)
     val driveClient = DriveClient(driveAuth)
     val streamResolver = CloudStreamResolver(driveAuth, settings)
     val playlistRepository: PlaylistRepository = PlaylistRepositoryImpl(database.playlistDao())

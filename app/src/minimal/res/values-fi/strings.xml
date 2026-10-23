@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<resources>
+    <string name="onboarding_intro">MP3-tiedostosi ovat jo sinun. Kenellekään ei tarvitse maksaa niiden kuuntelusta. Eikä kenenkään pidä vakoilla sinua, kun kuuntelet niitä.\n\nValitse YKSI kansio puhelimesta: ASD seuloo sen, laittaa kappaleet jonoon ja antaa sinun tehdä mixtapeja. Siinä kaikki.</string>
+    <string name="library_empty_hint">Heitä sinne muutama MP3-, WAV- tai FLAC-tiedosto ja paina Skannaa uudelleen ASETUKSISSA.</string>
+    <string name="volume_hint">Jokainen kappale mitataan kerran (EBU R128, kuten ReplayGain 2.0) ja soitetaan tasolla -18 LUFS: ei enää äänenvoimakkuuden hyppyjä MP3:sta toiseen. Kovempia kappaleita hiljennetään, joten nosta puhelimen ääntä hieman.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\n\"Streaming\" kulkee muististasi korviisi, eikä muuta.\n\n· Ei verkkoa: ASD ei mene nettiin eikä lähetä mitään kenellekään.\n· Ei tiliä, ei mainoksia, ei seurantaa.\n· Soittolistat asuvat puhelimessa. Niiden poistaminen ei koske tiedostoihin.\n· ASD ei koskaan poista tiedostojasi: jos haluat poistaa jonkin, käytä puhelinta.\n· Hinta: 0€. Ikuisesti.</string>
+</resources>

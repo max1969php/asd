@@ -209,7 +209,7 @@ fun TubeScreen(
     }
 }
 
-/** La select della destinazione: telefono o Drive. Quelle non pronte dicono cosa manca. */
+/** La select della destinazione: telefono, Drive o tutti e due. Quelle non pronte dicono cosa manca. */
 @Composable
 private fun DestinationSelect(
     options: List<DestinationOption>,
@@ -265,6 +265,7 @@ private fun DestinationSelect(
 private fun TubeDestination.label() = when (this) {
     TubeDestination.LOCAL -> stringResource(R.string.phone)
     TubeDestination.DRIVE -> "Google Drive"
+    TubeDestination.BOTH -> stringResource(R.string.phone) + " + Google Drive"
 }
 
 @Composable

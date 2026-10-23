@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<resources>
+    <string name="onboarding_intro">MP3 gị bụ nke gị ugbu a. Ịchọghị ịkwụ onye ọ bụla ụgwọ ka ị gee ha ntị. Ọ dịghịkwa onye kwesịrị ịnyocha gị nzuzo mgbe ị na-ege ha ntị.\n\nHọrọ OTU folda na ekwentị gị: ASD na-enyocha ya, na-ahazi egwu n\'usoro ma hapụ gị ka ị mee mixtape. Ọ bụ naanị ya.</string>
+    <string name="library_empty_hint">Tụba ụfọdụ faịlụ MP3, WAV ma ọ bụ FLAC n\'ime ya wee pịa Nyochaa ọzọ na NHAZI.</string>
+    <string name="volume_hint">A na-atụ egwu ọ bụla otu ugboro (EBU R128, dị ka ReplayGain 2.0) wee kpọọ ya na -18 LUFS: enwekwaghị mmeghe ụda site na otu MP3 gaa na nke ọzọ. A na-ebelata egwu ndị ruru elu, ya mere bulie ụda ekwentị gị nwa ntakịrị.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device (Ngwa Ntụgharị Egwu nke Ọgbaghara).\n\"Streaming\" si n\'ebe nchekwa gị gaa n\'ntị gị, ọ bụ nke ahụ.\n\n· Enweghị netwọk: ASD anaghị aga n\'ịntanetị, anaghịkwa ezigara onye ọ bụla ihe ọ bụla.\n· Enweghị akaụntụ, enweghị mgbasa ozi, enweghị nsochi.\n· Ndepụta egwu bi n\'ekwentị. Ihichapụ ha anaghị emetụ faịlụ aka.\n· ASD anaghị ehichapụ faịlụ gị ma ọlị: ọ bụrụ na ịchọrọ iwepụ otu, jiri ekwentị.\n· Ọnụahịa: 0€. Ruo mgbe ebighị ebi.</string>
+</resources>

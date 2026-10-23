@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<resources>
+    <string name="onboarding_intro">MP3-urile tale sunt deja ale tale. Nu trebuie să plătești pe nimeni ca să le asculți. Și nimeni nu trebuie să te spioneze cât timp le asculți.\n\nAlege UN folder de pe telefon: ASD îl cerne, pune piesele în ordine și te lasă să faci mixtape-uri. Atât.</string>
+    <string name="library_empty_hint">Aruncă acolo niște MP3, WAV sau FLAC și apasă Rescanează în SETUP.</string>
+    <string name="volume_hint">Fiecare piesă e măsurată o dată (EBU R128, ca ReplayGain 2.0) și cântată la -18 LUFS: gata cu săriturile de volum între MP3-uri. Piesele mai tari sunt coborâte, așa că dă puțin mai tare telefonul.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\n„Streamingul\" e din memoria ta în urechile tale, și atât.\n\n· Fără rețea: ASD nu iese pe internet și nu trimite nimic nimănui.\n· Fără cont, fără reclame, fără urmărire.\n· Playlisturile trăiesc în telefon. Ștergerea lor nu atinge fișierele.\n· ASD nu îți șterge niciodată fișierele: ca să scoți unul, folosește telefonul.\n· Cost: 0€. Pentru totdeauna.</string>
+</resources>

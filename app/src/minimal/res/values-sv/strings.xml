@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<resources>
+    <string name="onboarding_intro">Dina MP3-filer är redan dina. Du behöver inte betala någon för att lyssna på dem. Och ingen ska spionera på dig medan du lyssnar.\n\nVälj EN mapp på telefonen: ASD sållar igenom den, ställer upp låtarna och låter dig göra mixtapes. Klart.</string>
+    <string name="library_empty_hint">Släng in några MP3-, WAV- eller FLAC-filer och tryck på Skanna igen under INSTÄLLNINGAR.</string>
+    <string name="volume_hint">Varje låt mäts en gång (EBU R128, som ReplayGain 2.0) och spelas på -18 LUFS: inga fler volymhopp mellan olika MP3-filer. Högljudda låtar skruvas ner, så höj volymen på telefonen lite.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device.\n\"Streamingen\" går från ditt minne till dina öron, och det var allt.\n\n· Inget nät: ASD går inte ut på internet och skickar ingenting till någon.\n· Inget konto, inga reklamer, ingen spårning.\n· Spellistor bor på telefonen. Att ta bort dem rör inte filerna.\n· ASD raderar aldrig dina filer: vill du ta bort en, använd telefonen.\n· Kostnad: 0€. För evigt.</string>
+</resources>

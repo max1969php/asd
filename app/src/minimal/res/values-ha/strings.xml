@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Versione minimal: gli stessi testi senza Drive né TUBO. -->
+<resources>
+    <string name="onboarding_intro">Fayilolin MP3 ɗinka naka ne tun tuni. Ba sai ka biya kowa don ka saurare su ba. Kuma babu wanda ya kamata ya yi maka leƙen asiri yayin da kake sauraron su.\n\nZaɓi fayil ƊAYA a wayarka: ASD zai tankaɗe shi, ya jera waƙoƙi kuma ya bar ka ka yi mixtape. Shi ke nan.</string>
+    <string name="library_empty_hint">Jefa wasu fayilolin MP3, WAV ko FLAC a ciki sannan ka danna Sake bincika a SAITUNA.</string>
+    <string name="volume_hint">Ana auna kowace waƙa sau ɗaya (EBU R128, kamar ReplayGain 2.0) kuma a kunna ta a -18 LUFS: babu sauran tsallen sauti tsakanin MP3 da MP3. Ana rage waƙoƙin da suka fi ƙarfi, saboda haka ƙara sautin wayarka kaɗan.</string>
+    <string name="manifesto">ASD = Anarchic Streaming Device (Na\'urar Watsa Waƙa ta Hargitsi).\n\"Watsawa\" daga ma\'adanar wayarka zuwa kunnuwanka ne, shi ke nan.\n\n· Babu intanet: ASD ba ya shiga intanet kuma ba ya aika wa kowa komai.\n· Babu asusu, babu talla, babu bin diddiki.\n· Jerin waƙoƙi na zaune a waya. Share su ba ya taɓa fayilolin.\n· ASD ba ya taɓa goge fayilolinka: idan kana son cire ɗaya, yi amfani da wayar.\n· Farashi: 0€. Har abada.</string>
+</resources>
