@@ -17,6 +17,8 @@ data class ScannedFile(
     val mimeType: String?,
     val size: Long,
     val lastModified: Long,
+    /** Sottocartelle dalla cartella scelta al file: vuota = direttamente nella cartella. */
+    val folder: List<String> = emptyList(),
 )
 
 /**
@@ -27,11 +29,12 @@ class AudioScanner(private val resolver: ContentResolver) {
 
     fun scan(treeUri: Uri): List<ScannedFile> {
         val result = mutableListOf<ScannedFile>()
-        val pending = ArrayDeque<String>()
-        pending.add(DocumentsContract.getTreeDocumentId(treeUri))
+        // Ogni cartella da visitare con il suo percorso: gli id dei documenti non sempre lo contengono.
+        val pending = ArrayDeque<Pair<String, List<String>>>()
+        pending.add(DocumentsContract.getTreeDocumentId(treeUri) to emptyList())
 
         while (pending.isNotEmpty()) {
-            val parentId = pending.removeFirst()
+            val (parentId, path) = pending.removeFirst()
             val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, parentId)
             resolver.query(childrenUri, PROJECTION, null, null, null)?.use { cursor ->
                 while (cursor.moveToNext()) {
@@ -39,7 +42,7 @@ class AudioScanner(private val resolver: ContentResolver) {
                     val name = cursor.getString(1) ?: continue
                     val mime = cursor.getString(2)
                     if (mime == Document.MIME_TYPE_DIR) {
-                        pending.add(docId)
+                        pending.add(docId to path + name)
                     } else if (isSupported(name)) {
                         result += ScannedFile(
                             uri = DocumentsContract.buildDocumentUriUsingTree(treeUri, docId).toString(),
@@ -47,6 +50,7 @@ class AudioScanner(private val resolver: ContentResolver) {
                             mimeType = mime,
                             size = if (cursor.isNull(3)) 0 else cursor.getLong(3),
                             lastModified = if (cursor.isNull(4)) 0 else cursor.getLong(4),
+                            folder = path,
                         )
                     }
                 }
@@ -94,10 +98,11 @@ class AudioScanner(private val resolver: ContentResolver) {
                     mimeType = c.getString(2) ?: mimeType,
                     size = c.getLong(3),
                     lastModified = c.getLong(4),
+                    folder = dirs,
                 )
             }
         }
-        return ScannedFile(uri.toString(), displayName, mimeType, 0L, System.currentTimeMillis())
+        return ScannedFile(uri.toString(), displayName, mimeType, 0L, System.currentTimeMillis(), dirs)
     }
 
     /** Id della sottocartella [name] di [parentId]; se non c'è la crea. */

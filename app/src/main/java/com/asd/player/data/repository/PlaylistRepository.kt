@@ -10,6 +10,9 @@ interface PlaylistRepository {
     suspend fun create(name: String): Long
     suspend fun rename(id: Long, name: String)
     suspend fun delete(id: Long)
+
+    /** Toglie i mixtape rimasti senza brani (es. dopo il cambio di cartella in SETUP). */
+    suspend fun deleteEmpty()
     suspend fun addSongs(id: Long, songIds: List<Long>)
     suspend fun removeAt(id: Long, index: Int)
     suspend fun move(id: Long, from: Int, to: Int)

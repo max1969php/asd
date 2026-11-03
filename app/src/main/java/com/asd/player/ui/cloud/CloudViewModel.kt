@@ -60,6 +60,11 @@ abstract class CloudViewModel(
 
     protected open fun forget(email: String) {}
 
+    init {
+        // Brani indicizzati da una versione che non ricordava le cartelle: una riscansione le trova.
+        viewModelScope.launch { if (library.needsFolders(source)) rescan() }
+    }
+
     /**
      * Dalla select in SETUP: cambia l'account predefinito. Riscegliere lo stesso account non è
      * un no-op: rinnova l'autorizzazione e riscansiona.

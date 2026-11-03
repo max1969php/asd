@@ -16,6 +16,8 @@ data class Song(
     val source: SongSource = SongSource.LOCAL,
     /** Volume percepito misurato (LUFS), null finché non è stato analizzato. */
     val loudnessLufs: Double? = null,
+    /** Sottocartelle dalla cartella scelta al file: vuota = direttamente nella cartella. */
+    val folder: List<String> = emptyList(),
 ) {
     /** Estensione in maiuscolo (MP3, WAV, ...), usata per il filtro per formato. */
     val format: String

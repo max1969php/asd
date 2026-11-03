@@ -25,6 +25,9 @@ interface MusicLibraryRepository {
     /** Aggiunge un singolo brano appena comparso in una fonte (es. caricato su Drive dal Tubo). */
     suspend fun add(file: ScannedFile, metadata: AudioMetadata, source: SongSource)
 
+    /** Ci sono brani di [source] indicizzati prima che ASD ricordasse le cartelle? */
+    suspend fun needsFolders(source: SongSource): Boolean
+
     /** Brani di cui non si conosce ancora il volume percepito. */
     suspend fun unmeasured(): List<Song>
 

@@ -24,10 +24,17 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
 
 ## Cosa fa
 
-- **Roba**: la lista dei brani della cartella scelta (anche nelle sottocartelle), con ricerca
-  su titolo, artista, album e nome file, filtri per formato e artista e ordinamento
-  per titolo, artista, album, durata o data, crescente o decrescente. Tieni premuto un brano
-  per metterlo in un mixtape.
+- **Roba**: la cartella scelta come cartelle: senza sottocartelle si vedono solo i file audio,
+  altrimenti prima le sottocartelle (toccandone una ci si entra, con la stessa regola, a ogni
+  profondità) e poi i file di quel livello; `..`, il percorso in alto o Indietro per risalire.
+  Nella full, con brani sia del telefono sia di Drive, alla radice le due fonti sono due cartelle.
+  "Tutto" e "Caos" suonano tutto quello che c'è dalla cartella aperta in giù. Ricerca su titolo,
+  artista, album e nome file, filtri per formato e artista: con ricerca o filtri attivi niente
+  cartelle, i risultati di tutto l'albero sotto la cartella aperta. Ordinamento per titolo,
+  artista, album, durata o data, crescente o decrescente. Tieni premuto un brano per metterlo in
+  un mixtape: un mixtape può avere brani di cartelle diverse e non cambia quando ci si sposta tra
+  le cartelle. Cambiando cartella in SETUP i brani della vecchia escono dai mixtape e i mixtape
+  rimasti vuoti spariscono.
 - **Mixtape**: le playlist. Puoi crearle, rinominarle, eliminarle (i file audio restano dove sono),
   riordinare i brani, toglierli e riprodurre tutto in ordine o in modalità "Caos" (shuffle).
 - **Player**: mini-player sempre visibile e schermata completa con seek, shuffle e repeat.

@@ -19,6 +19,8 @@ import com.asd.player.domain.model.Playlist
 import com.asd.player.domain.model.Song
 import com.asd.player.domain.model.SongSource
 import com.asd.player.domain.model.SortOrder
+import com.asd.player.domain.usecase.FolderEntry
+import com.asd.player.domain.usecase.FolderPath
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +38,12 @@ data class LibraryUiState(
     val directoryUri: Uri? = null,
     val totalCount: Int = 0,
     val countBySource: Map<SongSource, Int> = emptyMap(),
+    /** I file della cartella corrente (o i risultati di ricerca e filtri). */
     val songs: List<Song> = emptyList(),
+    val folders: List<FolderEntry> = emptyList(),
+    val path: FolderPath = FolderPath(),
+    /** Tutto quello che c'è da qui in giù: lo suonano "suona tutto" e "shuffle". */
+    val below: List<Song> = emptyList(),
     val formats: List<String> = emptyList(),
     val sources: List<SongSource> = emptyList(),
     val artists: List<String> = emptyList(),
@@ -55,10 +62,13 @@ class LibraryViewModel(
     private val repository = container.libraryRepository
     private val filters = MutableStateFlow(LibraryQuery())
 
+    /** La cartella aperta in ROBA. Cambiarla non tocca i mixtape. */
+    private val path = MutableStateFlow(FolderPath())
+
     private val query = combine(filters, settings.sortOrder) { f, sort -> f.copy(sort = sort) }
 
-    private val catalog = combine(repository.songs, query) { all, q ->
-        Triple(all, q, container.searchSongs(all, q))
+    private val catalog = combine(repository.songs, query, path) { all, q, p ->
+        Triple(all, q, container.browseFolder(all, p, q))
     }.flowOn(Dispatchers.Default)
 
     val uiState: StateFlow<LibraryUiState> = combine(
@@ -66,12 +76,15 @@ class LibraryViewModel(
         settings.directoryUri,
         repository.scanState,
         settings.lastScanAt,
-    ) { (all, q, filtered), dir, scan, lastScan ->
+    ) { (all, q, view), dir, scan, lastScan ->
         LibraryUiState(
             directoryUri = dir,
             totalCount = all.size,
             countBySource = all.groupingBy { it.source }.eachCount(),
-            songs = filtered,
+            songs = view.songs,
+            folders = view.folders,
+            path = view.path,
+            below = view.below,
             // Anche i valori selezionati che non esistono più restano visibili come chip:
             // altrimenti il filtro resterebbe attivo senza modo di toglierlo.
             formats = (all.mapTo(sortedSetOf()) { it.format } + q.formats).sorted(),
@@ -90,9 +103,26 @@ class LibraryViewModel(
     init {
         // Primo avvio dopo l'installazione o cartella appena scelta ma mai scansionata.
         settings.directoryUri.value?.let { dir ->
-            if (settings.lastScanAt.value == 0L) rescan(dir)
+            if (settings.lastScanAt.value == 0L) {
+                rescan(dir)
+            } else {
+                // Brani indicizzati da una versione che non ricordava le cartelle: una riscansione le trova.
+                viewModelScope.launch { if (repository.needsFolders(SongSource.LOCAL)) rescan(dir) }
+            }
         }
     }
+
+    fun openFolder(folder: FolderEntry) = path.update {
+        val shown = uiState.value.path
+        if (folder.source != null) FolderPath(folder.source) else shown.copy(dirs = shown.dirs + folder.name)
+    }
+
+    fun goUp() = path.update { uiState.value.path.up() }
+
+    /** Dal percorso in alto: [depth] cartelle sotto la radice della fonte (0 = la radice). */
+    fun goTo(depth: Int) = path.update { uiState.value.path.let { it.copy(dirs = it.dirs.take(depth)) } }
+
+    fun goToRoot() = path.update { FolderPath() }
 
     /**
      * Testo del campo CERCA_, aggiornato in modo sincrono a ogni tasto. Il campo non deve leggere
@@ -134,6 +164,7 @@ class LibraryViewModel(
         // Anche scrittura: il TUBO può salvare l'audio scaricato in questa cartella.
         val read = Intent.FLAG_GRANT_READ_URI_PERMISSION
         val write = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        val changed = settings.directoryUri.value.let { it != null && it != uri }
         settings.directoryUri.value?.takeIf { it != uri }?.let { old ->
             // Le cartelle scelte con le versioni precedenti hanno solo la lettura: si rilasciano separatamente.
             runCatching { resolver.releasePersistableUriPermission(old, read or write) }
@@ -141,15 +172,21 @@ class LibraryViewModel(
         }
         resolver.takePersistableUriPermission(uri, read or write)
         settings.setDirectory(uri)
-        rescan(uri)
+        path.value = FolderPath()
+        viewModelScope.launch {
+            // Cartella nuova: i brani della vecchia escono dai mixtape, e i mixtape rimasti vuoti spariscono.
+            if (scan(uri) && changed) container.playlistRepository.deleteEmpty()
+        }
     }
 
     fun rescan(uri: Uri? = settings.directoryUri.value) {
         uri ?: return
-        viewModelScope.launch {
-            val scanner = LocalSourceScanner(uri, container.audioScanner, container.metadataReader)
-            if (repository.rescan(scanner)) settings.setLastScanAt(System.currentTimeMillis())
-        }
+        viewModelScope.launch { scan(uri) }
+    }
+
+    private suspend fun scan(uri: Uri): Boolean {
+        val scanner = LocalSourceScanner(uri, container.audioScanner, container.metadataReader)
+        return repository.rescan(scanner).also { if (it) settings.setLastScanAt(System.currentTimeMillis()) }
     }
 
     private val _messages = MutableSharedFlow<String>(extraBufferCapacity = 4)

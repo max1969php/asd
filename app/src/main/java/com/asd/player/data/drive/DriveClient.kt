@@ -38,17 +38,19 @@ class DriveClient(private val auth: DriveAuth) {
     /** Visita ricorsiva della cartella: restituisce solo i file audio della whitelist. */
     fun scanAudio(email: String, folderId: String): List<ScannedFile> {
         val result = mutableListOf<ScannedFile>()
-        val pending = ArrayDeque(listOf(folderId))
+        val pending = ArrayDeque(listOf(folderId to emptyList<String>()))
         while (pending.isNotEmpty()) {
-            listChildren(email, pending.removeFirst(), foldersOnly = false).forEach { file ->
+            val (id, path) = pending.removeFirst()
+            listChildren(email, id, foldersOnly = false).forEach { file ->
                 when {
-                    file.isFolder -> pending.add(file.id)
+                    file.isFolder -> pending.add(file.id to path + file.name)
                     AudioScanner.isSupported(file.name) -> result += ScannedFile(
                         uri = uriFor(file.id),
                         fileName = file.name,
                         mimeType = file.mimeType,
                         size = file.size,
                         lastModified = file.modifiedAt,
+                        folder = path,
                     )
                 }
             }

@@ -1,5 +1,6 @@
 package com.asd.player.ui.library
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,12 +17,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material3.DropdownMenu
@@ -41,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.asd.player.R
 import com.asd.player.data.repository.ScanState
@@ -48,6 +52,7 @@ import com.asd.player.domain.model.Playlist
 import com.asd.player.domain.model.Song
 import com.asd.player.domain.model.SongSource
 import com.asd.player.domain.model.SortField
+import com.asd.player.domain.usecase.FolderPath
 import com.asd.player.ui.components.AnarchyLogo
 import com.asd.player.ui.components.PunkButton
 import com.asd.player.ui.components.SongRow
@@ -68,40 +73,58 @@ fun LibraryScreen(
     var songForPlaylist by remember { mutableStateOf<Song?>(null) }
     val listState = rememberLazyListState()
 
+    // Indietro risale di una cartella; dalla radice esce come sempre.
+    BackHandler(enabled = !state.path.isRoot) { viewModel.goUp() }
+
     Column(modifier.fillMaxSize()) {
         LibraryHeader(total = state.totalCount, slogan = slogan)
         SearchBox(text = viewModel.searchText, onTextChange = viewModel::setText)
         FilterBar(state, viewModel)
         ScanBanner(state.scanState)
+        if (!state.path.isRoot) Breadcrumb(state.path, viewModel)
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
         ) {
             Text(
-                stringResource(R.string.library_count, state.songs.size, state.totalCount),
+                stringResource(R.string.library_count, state.below.size, state.totalCount),
                 style = MaterialTheme.typography.labelMedium,
                 color = Asd.Smudge,
                 modifier = Modifier.weight(1f),
             )
-            PunkButton(stringResource(R.string.play_all), onClick = { viewModel.play(state.songs, 0) }, icon = Icons.Filled.PlayArrow, enabled = state.songs.isNotEmpty())
+            PunkButton(stringResource(R.string.play_all), onClick = { viewModel.play(state.below, 0) }, icon = Icons.Filled.PlayArrow, enabled = state.below.isNotEmpty())
             Spacer(Modifier.width(8.dp))
             PunkButton(
                 stringResource(R.string.shuffle_button),
-                onClick = { viewModel.shuffle(state.songs) },
+                onClick = { viewModel.shuffle(state.below) },
                 icon = Icons.Filled.Shuffle,
                 container = Asd.Spray,
                 content = Asd.Paper,
                 shadow = Asd.Paper,
-                enabled = state.songs.isNotEmpty(),
+                enabled = state.below.isNotEmpty(),
             )
         }
         HorizontalDivider(thickness = 2.dp, color = Asd.Paper)
 
-        if (state.loaded && state.songs.isEmpty()) {
+        if (state.loaded && state.songs.isEmpty() && state.folders.isEmpty()) {
             EmptyLibrary(hasSongs = state.totalCount > 0, scanning = state.scanState is ScanState.Scanning, onClear = viewModel::clearFilters)
         } else {
             LazyColumn(state = listState, modifier = Modifier.fillMaxSize()) {
+                if (!state.path.isRoot) {
+                    item(key = "dir:..") {
+                        FolderRow(name = "..", count = null, onClick = viewModel::goUp)
+                        HorizontalDivider(color = Asd.Concrete)
+                    }
+                }
+                items(state.folders, key = { "dir:${it.source}:${it.name}" }) { folder ->
+                    FolderRow(
+                        name = folder.source?.label() ?: folder.name,
+                        count = folder.songCount,
+                        onClick = { viewModel.openFolder(folder) },
+                    )
+                    HorizontalDivider(color = Asd.Concrete)
+                }
                 itemsIndexed(state.songs, key = { _, song -> song.id }) { index, song ->
                     SongRow(
                         song = song,
@@ -129,6 +152,67 @@ fun LibraryScreen(
                 null
             },
         )
+    }
+}
+
+/** Il percorso della cartella aperta: ogni pezzo riporta lì. */
+@Composable
+private fun Breadcrumb(path: FolderPath, viewModel: LibraryViewModel) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+            .padding(horizontal = 8.dp, vertical = 2.dp),
+    ) {
+        Crumb("/", onClick = viewModel::goToRoot)
+        path.source?.let { source ->
+            Crumb(source.label(), onClick = { viewModel.goTo(0) })
+            if (path.dirs.isNotEmpty()) Slash()
+        }
+        path.dirs.forEachIndexed { i, dir ->
+            Crumb(dir, onClick = { viewModel.goTo(i + 1) }, current = i == path.dirs.lastIndex)
+            if (i < path.dirs.lastIndex) Slash()
+        }
+    }
+}
+
+@Composable
+private fun Crumb(text: String, onClick: () -> Unit, current: Boolean = false) {
+    Text(
+        text.uppercase(),
+        style = MaterialTheme.typography.labelMedium,
+        color = if (current) Asd.Acid else Asd.Paper,
+        modifier = Modifier.clickable(onClick = onClick).padding(horizontal = 4.dp, vertical = 6.dp),
+    )
+}
+
+@Composable
+private fun Slash() {
+    Text("/", style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
+}
+
+@Composable
+private fun FolderRow(name: String, count: Int?, onClick: () -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Asd.Toner)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+    ) {
+        Icon(Icons.Filled.Folder, contentDescription = null, tint = Asd.Spray, modifier = Modifier.size(20.dp))
+        Spacer(Modifier.width(12.dp))
+        Text(
+            name.uppercase(),
+            style = MaterialTheme.typography.titleMedium,
+            color = Asd.Paper,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f),
+        )
+        count?.let { Text(it.toString(), style = MaterialTheme.typography.labelSmall, color = Asd.Smudge) }
     }
 }
 

@@ -17,6 +17,7 @@ import com.asd.player.data.settings.SettingsStore
 import com.asd.player.data.tube.TubeCookies
 import com.asd.player.data.tube.TubeDownloader
 import com.asd.player.data.tube.TubeImporter
+import com.asd.player.domain.usecase.BrowseFolder
 import com.asd.player.domain.usecase.SearchSongs
 import com.asd.player.playback.CloudStreamResolver
 import com.asd.player.playback.PlaybackController
@@ -45,4 +46,5 @@ class AppContainer(context: Context) {
     ).also { it.start() }
     val playbackController = PlaybackController(context)
     val searchSongs = SearchSongs()
+    val browseFolder = BrowseFolder(searchSongs)
 }

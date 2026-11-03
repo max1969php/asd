@@ -19,6 +19,10 @@ interface SongDao {
     @Insert
     suspend fun insertAll(songs: List<SongEntity>)
 
+    /** Brani indicizzati prima delle cartelle: la riscansione gliele assegna. */
+    @Query("SELECT COUNT(*) FROM songs WHERE source = :source AND folder IS NULL")
+    suspend fun countWithoutFolder(source: String): Int
+
     @Query("SELECT * FROM songs WHERE loudnessLufs IS NULL")
     suspend fun getUnmeasured(): List<SongEntity>
 

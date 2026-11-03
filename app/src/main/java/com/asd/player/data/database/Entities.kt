@@ -24,16 +24,27 @@ data class SongEntity(
     /** Loudness integrata EBU R128; null = ancora da misurare, [LOUDNESS_FAILED] = illeggibile. */
     val loudnessLufs: Double? = null,
     val peakDb: Double? = null,
+    /** Sottocartelle unite da [FOLDER_SEPARATOR]; null = brano indicizzato prima delle cartelle. */
+    val folder: String? = null,
 ) {
     fun toDomain() = Song(
         id, uri, fileName, title, artist, album, durationMs, mimeType, fileSize, modifiedAt,
         source = runCatching { SongSource.valueOf(source) }.getOrDefault(SongSource.LOCAL),
         loudnessLufs = loudnessLufs?.takeIf { it != LOUDNESS_FAILED },
+        folder = decodeFolder(folder),
     )
 
     companion object {
         /** Segnaposto per i file che non si riescono a decodificare: non li riproviamo a ogni avvio. */
         const val LOUDNESS_FAILED = 999.0
+
+        /** Su Drive un nome di cartella può contenere "/": serve un separatore che nei nomi non c'è. */
+        private const val FOLDER_SEPARATOR = '\u001F'
+
+        fun encodeFolder(folder: List<String>): String = folder.joinToString(FOLDER_SEPARATOR.toString())
+
+        fun decodeFolder(folder: String?): List<String> =
+            if (folder.isNullOrEmpty()) emptyList() else folder.split(FOLDER_SEPARATOR)
     }
 }
 

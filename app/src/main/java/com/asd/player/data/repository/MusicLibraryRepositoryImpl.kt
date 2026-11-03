@@ -48,6 +48,13 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
                     val old = existing[file.uri]
                     old == null || old.fileSize != file.size || old.modifiedAt != file.lastModified
                 }
+                // Stesso file, cartella diversa (o mai salvata): basta aggiornarla, i tag restano quelli.
+                val changedUris = changed.mapTo(HashSet()) { it.uri }
+                val moved = files.mapNotNull { file ->
+                    val old = existing[file.uri] ?: return@mapNotNull null
+                    val folder = SongEntity.encodeFolder(file.folder)
+                    old.takeIf { file.uri !in changedUris && it.folder != folder }?.copy(folder = folder)
+                }
                 val processed = AtomicInteger(files.size - changed.size)
                 _scanState.value = ScanState.Scanning(source, processed.get(), files.size)
 
@@ -66,7 +73,7 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
 
                 val foundUris = files.mapTo(HashSet()) { it.uri }
                 val toDelete = existing.values.filter { it.uri !in foundUris }.map { it.id }
-                songDao.applyScan(toInsert, toUpdate, toDelete)
+                songDao.applyScan(toInsert, toUpdate + moved, toDelete)
                 _scanState.value = ScanState.Done(source, toInsert.size, toUpdate.size, toDelete.size)
                 true
             } catch (e: SecurityException) {
@@ -84,6 +91,10 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
 
     override suspend fun add(file: ScannedFile, metadata: AudioMetadata, source: SongSource) =
         withContext(Dispatchers.IO) { songDao.upsert(entityOf(file, metadata, source)) }
+
+    override suspend fun needsFolders(source: SongSource): Boolean = withContext(Dispatchers.IO) {
+        songDao.countWithoutFolder(source.name) > 0
+    }
 
     override suspend fun unmeasured(): List<Song> = withContext(Dispatchers.IO) {
         songDao.getUnmeasured().map { it.toDomain() }
@@ -116,6 +127,7 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
             fileSize = file.size,
             modifiedAt = file.lastModified,
             source = source.name,
+            folder = SongEntity.encodeFolder(file.folder),
         )
     }
 }

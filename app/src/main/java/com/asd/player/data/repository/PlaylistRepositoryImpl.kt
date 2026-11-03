@@ -34,6 +34,8 @@ class PlaylistRepositoryImpl(private val dao: PlaylistDao) : PlaylistRepository 
 
     override suspend fun delete(id: Long) = dao.deletePlaylist(id)
 
+    override suspend fun deleteEmpty() = dao.deleteEmpty()
+
     override suspend fun addSongs(id: Long, songIds: List<Long>) {
         edit(id) { it + songIds }
     }
