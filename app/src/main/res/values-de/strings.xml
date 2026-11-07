@@ -87,6 +87,10 @@
     <string name="previous">Zurück</string>
     <string name="next">Weiter</string>
     <string name="repeat">Wiederholen</string>
+    <string name="sleep_timer">Sleep-Timer</string>
+    <string name="sleep_minutes">%1$d Min.</string>
+    <string name="sleep_end_of_song">Am Ende des Titels</string>
+    <string name="sleep_off">Timer ausschalten</string>
     <string name="pause">Pause</string>
     <string name="settings_subtitle">wenige Regler, kein Vertrag</string>
     <string name="none_f">keiner</string>

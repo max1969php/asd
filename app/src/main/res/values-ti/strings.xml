@@ -87,6 +87,10 @@
     <string name="previous">ዝሓለፈ</string>
     <string name="next">ዝቕጽል</string>
     <string name="repeat">ደግም</string>
+    <string name="sleep_timer">ናይ ምጥፋእ ሰዓት</string>
+    <string name="sleep_minutes">%1$d ደቒቕ</string>
+    <string name="sleep_end_of_song">ኣብ መወዳእታ ደርፊ</string>
+    <string name="sleep_off">ሰዓት ኣጥፍእ</string>
     <string name="pause">ኣቋርጽ</string>
     <string name="settings_subtitle">ብዙሕ ዘይኮነ መቆጻጸርታት፣ ውዕል የለን</string>
     <string name="none_f">የለን</string>

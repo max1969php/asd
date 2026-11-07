@@ -17,7 +17,10 @@ object AsdViewModels {
             val app = this[APPLICATION_KEY] as MusicApplication
             LibraryViewModel(app, app.container)
         }
-        initializer { PlayerViewModel((this[APPLICATION_KEY] as MusicApplication).container.playbackController) }
+        initializer {
+            val container = (this[APPLICATION_KEY] as MusicApplication).container
+            PlayerViewModel(container.playbackController, container.sleepTimer)
+        }
         initializer {
             val container = (this[APPLICATION_KEY] as MusicApplication).container
             PlaylistsViewModel(container.playlistRepository, container.playbackController)

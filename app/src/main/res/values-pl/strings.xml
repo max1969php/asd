@@ -87,6 +87,10 @@
     <string name="previous">Poprzedni</string>
     <string name="next">Następny</string>
     <string name="repeat">Powtarzaj</string>
+    <string name="sleep_timer">Wyłącznik czasowy</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">Na końcu utworu</string>
+    <string name="sleep_off">Wyłącz minutnik</string>
     <string name="pause">Pauza</string>
     <string name="settings_subtitle">mało pokręteł, zero umów</string>
     <string name="none_f">brak</string>

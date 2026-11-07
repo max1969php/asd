@@ -87,6 +87,10 @@
     <string name="previous">Forrige</string>
     <string name="next">Næste</string>
     <string name="repeat">Gentag</string>
+    <string name="sleep_timer">Sleep-timer</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">Når nummeret slutter</string>
+    <string name="sleep_off">Slå timeren fra</string>
     <string name="pause">Pause</string>
     <string name="settings_subtitle">få knapper, ingen kontrakt</string>
     <string name="none_f">ingen</string>

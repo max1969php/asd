@@ -4,22 +4,28 @@ import com.asd.player.data.database.PlaylistDao
 import com.asd.player.data.database.PlaylistEntity
 import com.asd.player.domain.model.Playlist
 import com.asd.player.domain.model.PlaylistWithSongs
+import com.asd.player.domain.model.Song
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 
-class PlaylistRepositoryImpl(private val dao: PlaylistDao) : PlaylistRepository {
+/** [librarySongs]: i brani con i nomi già puliti, gli stessi che si vedono in ROBA. */
+class PlaylistRepositoryImpl(
+    private val dao: PlaylistDao,
+    private val librarySongs: Flow<List<Song>>,
+) : PlaylistRepository {
 
     override val playlists: Flow<List<Playlist>> = dao.observeSummaries().map { rows ->
         rows.map { Playlist(it.id, it.name, it.songCount, it.createdAt, it.updatedAt) }
     }
 
     override fun observePlaylist(id: Long): Flow<PlaylistWithSongs?> =
-        combine(dao.observePlaylist(id), dao.observeSongs(id)) { playlist, songs ->
+        combine(dao.observePlaylist(id), dao.observeSongs(id), librarySongs) { playlist, songs, library ->
             playlist?.let {
+                val byId = library.associateBy { song -> song.id }
                 PlaylistWithSongs(
                     Playlist(it.id, it.name, songs.size, it.createdAt, it.updatedAt),
-                    songs.map { song -> song.toDomain() },
+                    songs.map { song -> byId[song.id] ?: song.toDomain() },
                 )
             }
         }

@@ -88,6 +88,10 @@
     <string name="previous">Precedente</string>
     <string name="next">Successivo</string>
     <string name="repeat">Ripeti</string>
+    <string name="sleep_timer">Timer di spegnimento</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">A fine pezzo</string>
+    <string name="sleep_off">Spegni il timer</string>
     <string name="pause">Pausa</string>
     <string name="settings_subtitle">poche manopole, nessun contratto</string>
     <string name="none_f">nessuna</string>

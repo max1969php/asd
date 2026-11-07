@@ -34,12 +34,23 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
   artista, album, durata o data, crescente o decrescente. Tieni premuto un brano per metterlo in
   un mixtape: un mixtape può avere brani di cartelle diverse e non cambia quando ci si sposta tra
   le cartelle. Cambiando cartella in SETUP i brani della vecchia escono dai mixtape e i mixtape
-  rimasti vuoti spariscono.
+  rimasti vuoti spariscono. Alla riapertura ROBA torna nella cartella e nel punto della lista
+  dov'eri.
+- **Nomi puliti** (`SongNames`, solo quello che si vede: i file non si toccano): via i numeri di
+  catalogazione in testa (`001 - `, `01. `, `1) `, `(03) `, `CD1-03 `) e le code dei download
+  (`(Official Video)`, `[HD]`, `(Lyric Video)`, `(Video ufficiale)`…), e " - Topic" dagli artisti.
+  Si toglie solo un numero di traccia (una o due cifre, o con lo zero davanti): "1979",
+  "2000 miglia", "883", "99 Luftballons" restano. Senza tag artista e titolo vengono dal nome
+  file: con `A - B` l'artista è la parte che torna in altri brani (come artista dei tag o in altri
+  nomi file); se nessuna delle due torna vale "Artista - Titolo". Nel database restano i nomi grezzi
+  (tag o nome file): la pulizia si rifà a ogni lettura della libreria.
 - **Mixtape**: le playlist. Puoi crearle, rinominarle, eliminarle (i file audio restano dove sono),
   riordinare i brani, toglierli e riprodurre tutto in ordine o in modalità "Caos" (shuffle).
 - **Player**: mini-player sempre visibile e schermata completa con seek, shuffle e repeat.
   La riproduzione continua in background, con i controlli nella notifica, nella lock screen
-  e sulle cuffie.
+  e sulle cuffie. Alla riapertura riparte dall'ultimo ascolto (stessa coda, pezzo e punto, in
+  pausa: `PlaybackMemory`, la coda in un file dell'app). Timer di spegnimento (icona luna in alto
+  nel player): 15, 30, 60 minuti o a fine pezzo; negli ultimi 10 secondi il volume sfuma, poi pausa.
 - **Lingue**: italiano di base più tutte le altre lingue dell'UE, norvegese, ucraino, cinese
   semplificato, hindi, arabo, farsi, swahili, wolof, hausa, yoruba, igbo, amarico, tigrino e somalo
   (38 in tutto). Si sceglie in SETUP → Lingua

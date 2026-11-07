@@ -87,6 +87,10 @@
     <string name="previous">Előző</string>
     <string name="next">Következő</string>
     <string name="repeat">Ismétlés</string>
+    <string name="sleep_timer">Elalvási időzítő</string>
+    <string name="sleep_minutes">%1$d perc</string>
+    <string name="sleep_end_of_song">A szám végén</string>
+    <string name="sleep_off">Időzítő kikapcsolása</string>
     <string name="pause">Szünet</string>
     <string name="settings_subtitle">kevés gomb, semmi szerződés</string>
     <string name="none_f">nincs</string>

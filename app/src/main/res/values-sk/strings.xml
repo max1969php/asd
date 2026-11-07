@@ -87,6 +87,10 @@
     <string name="previous">Predchádzajúca</string>
     <string name="next">Ďalšia</string>
     <string name="repeat">Opakovať</string>
+    <string name="sleep_timer">Časovač vypnutia</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">Na konci skladby</string>
+    <string name="sleep_off">Vypnúť časovač</string>
     <string name="pause">Pauza</string>
     <string name="settings_subtitle">pár gombíkov, žiadna zmluva</string>
     <string name="none_f">žiadny</string>

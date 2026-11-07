@@ -87,6 +87,10 @@
     <string name="previous">पिछला</string>
     <string name="next">अगला</string>
     <string name="repeat">दोहराएँ</string>
+    <string name="sleep_timer">स्लीप टाइमर</string>
+    <string name="sleep_minutes">%1$d मिनट</string>
+    <string name="sleep_end_of_song">गाने के अंत में</string>
+    <string name="sleep_off">टाइमर बंद करें</string>
     <string name="pause">रोकें</string>
     <string name="settings_subtitle">गिनती के नॉब, कोई अनुबंध नहीं</string>
     <string name="none_f">कोई नहीं</string>

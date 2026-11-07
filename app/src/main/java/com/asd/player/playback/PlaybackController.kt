@@ -2,10 +2,7 @@ package com.asd.player.playback
 
 import android.content.ComponentName
 import android.content.Context
-import android.net.Uri
 import androidx.core.content.ContextCompat
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
@@ -146,21 +143,5 @@ class PlaybackController(private val context: Context) {
             hasNext = player.hasNextMediaItem(),
             hasPrevious = player.hasPreviousMediaItem(),
         )
-    }
-
-    private fun Song.toMediaItem(): MediaItem {
-        val parsed = Uri.parse(uri)
-        return MediaItem.Builder()
-            .setMediaId(uri)
-            .setUri(parsed)
-            .setRequestMetadata(MediaItem.RequestMetadata.Builder().setMediaUri(parsed).build())
-            .setMediaMetadata(
-                MediaMetadata.Builder()
-                    .setTitle(title)
-                    .setArtist(artist)
-                    .setAlbumTitle(album)
-                    .build()
-            )
-            .build()
     }
 }

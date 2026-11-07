@@ -87,6 +87,10 @@
     <string name="previous">Anterioara</string>
     <string name="next">Următoarea</string>
     <string name="repeat">Repetă</string>
+    <string name="sleep_timer">Temporizator de oprire</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">La sfârșitul piesei</string>
+    <string name="sleep_off">Oprește temporizatorul</string>
     <string name="pause">Pauză</string>
     <string name="settings_subtitle">puține butoane, niciun contract</string>
     <string name="none_f">niciunul</string>

@@ -87,6 +87,10 @@
     <string name="previous">السابق</string>
     <string name="next">التالي</string>
     <string name="repeat">تكرار</string>
+    <string name="sleep_timer">مؤقت الإيقاف</string>
+    <string name="sleep_minutes">%1$d د</string>
+    <string name="sleep_end_of_song">في نهاية الأغنية</string>
+    <string name="sleep_off">إلغاء المؤقت</string>
     <string name="pause">إيقاف مؤقت</string>
     <string name="settings_subtitle">مفاتيح قليلة، بلا عقد</string>
     <string name="none_f">لا شيء</string>

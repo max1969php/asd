@@ -87,6 +87,10 @@
     <string name="previous">Gara aga</string>
     <string name="next">Na-esote</string>
     <string name="repeat">Megharịa</string>
+    <string name="sleep_timer">Oge mgbanyụ</string>
+    <string name="sleep_minutes">nkeji %1$d</string>
+    <string name="sleep_end_of_song">Na njedebe egwu</string>
+    <string name="sleep_off">Gbanyụọ oge</string>
     <string name="pause">Kwụsị</string>
     <string name="settings_subtitle">ọkpọ ole na ole, enweghị nkwekọrịta</string>
     <string name="none_f">enweghị</string>

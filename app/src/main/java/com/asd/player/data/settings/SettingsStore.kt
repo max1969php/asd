@@ -136,6 +136,33 @@ class SettingsStore(context: Context) {
         _lastScanAt.value = timestamp
     }
 
+    /** Cartella aperta in ROBA e posizione nella lista, per ritrovarle alla riapertura. */
+    data class LibraryPlace(
+        val source: String? = null,
+        val dirs: List<String> = emptyList(),
+        val index: Int = 0,
+        val offset: Int = 0,
+    )
+
+    val libraryPlace: LibraryPlace
+        get() {
+            val parts = prefs.getString(KEY_LIBRARY_PATH, null)?.split(SEPARATOR) ?: return LibraryPlace()
+            return LibraryPlace(
+                source = parts.first().ifEmpty { null },
+                dirs = parts.drop(1),
+                index = prefs.getInt(KEY_LIBRARY_INDEX, 0),
+                offset = prefs.getInt(KEY_LIBRARY_OFFSET, 0),
+            )
+        }
+
+    fun setLibraryPlace(place: LibraryPlace) {
+        prefs.edit()
+            .putString(KEY_LIBRARY_PATH, (listOf(place.source.orEmpty()) + place.dirs).joinToString(SEPARATOR))
+            .putInt(KEY_LIBRARY_INDEX, place.index)
+            .putInt(KEY_LIBRARY_OFFSET, place.offset)
+            .apply()
+    }
+
     fun setSortOrder(order: SortOrder) {
         prefs.edit().putString(KEY_SORT_FIELD, order.field.name).putBoolean(KEY_SORT_ASC, order.ascending).apply()
         _sortOrder.value = order
@@ -148,5 +175,10 @@ class SettingsStore(context: Context) {
         const val KEY_SORT_ASC = "sort_asc"
         const val KEY_TUBE_DESTINATION = "tube_destination"
         const val KEY_NORMALIZE_VOLUME = "normalize_volume"
+        const val KEY_LIBRARY_PATH = "library_path"
+        const val KEY_LIBRARY_INDEX = "library_index"
+        const val KEY_LIBRARY_OFFSET = "library_offset"
+        /** Nei nomi di cartella (anche di Drive) non c'è. */
+        const val SEPARATOR = "\u001F"
     }
 }

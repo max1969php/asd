@@ -87,6 +87,10 @@
     <string name="previous">Попередній</string>
     <string name="next">Наступний</string>
     <string name="repeat">Повторити</string>
+    <string name="sleep_timer">Таймер сну</string>
+    <string name="sleep_minutes">%1$d хв</string>
+    <string name="sleep_end_of_song">Наприкінці треку</string>
+    <string name="sleep_off">Вимкнути таймер</string>
     <string name="pause">Пауза</string>
     <string name="settings_subtitle">кілька ручок, жодного контракту</string>
     <string name="none_f">немає</string>

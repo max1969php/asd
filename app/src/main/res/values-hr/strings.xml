@@ -87,6 +87,10 @@
     <string name="previous">Prethodna</string>
     <string name="next">Sljedeća</string>
     <string name="repeat">Ponavljaj</string>
+    <string name="sleep_timer">Mjerač vremena za isključivanje</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">Na kraju pjesme</string>
+    <string name="sleep_off">Isključi mjerač</string>
     <string name="pause">Pauza</string>
     <string name="settings_subtitle">malo gumba, nikakav ugovor</string>
     <string name="none_f">nijedna</string>

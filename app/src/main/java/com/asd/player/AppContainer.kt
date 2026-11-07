@@ -21,6 +21,7 @@ import com.asd.player.domain.usecase.BrowseFolder
 import com.asd.player.domain.usecase.SearchSongs
 import com.asd.player.playback.CloudStreamResolver
 import com.asd.player.playback.PlaybackController
+import com.asd.player.playback.SleepTimer
 
 /** Dependency injection fatta a mano: per un'app così non serve un framework. */
 class AppContainer(context: Context) {
@@ -35,7 +36,7 @@ class AppContainer(context: Context) {
     val driveAuth = DriveAuth(context)
     val driveClient = DriveClient(driveAuth)
     val streamResolver = CloudStreamResolver(driveAuth, settings)
-    val playlistRepository: PlaylistRepository = PlaylistRepositoryImpl(database.playlistDao())
+    val playlistRepository: PlaylistRepository = PlaylistRepositoryImpl(database.playlistDao(), libraryRepository.songs)
     private val tubeCookies = TubeCookies(context)
     val tubeImporter = TubeImporter(
         TubeDownloader(context, tubeCookies), tubeCookies, audioScanner, driveClient, metadataReader,
@@ -45,6 +46,7 @@ class AppContainer(context: Context) {
         context, LoudnessAnalyzer(context), libraryRepository, settings, driveAuth,
     ).also { it.start() }
     val playbackController = PlaybackController(context)
+    val sleepTimer = SleepTimer()
     val searchSongs = SearchSongs()
     val browseFolder = BrowseFolder(searchSongs)
 }

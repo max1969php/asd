@@ -87,6 +87,10 @@
     <string name="previous">Eelmine</string>
     <string name="next">Järgmine</string>
     <string name="repeat">Korda</string>
+    <string name="sleep_timer">Unetaimer</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">Loo lõpus</string>
+    <string name="sleep_off">Lülita taimer välja</string>
     <string name="pause">Paus</string>
     <string name="settings_subtitle">vähe nuppe, lepingut pole</string>
     <string name="none_f">puudub</string>

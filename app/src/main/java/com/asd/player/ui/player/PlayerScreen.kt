@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bedtime
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
@@ -32,6 +33,8 @@ import androidx.compose.material.icons.filled.RepeatOne
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,6 +42,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,6 +59,8 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player
 import com.asd.player.R
 import com.asd.player.playback.PlaybackState
+import com.asd.player.playback.SleepTimer
+import com.asd.player.playback.SleepTimerState
 import com.asd.player.ui.components.AnarchyLogo
 import com.asd.player.ui.components.Stamp
 import com.asd.player.ui.components.formatDuration
@@ -82,6 +88,8 @@ fun PlayerScreen(
                 Icon(Icons.Filled.KeyboardArrowDown, contentDescription = stringResource(R.string.close), tint = Asd.Paper, modifier = Modifier.size(32.dp))
             }
             Spacer(Modifier.weight(1f))
+            SleepTimerButton(viewModel)
+            Spacer(Modifier.width(8.dp))
             Stamp(if (state.isPlaying) stringResource(R.string.on_air) else stringResource(R.string.paused), color = if (state.isPlaying) Asd.Spray else Asd.Smudge, rotation = 3f)
         }
 
@@ -131,6 +139,45 @@ fun PlayerScreen(
             )
         }
         Spacer(Modifier.height(24.dp))
+    }
+}
+
+/** Timer di spegnimento: icona luna, tempo che manca e menu con le durate. */
+@Composable
+private fun SleepTimerButton(viewModel: PlayerViewModel) {
+    val sleep by viewModel.sleepState.collectAsState()
+    val left by viewModel.sleepLeft.collectAsState(initial = null)
+    var menu by remember { mutableStateOf(false) }
+    val active = sleep != SleepTimerState.Off
+    Box {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.clickable { menu = true }.padding(8.dp),
+        ) {
+            Icon(Icons.Filled.Bedtime, contentDescription = stringResource(R.string.sleep_timer), tint = if (active) Asd.Acid else Asd.Smudge)
+            when {
+                left != null -> Text(" " + formatDuration(left!!), style = MaterialTheme.typography.labelMedium, color = Asd.Acid)
+                sleep == SleepTimerState.EndOfSong -> Text(" " + stringResource(R.string.sleep_end_of_song).uppercase(), style = MaterialTheme.typography.labelMedium, color = Asd.Acid)
+            }
+        }
+        DropdownMenu(expanded = menu, onDismissRequest = { menu = false }, containerColor = Asd.Asphalt) {
+            SleepTimer.MINUTES.forEach { minutes ->
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.sleep_minutes, minutes)) },
+                    onClick = { viewModel.sleepIn(minutes); menu = false },
+                )
+            }
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.sleep_end_of_song), color = if (sleep == SleepTimerState.EndOfSong) Asd.Acid else Asd.Paper) },
+                onClick = { viewModel.sleepAtEndOfSong(); menu = false },
+            )
+            if (active) {
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.sleep_off), color = Asd.Spray) },
+                    onClick = { viewModel.cancelSleep(); menu = false },
+                )
+            }
+        }
     }
 }
 

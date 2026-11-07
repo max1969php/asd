@@ -87,6 +87,10 @@
     <string name="previous">Anterior</string>
     <string name="next">Seguinte</string>
     <string name="repeat">Repetir</string>
+    <string name="sleep_timer">Temporizador para desligar</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">No fim da faixa</string>
+    <string name="sleep_off">Desligar o temporizador</string>
     <string name="pause">Pausa</string>
     <string name="settings_subtitle">poucos botões, nenhum contrato</string>
     <string name="none_f">nenhuma</string>

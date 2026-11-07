@@ -10,6 +10,7 @@ import com.asd.player.data.scanner.ScannedFile
 import com.asd.player.data.scanner.SourceScanner
 import com.asd.player.domain.model.Song
 import com.asd.player.domain.model.SongSource
+import com.asd.player.domain.usecase.SongNames
 import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.Semaphore
@@ -33,7 +35,10 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
     private val _scanState = MutableStateFlow<ScanState>(ScanState.Idle)
     override val scanState: StateFlow<ScanState> = _scanState.asStateFlow()
 
-    override val songs: Flow<List<Song>> = songDao.observeAll().map { list -> list.map { it.toDomain() } }
+    /** Nel database i nomi grezzi (tag o nome file); qui quelli da mostrare, ricavati con tutta la libreria. */
+    override val songs: Flow<List<Song>> = songDao.observeAll()
+        .map { list -> SongNames.resolve(list.map { it.toDomain() }) }
+        .flowOn(Dispatchers.Default)
 
     override suspend fun rescan(scanner: SourceScanner): Boolean = scanMutex.withLock {
         val source = scanner.source
@@ -112,15 +117,13 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
         entityOf(file, scanner.readMetadata(file), scanner.source, old?.id ?: 0)
 
     private fun entityOf(file: ScannedFile, meta: AudioMetadata, source: SongSource, id: Long = 0): SongEntity {
-        // Senza tag (es. gli m4a del TUBO dopo una riscansione completa) il nome "Artista - Titolo" fa da tag.
-        val base = file.fileName.substringBeforeLast('.')
-        val parts = base.split(" - ", limit = 2).map { it.trim() }.takeIf { it.size == 2 && it.all(String::isNotEmpty) }
+        // Senza tag il titolo è il nome del file: artista e titolo li ricava SongNames con tutta la libreria.
         return SongEntity(
             id = id,
             uri = file.uri,
             fileName = file.fileName,
-            title = meta.title ?: parts?.get(1) ?: base,
-            artist = meta.artist ?: parts?.takeIf { meta.title == null }?.get(0),
+            title = meta.title ?: file.fileName.substringBeforeLast('.'),
+            artist = meta.artist,
             album = meta.album,
             durationMs = meta.durationMs,
             mimeType = file.mimeType,

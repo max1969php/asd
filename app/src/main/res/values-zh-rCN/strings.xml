@@ -87,6 +87,10 @@
     <string name="previous">上一首</string>
     <string name="next">下一首</string>
     <string name="repeat">重复</string>
+    <string name="sleep_timer">睡眠定时</string>
+    <string name="sleep_minutes">%1$d 分钟</string>
+    <string name="sleep_end_of_song">播完本曲</string>
+    <string name="sleep_off">关闭定时</string>
     <string name="pause">暂停</string>
     <string name="settings_subtitle">没几个旋钮,也没有合同</string>
     <string name="none_f">无</string>

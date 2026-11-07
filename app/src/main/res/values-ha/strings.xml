@@ -87,6 +87,10 @@
     <string name="previous">Na baya</string>
     <string name="next">Na gaba</string>
     <string name="repeat">Maimaita</string>
+    <string name="sleep_timer">Lokacin kashewa</string>
+    <string name="sleep_minutes">minti %1$d</string>
+    <string name="sleep_end_of_song">A ƙarshen waƙa</string>
+    <string name="sleep_off">Kashe lokacin</string>
     <string name="pause">Dakata</string>
     <string name="settings_subtitle">ƙananan maɓallai, babu kwangila</string>
     <string name="none_f">babu</string>

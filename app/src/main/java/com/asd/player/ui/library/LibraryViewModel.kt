@@ -14,6 +14,7 @@ import com.asd.player.R
 import com.asd.player.data.loudness.LoudnessProgress
 import com.asd.player.data.repository.ScanState
 import com.asd.player.data.scanner.LocalSourceScanner
+import com.asd.player.data.settings.SettingsStore
 import com.asd.player.domain.model.LibraryQuery
 import com.asd.player.domain.model.Playlist
 import com.asd.player.domain.model.Song
@@ -62,8 +63,22 @@ class LibraryViewModel(
     private val repository = container.libraryRepository
     private val filters = MutableStateFlow(LibraryQuery())
 
-    /** La cartella aperta in ROBA. Cambiarla non tocca i mixtape. */
-    private val path = MutableStateFlow(FolderPath())
+    private val savedPlace = settings.libraryPlace
+
+    /** La cartella aperta in ROBA, ritrovata alla riapertura. Cambiarla non tocca i mixtape. */
+    private val path = MutableStateFlow(
+        FolderPath(savedPlace.source?.let { runCatching { SongSource.valueOf(it) }.getOrNull() }, savedPlace.dirs)
+    )
+
+    /** Posizione nella lista per ogni cartella visitata: risalendo si ritrova il punto. */
+    private val scrolls = mutableMapOf(path.value to (savedPlace.index to savedPlace.offset))
+
+    fun scrollFor(folder: FolderPath): Pair<Int, Int> = scrolls[folder] ?: (0 to 0)
+
+    fun saveScroll(folder: FolderPath, index: Int, offset: Int) {
+        scrolls[folder] = index to offset
+        settings.setLibraryPlace(SettingsStore.LibraryPlace(folder.source?.name, folder.dirs, index, offset))
+    }
 
     private val query = combine(filters, settings.sortOrder) { f, sort -> f.copy(sort = sort) }
 
@@ -173,6 +188,7 @@ class LibraryViewModel(
         resolver.takePersistableUriPermission(uri, read or write)
         settings.setDirectory(uri)
         path.value = FolderPath()
+        scrolls.clear()
         viewModelScope.launch {
             // Cartella nuova: i brani della vecchia escono dai mixtape, e i mixtape rimasti vuoti spariscono.
             if (scan(uri) && changed) container.playlistRepository.deleteEmpty()

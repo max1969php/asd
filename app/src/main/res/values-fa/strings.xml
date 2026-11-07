@@ -87,6 +87,10 @@
     <string name="previous">قبلی</string>
     <string name="next">بعدی</string>
     <string name="repeat">تکرار</string>
+    <string name="sleep_timer">زمان‌سنج خاموشی</string>
+    <string name="sleep_minutes">%1$d دقیقه</string>
+    <string name="sleep_end_of_song">در پایان آهنگ</string>
+    <string name="sleep_off">خاموش کردن زمان‌سنج</string>
     <string name="pause">توقف</string>
     <string name="settings_subtitle">چند دکمه، بدون قرارداد</string>
     <string name="none_f">هیچ</string>

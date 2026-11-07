@@ -87,6 +87,10 @@
     <string name="previous">Preċedenti</string>
     <string name="next">Li jmiss</string>
     <string name="repeat">Irrepeti</string>
+    <string name="sleep_timer">Timer tal-irqad</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">Fi tmiem il-kanzunetta</string>
+    <string name="sleep_off">Itfi t-timer</string>
     <string name="pause">Pawża</string>
     <string name="settings_subtitle">ftit buttuni, l-ebda kuntratt</string>
     <string name="none_f">xejn</string>

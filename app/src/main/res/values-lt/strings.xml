@@ -87,6 +87,10 @@
     <string name="previous">Ankstesnis</string>
     <string name="next">Kitas</string>
     <string name="repeat">Kartoti</string>
+    <string name="sleep_timer">Miego laikmatis</string>
+    <string name="sleep_minutes">%1$d min.</string>
+    <string name="sleep_end_of_song">Dainos pabaigoje</string>
+    <string name="sleep_off">Išjungti laikmatį</string>
     <string name="pause">Pauzė</string>
     <string name="settings_subtitle">kelios rankenėlės, jokios sutarties</string>
     <string name="none_f">nėra</string>

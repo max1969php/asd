@@ -87,6 +87,10 @@
     <string name="previous">Hore</string>
     <string name="next">Xiga</string>
     <string name="repeat">Ku celi</string>
+    <string name="sleep_timer">Saacadda damitaanka</string>
+    <string name="sleep_minutes">%1$d daqiiqo</string>
+    <string name="sleep_end_of_song">Dhammaadka heesta</string>
+    <string name="sleep_off">Dami saacadda</string>
     <string name="pause">Hakad</string>
     <string name="settings_subtitle">badhamo yar, heshiis la\'aan</string>
     <string name="none_f">midna</string>

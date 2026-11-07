@@ -87,6 +87,10 @@
     <string name="previous">Previous</string>
     <string name="next">Next</string>
     <string name="repeat">Repeat</string>
+    <string name="sleep_timer">Sleep timer</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">At end of track</string>
+    <string name="sleep_off">Turn off timer</string>
     <string name="pause">Pause</string>
     <string name="settings_subtitle">few knobs, no contract</string>
     <string name="none_f">none</string>

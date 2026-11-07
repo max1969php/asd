@@ -87,6 +87,10 @@
     <string name="previous">Roimhe seo</string>
     <string name="next">Ar aghaidh</string>
     <string name="repeat">Athdhéan</string>
+    <string name="sleep_timer">Amadóir codlata</string>
+    <string name="sleep_minutes">%1$d nóim</string>
+    <string name="sleep_end_of_song">Ag deireadh an amhráin</string>
+    <string name="sleep_off">Múch an t-amadóir</string>
     <string name="pause">Sos</string>
     <string name="settings_subtitle">cúpla cnaipe, gan conradh</string>
     <string name="none_f">ceann ar bith</string>

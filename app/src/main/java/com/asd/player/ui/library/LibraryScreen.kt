@@ -19,7 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -36,6 +36,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,7 +62,10 @@ import com.asd.player.ui.components.Stamp
 import com.asd.player.ui.components.TapeChip
 import com.asd.player.ui.playlists.AddToPlaylistDialog
 import com.asd.player.ui.theme.Asd
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 
+@OptIn(FlowPreview::class)
 @Composable
 fun LibraryScreen(
     state: LibraryUiState,
@@ -71,7 +76,16 @@ fun LibraryScreen(
     modifier: Modifier = Modifier,
 ) {
     var songForPlaylist by remember { mutableStateOf<Song?>(null) }
-    val listState = rememberLazyListState()
+    // Una lista per cartella: entrando si parte dall'alto, tornando si ritrova il punto (anche dopo un riavvio).
+    val listState = remember(state.path) {
+        viewModel.scrollFor(state.path).let { (index, offset) -> LazyListState(index, offset) }
+    }
+    LaunchedEffect(listState, state.loaded) {
+        if (!state.loaded) return@LaunchedEffect
+        snapshotFlow { listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset }
+            .debounce(400)
+            .collect { (index, offset) -> viewModel.saveScroll(state.path, index, offset) }
+    }
 
     // Indietro risale di una cartella; dalla radice esce come sempre.
     BackHandler(enabled = !state.path.isRoot) { viewModel.goUp() }
@@ -107,7 +121,10 @@ fun LibraryScreen(
         }
         HorizontalDivider(thickness = 2.dp, color = Asd.Paper)
 
-        if (state.loaded && state.songs.isEmpty() && state.folders.isEmpty()) {
+        if (!state.loaded) {
+            // Niente lista vuota prima del catalogo: azzererebbe la posizione da ritrovare.
+            Spacer(Modifier.fillMaxSize())
+        } else if (state.songs.isEmpty() && state.folders.isEmpty()) {
             EmptyLibrary(hasSongs = state.totalCount > 0, scanning = state.scanState is ScanState.Scanning, onClear = viewModel::clearFilters)
         } else {
             LazyColumn(state = listState, modifier = Modifier.fillMaxSize()) {

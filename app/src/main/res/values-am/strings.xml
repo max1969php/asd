@@ -87,6 +87,10 @@
     <string name="previous">ቀዳሚ</string>
     <string name="next">ቀጣይ</string>
     <string name="repeat">ድገም</string>
+    <string name="sleep_timer">የእንቅልፍ ሰዓት ቆጣሪ</string>
+    <string name="sleep_minutes">%1$d ደቂቃ</string>
+    <string name="sleep_end_of_song">በዘፈኑ መጨረሻ</string>
+    <string name="sleep_off">ሰዓት ቆጣሪውን አጥፋ</string>
     <string name="pause">አቁም</string>
     <string name="settings_subtitle">ጥቂት ቁልፎች፣ ውል የለም</string>
     <string name="none_f">ምንም</string>

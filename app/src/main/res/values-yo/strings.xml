@@ -87,6 +87,10 @@
     <string name="previous">Ti ṣáájú</string>
     <string name="next">Tó kàn</string>
     <string name="repeat">Tún ṣe</string>
+    <string name="sleep_timer">Aago ìpanápa</string>
+    <string name="sleep_minutes">ìṣẹ́jú %1$d</string>
+    <string name="sleep_end_of_song">Ní òpin orin</string>
+    <string name="sleep_off">Pa aago náà</string>
     <string name="pause">Dúró</string>
     <string name="settings_subtitle">bọ́tìnì díẹ̀, kò sí àdéhùn</string>
     <string name="none_f">kò sí</string>

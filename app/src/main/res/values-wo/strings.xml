@@ -87,6 +87,10 @@
     <string name="previous">Ki jiitu</string>
     <string name="next">Ki toppu</string>
     <string name="repeat">Waat</string>
+    <string name="sleep_timer">Waxtu wu fey</string>
+    <string name="sleep_minutes">%1$d simili</string>
+    <string name="sleep_end_of_song">Ci mujjug woy wi</string>
+    <string name="sleep_off">Fey waxtu wi</string>
     <string name="pause">Taxaw</string>
     <string name="settings_subtitle">ay butoŋ ndaw, amul kontra</string>
     <string name="none_f">amul</string>

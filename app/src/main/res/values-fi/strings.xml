@@ -87,6 +87,10 @@
     <string name="previous">Edellinen</string>
     <string name="next">Seuraava</string>
     <string name="repeat">Toista</string>
+    <string name="sleep_timer">Uniajastin</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">Kappaleen lopussa</string>
+    <string name="sleep_off">Poista ajastin</string>
     <string name="pause">Tauko</string>
     <string name="settings_subtitle">vähän nuppeja, ei sopimusta</string>
     <string name="none_f">ei mitään</string>

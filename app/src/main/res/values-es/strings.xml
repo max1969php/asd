@@ -87,6 +87,10 @@
     <string name="previous">Anterior</string>
     <string name="next">Siguiente</string>
     <string name="repeat">Repetir</string>
+    <string name="sleep_timer">Temporizador de apagado</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">Al final de la canción</string>
+    <string name="sleep_off">Apagar el temporizador</string>
     <string name="pause">Pausa</string>
     <string name="settings_subtitle">pocos botones, ningún contrato</string>
     <string name="none_f">ninguna</string>

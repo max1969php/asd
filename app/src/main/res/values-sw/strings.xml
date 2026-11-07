@@ -87,6 +87,10 @@
     <string name="previous">Iliyotangulia</string>
     <string name="next">Inayofuata</string>
     <string name="repeat">Rudia</string>
+    <string name="sleep_timer">Kipima muda wa kuzima</string>
+    <string name="sleep_minutes">dakika %1$d</string>
+    <string name="sleep_end_of_song">Mwishoni mwa wimbo</string>
+    <string name="sleep_off">Zima kipima muda</string>
     <string name="pause">Simamisha</string>
     <string name="settings_subtitle">vifundo vichache, bila mkataba</string>
     <string name="none_f">hakuna</string>

@@ -87,6 +87,10 @@
     <string name="previous">Προηγούμενο</string>
     <string name="next">Επόμενο</string>
     <string name="repeat">Επανάληψη</string>
+    <string name="sleep_timer">Χρονοδιακόπτης ύπνου</string>
+    <string name="sleep_minutes">%1$d λεπτά</string>
+    <string name="sleep_end_of_song">Στο τέλος του κομματιού</string>
+    <string name="sleep_off">Απενεργοποίηση χρονοδιακόπτη</string>
     <string name="pause">Παύση</string>
     <string name="settings_subtitle">λίγα κουμπιά, κανένα συμβόλαιο</string>
     <string name="none_f">καμία</string>

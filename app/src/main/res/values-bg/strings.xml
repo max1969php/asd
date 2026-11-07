@@ -87,6 +87,10 @@
     <string name="previous">Предишна</string>
     <string name="next">Следваща</string>
     <string name="repeat">Повтори</string>
+    <string name="sleep_timer">Таймер за изключване</string>
+    <string name="sleep_minutes">%1$d мин</string>
+    <string name="sleep_end_of_song">В края на песента</string>
+    <string name="sleep_off">Изключи таймера</string>
     <string name="pause">Пауза</string>
     <string name="settings_subtitle">малко копчета, никакъв договор</string>
     <string name="none_f">няма</string>

@@ -87,6 +87,10 @@
     <string name="previous">Föregående</string>
     <string name="next">Nästa</string>
     <string name="repeat">Upprepa</string>
+    <string name="sleep_timer">Insomningstimer</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">När låten är slut</string>
+    <string name="sleep_off">Stäng av timern</string>
     <string name="pause">Paus</string>
     <string name="settings_subtitle">få rattar, inget kontrakt</string>
     <string name="none_f">ingen</string>

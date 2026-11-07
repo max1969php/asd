@@ -87,6 +87,10 @@
     <string name="previous">Iepriekšējais</string>
     <string name="next">Nākamais</string>
     <string name="repeat">Atkārtot</string>
+    <string name="sleep_timer">Miega taimeris</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">Dziesmas beigās</string>
+    <string name="sleep_off">Izslēgt taimeri</string>
     <string name="pause">Pauze</string>
     <string name="settings_subtitle">dažas pogas, nekādu līgumu</string>
     <string name="none_f">nav</string>

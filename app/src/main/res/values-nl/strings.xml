@@ -87,6 +87,10 @@
     <string name="previous">Vorige</string>
     <string name="next">Volgende</string>
     <string name="repeat">Herhalen</string>
+    <string name="sleep_timer">Slaaptimer</string>
+    <string name="sleep_minutes">%1$d min</string>
+    <string name="sleep_end_of_song">Aan het eind van het nummer</string>
+    <string name="sleep_off">Timer uitzetten</string>
     <string name="pause">Pauze</string>
     <string name="settings_subtitle">weinig knoppen, geen contract</string>
     <string name="none_f">geen</string>
