@@ -51,7 +51,9 @@ class LoudnessQueue(
 
     fun start() {
         // Ogni cambio di catalogo (scansione, TUBO) o dell'interruttore sveglia la coda.
-        scope.launch { combine(library.songs, settings.normalizeVolume) { _, _ -> }.collect { wakeUp.trySend(Unit) } }
+        scope.launch {
+            combine(library.songs, settings.normalizeVolume, settings.skipSilence) { _, _, _ -> }.collect { wakeUp.trySend(Unit) }
+        }
         scope.launch { for (signal in wakeUp) drain() }
     }
 
@@ -61,24 +63,30 @@ class LoudnessQueue(
     }
 
     private suspend fun drain() {
-        while (settings.normalizeVolume.value) {
+        // La stessa decodifica misura volume e silenzio: serve se almeno una delle due è accesa.
+        while (settings.normalizeVolume.value || settings.skipSilence.value) {
             val pending = library.unmeasured()
                 .filter { it.id !in skipped && (it.source == SongSource.LOCAL || unmetered()) }
             _progress.value = LoudnessProgress(pending.size, running = pending.isNotEmpty())
             val next = pending.find { it.uri == urgent } ?: pending.firstOrNull() ?: break
             Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND)
-            val loudness = runCatching { measure(next) }.getOrNull()
+            val analysis = runCatching { measure(next) }.getOrNull()
             when {
-                loudness != null ->
-                    library.setLoudness(next.id, loudness.integratedLufs.takeIf { it.isFinite() } ?: SILENCE, loudness.samplePeakDb)
-                next.source == SongSource.LOCAL -> library.setLoudness(next.id, null, null)
+                analysis != null -> {
+                    val loudness = analysis.loudness
+                    val (start, end) = SilenceTrim.bounds(analysis.firstSoundMs, analysis.lastSoundMs, analysis.totalMs)
+                    library.setAnalysis(
+                        next.id, loudness.integratedLufs.takeIf { it.isFinite() } ?: SILENCE, loudness.samplePeakDb, start, end,
+                    )
+                }
+                next.source == SongSource.LOCAL -> library.setAnalysis(next.id, null, null, null, null)
                 else -> skipped += next.id
             }
         }
         _progress.value = LoudnessProgress(library.unmeasured().count { it.id !in skipped }, running = false)
     }
 
-    private fun measure(song: Song): Loudness = when (song.source) {
+    private fun measure(song: Song): AudioAnalysis = when (song.source) {
         SongSource.LOCAL -> analyzer.analyzeLocal(Uri.parse(song.uri))
         SongSource.DRIVE -> {
             val email = settings.drive.state.value.defaultAccount ?: error("Nessun account Drive")

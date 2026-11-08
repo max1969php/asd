@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -26,6 +27,8 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -58,6 +61,7 @@ import com.asd.player.ui.library.label
 import com.asd.player.ui.theme.Asd
 import java.text.DateFormat
 import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -149,6 +153,18 @@ fun SettingsScreen(
             )
         }
 
+        Section(stringResource(R.string.silence_title)) {
+            val skip by viewModel.skipSilence.collectAsStateWithLifecycle()
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                TapeChip(stringResource(R.string.on), selected = skip, onClick = { viewModel.setSkipSilence(true) })
+                TapeChip(stringResource(R.string.off), selected = !skip, onClick = { viewModel.setSkipSilence(false) })
+            }
+            Spacer(Modifier.height(8.dp))
+            Text(stringResource(R.string.silence_hint), style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
+        }
+
+        EqualizerSection(viewModel)
+
         Section(stringResource(R.string.default_sort)) {
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 SortField.entries.forEach { field ->
@@ -201,6 +217,73 @@ fun SettingsScreen(
             },
         )
         Spacer(Modifier.height(24.dp))
+    }
+}
+
+/** Equalizzatore del telefono sulla sessione di ASD: preset, bande a mano e bassi. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun EqualizerSection(viewModel: LibraryViewModel) {
+    val eq by viewModel.eq.collectAsStateWithLifecycle()
+    val effects = viewModel.effects
+    Section(stringResource(R.string.eq_title)) {
+        if (!effects.available) {
+            Text(stringResource(R.string.eq_unsupported), style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
+            return@Section
+        }
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            TapeChip(stringResource(R.string.on), selected = eq.enabled, onClick = { viewModel.setEqEnabled(true) })
+            TapeChip(stringResource(R.string.off), selected = !eq.enabled, onClick = { viewModel.setEqEnabled(false) })
+        }
+        if (!eq.enabled) return@Section
+        Spacer(Modifier.height(10.dp))
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            effects.presets.forEachIndexed { i, name ->
+                TapeChip(name, selected = eq.preset == i, onClick = { viewModel.setEqPreset(i) })
+            }
+            TapeChip(stringResource(R.string.eq_custom), selected = eq.preset == null, onClick = {})
+        }
+        Spacer(Modifier.height(10.dp))
+        val range = effects.levelRange
+        effects.bands.forEach { band ->
+            val level = eq.levels.getOrNull(band.index) ?: 0
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    if (band.centerHz >= 1000) "${band.centerHz / 1000}k" else "${band.centerHz}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Asd.Paper,
+                    modifier = Modifier.width(44.dp),
+                )
+                Slider(
+                    value = level.toFloat(),
+                    onValueChange = { viewModel.setEqBand(band.index, it.toInt()) },
+                    valueRange = range.first.toFloat()..range.last.toFloat(),
+                    colors = SliderDefaults.colors(thumbColor = Asd.Spray, activeTrackColor = Asd.Acid, inactiveTrackColor = Asd.Concrete),
+                    modifier = Modifier.weight(1f),
+                )
+                Text(
+                    String.format(Locale.getDefault(), "%+d dB", level / 100),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Asd.Smudge,
+                    modifier = Modifier.width(52.dp),
+                )
+            }
+        }
+        if (effects.bassAvailable) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(stringResource(R.string.eq_bass).uppercase(), style = MaterialTheme.typography.labelSmall, color = Asd.Paper, modifier = Modifier.width(44.dp))
+                Slider(
+                    value = eq.bass.toFloat(),
+                    onValueChange = { viewModel.setEqBass(it.toInt()) },
+                    valueRange = 0f..1000f,
+                    colors = SliderDefaults.colors(thumbColor = Asd.Spray, activeTrackColor = Asd.Acid, inactiveTrackColor = Asd.Concrete),
+                    modifier = Modifier.weight(1f),
+                )
+                Text("${eq.bass / 10}%", style = MaterialTheme.typography.labelSmall, color = Asd.Smudge, modifier = Modifier.width(52.dp))
+            }
+        }
+        Spacer(Modifier.height(8.dp))
+        Text(stringResource(R.string.eq_hint), style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
     }
 }
 

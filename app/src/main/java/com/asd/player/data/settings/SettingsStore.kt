@@ -23,6 +23,17 @@ data class CloudSettings(
 /** Dove il TUBO salva l'audio scaricato: telefono, Drive o tutti e due (il predefinito). */
 enum class TubeDestination { LOCAL, DRIVE, BOTH }
 
+/**
+ * Equalizzatore: acceso/spento, preset del telefono scelto (null = bande a mano), livello di ogni
+ * banda in millibel e forza dei bassi (0..1000).
+ */
+data class EqSettings(
+    val enabled: Boolean = false,
+    val preset: Int? = null,
+    val levels: List<Int> = emptyList(),
+    val bass: Int = 0,
+)
+
 /** Poche preferenze, niente DataStore: SharedPreferences + StateFlow bastano. */
 class SettingsStore(context: Context) {
 
@@ -57,6 +68,35 @@ class SettingsStore(context: Context) {
     private val _normalizeVolume = MutableStateFlow(prefs.getBoolean(KEY_NORMALIZE_VOLUME, true))
     /** Volume uniforme (EBU R128 / ReplayGain 2.0): acceso di default. */
     val normalizeVolume: StateFlow<Boolean> = _normalizeVolume.asStateFlow()
+
+    private val _skipSilence = MutableStateFlow(prefs.getBoolean(KEY_SKIP_SILENCE, true))
+    /** Salta il silenzio a inizio e fine pezzo: acceso di default. */
+    val skipSilence: StateFlow<Boolean> = _skipSilence.asStateFlow()
+
+    fun setSkipSilence(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_SKIP_SILENCE, enabled).apply()
+        _skipSilence.value = enabled
+    }
+
+    private val _eq = MutableStateFlow(
+        EqSettings(
+            enabled = prefs.getBoolean(KEY_EQ_ENABLED, false),
+            preset = prefs.getInt(KEY_EQ_PRESET, -1).takeIf { it >= 0 },
+            levels = prefs.getString(KEY_EQ_LEVELS, null)?.split(',')?.mapNotNull { it.toIntOrNull() }.orEmpty(),
+            bass = prefs.getInt(KEY_EQ_BASS, 0),
+        )
+    )
+    val eq: StateFlow<EqSettings> = _eq.asStateFlow()
+
+    fun setEq(eq: EqSettings) {
+        prefs.edit()
+            .putBoolean(KEY_EQ_ENABLED, eq.enabled)
+            .putInt(KEY_EQ_PRESET, eq.preset ?: -1)
+            .putString(KEY_EQ_LEVELS, eq.levels.joinToString(","))
+            .putInt(KEY_EQ_BASS, eq.bass)
+            .apply()
+        _eq.value = eq
+    }
 
     fun setNormalizeVolume(enabled: Boolean) {
         prefs.edit().putBoolean(KEY_NORMALIZE_VOLUME, enabled).apply()
@@ -142,6 +182,8 @@ class SettingsStore(context: Context) {
         val dirs: List<String> = emptyList(),
         val index: Int = 0,
         val offset: Int = 0,
+        /** CARTELLE / ARTISTI / ALBUM. */
+        val view: String? = null,
     )
 
     val libraryPlace: LibraryPlace
@@ -152,6 +194,7 @@ class SettingsStore(context: Context) {
                 dirs = parts.drop(1),
                 index = prefs.getInt(KEY_LIBRARY_INDEX, 0),
                 offset = prefs.getInt(KEY_LIBRARY_OFFSET, 0),
+                view = prefs.getString(KEY_LIBRARY_VIEW, null),
             )
         }
 
@@ -160,6 +203,7 @@ class SettingsStore(context: Context) {
             .putString(KEY_LIBRARY_PATH, (listOf(place.source.orEmpty()) + place.dirs).joinToString(SEPARATOR))
             .putInt(KEY_LIBRARY_INDEX, place.index)
             .putInt(KEY_LIBRARY_OFFSET, place.offset)
+            .putString(KEY_LIBRARY_VIEW, place.view)
             .apply()
     }
 
@@ -175,9 +219,15 @@ class SettingsStore(context: Context) {
         const val KEY_SORT_ASC = "sort_asc"
         const val KEY_TUBE_DESTINATION = "tube_destination"
         const val KEY_NORMALIZE_VOLUME = "normalize_volume"
+        const val KEY_SKIP_SILENCE = "skip_silence"
+        const val KEY_EQ_ENABLED = "eq_enabled"
+        const val KEY_EQ_PRESET = "eq_preset"
+        const val KEY_EQ_LEVELS = "eq_levels"
+        const val KEY_EQ_BASS = "eq_bass"
         const val KEY_LIBRARY_PATH = "library_path"
         const val KEY_LIBRARY_INDEX = "library_index"
         const val KEY_LIBRARY_OFFSET = "library_offset"
+        const val KEY_LIBRARY_VIEW = "library_view"
         /** Nei nomi di cartella (anche di Drive) non c'è. */
         const val SEPARATOR = "\u001F"
     }

@@ -21,6 +21,7 @@ class DriveViewModel(private val container: AppContainer) : CloudViewModel(
     library = container.libraryRepository,
     source = SongSource.DRIVE,
     root = CloudFolder(DriveClient.ROOT, L10n.str(R.string.my_drive)),
+    online = container::isOnline,
 ) {
     private val auth = container.driveAuth
 

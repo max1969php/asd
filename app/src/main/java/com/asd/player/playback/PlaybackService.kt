@@ -53,6 +53,9 @@ class PlaybackService : MediaSessionService() {
     private var fade = 1f
     private var applyVolume: () -> Unit = {}
 
+    /** Margine per l'equalizzatore: con le bande alzate il player abbassa un po'. */
+    private var headroom = 1f
+
     override fun onCreate() {
         super.onCreate()
         // Un'unica pipeline per entrambe le fonti: i file locali passano dritti,
@@ -72,6 +75,8 @@ class PlaybackService : MediaSessionService() {
             .setHandleAudioBecomingNoisy(true)
             .setWakeMode(C.WAKE_MODE_LOCAL)
             .build()
+        // La sessione su cui stanno equalizzatore e bassi.
+        player.audioSessionId = (application as MusicApplication).container.audioEffects.sessionId
 
         levelVolume(player)
         rememberPlayback(player)
@@ -190,10 +195,11 @@ class PlaybackService : MediaSessionService() {
             val index = songs.indexOfFirst { it.uri == current }
             player.shuffleModeEnabled = saved.shuffle
             player.repeatMode = saved.repeatMode
+            val items = songs.map { it.toMediaItem(container.settings.skipSilence.value) }
             if (index >= 0) {
-                player.setMediaItems(songs.map { it.toMediaItem() }, index, saved.positionMs)
+                player.setMediaItems(items, index, saved.positionMs)
             } else {
-                player.setMediaItems(songs.map { it.toMediaItem() }, saved.index.coerceIn(songs.indices), 0L)
+                player.setMediaItems(items, saved.index.coerceIn(songs.indices), C.TIME_UNSET)
             }
         }
     }
@@ -211,20 +217,27 @@ class PlaybackService : MediaSessionService() {
         val container = (application as MusicApplication).container
         fun apply() {
             val uri = player.currentMediaItem?.mediaId
-            player.volume = fade * if (normalize) VolumeLeveling.volumeFor(levels[uri], fallbackLufs) else 1f
+            val level = if (normalize) VolumeLeveling.volumeFor(levels[uri], fallbackLufs) else 1f
+            player.volume = fade * headroom * level
         }
         applyVolume = ::apply
         player.addListener(object : Player.Listener {
             override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
                 apply()
-                if (normalize && mediaItem != null && mediaItem.mediaId !in levels) {
-                    container.loudnessQueue.prioritize(mediaItem.mediaId)
-                }
+                // Se non è ancora misurato (volume o silenzio) passa davanti agli altri.
+                if (mediaItem != null) container.loudnessQueue.prioritize(mediaItem.mediaId)
             }
         })
         val measured = container.libraryRepository.songs
             .map { songs -> songs.mapNotNull { s -> s.loudnessLufs?.let { s.uri to it } }.toMap() }
             .flowOn(Dispatchers.Default)
+        scope.launch {
+            container.settings.eq.collect { eq ->
+                container.audioEffects.apply(eq)
+                headroom = container.audioEffects.headroom(eq)
+                apply()
+            }
+        }
         scope.launch {
             combine(measured, container.settings.normalizeVolume, ::Pair).collect { (map, enabled) ->
                 levels = map

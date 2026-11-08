@@ -38,6 +38,8 @@ abstract class CloudViewModel(
     private val library: MusicLibraryRepository,
     private val source: SongSource,
     private val root: CloudFolder,
+    /** C'è una rete? Senza, la riscansione automatica all'apertura non parte. */
+    private val online: () -> Boolean,
 ) : ViewModel() {
 
     val settings: StateFlow<CloudSettings> = prefs.state
@@ -61,8 +63,16 @@ abstract class CloudViewModel(
     protected open fun forget(email: String) {}
 
     init {
-        // Brani indicizzati da una versione che non ricordava le cartelle: una riscansione le trova.
-        viewModelScope.launch { if (library.needsFolders(source)) rescan() }
+        // All'apertura, se c'è rete e l'ultima scansione ha più di un'ora; subito se ci sono brani
+        // indicizzati da una versione vecchia (senza cartelle o tag nuovi).
+        viewModelScope.launch {
+            val stale = System.currentTimeMillis() - settings.value.lastScanAt > AUTO_RESCAN_MS
+            if (online() && (stale || library.needsRescan(source))) rescan()
+        }
+    }
+
+    private companion object {
+        const val AUTO_RESCAN_MS = 60 * 60 * 1000L
     }
 
     /**

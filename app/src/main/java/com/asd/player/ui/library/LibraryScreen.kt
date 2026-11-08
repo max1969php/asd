@@ -24,7 +24,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Album
 import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material3.DropdownMenu
@@ -45,6 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -55,6 +58,7 @@ import com.asd.player.domain.model.Song
 import com.asd.player.domain.model.SongSource
 import com.asd.player.domain.model.SortField
 import com.asd.player.domain.usecase.FolderPath
+import com.asd.player.domain.usecase.LibraryView
 import com.asd.player.ui.components.AnarchyLogo
 import com.asd.player.ui.components.PunkButton
 import com.asd.player.ui.components.SongRow
@@ -94,6 +98,7 @@ fun LibraryScreen(
         LibraryHeader(total = state.totalCount, slogan = slogan)
         SearchBox(text = viewModel.searchText, onTextChange = viewModel::setText)
         FilterBar(state, viewModel)
+        ViewSelector(state.path.view, viewModel::setView)
         ScanBanner(state.scanState)
         if (!state.path.isRoot) Breadcrumb(state.path, viewModel)
 
@@ -134,11 +139,17 @@ fun LibraryScreen(
                         HorizontalDivider(color = Asd.Concrete)
                     }
                 }
+                val folderIcon = when {
+                    state.path.view == LibraryView.ARTISTS && state.path.dirs.isEmpty() -> Icons.Filled.Person
+                    state.path.view != LibraryView.FOLDERS -> Icons.Filled.Album
+                    else -> Icons.Filled.Folder
+                }
                 items(state.folders, key = { "dir:${it.source}:${it.name}" }) { folder ->
                     FolderRow(
                         name = folder.source?.label() ?: folder.name,
                         count = folder.songCount,
                         onClick = { viewModel.openFolder(folder) },
+                        icon = folderIcon,
                     )
                     HorizontalDivider(color = Asd.Concrete)
                 }
@@ -149,6 +160,13 @@ fun LibraryScreen(
                         isCurrent = song.uri == currentMediaId,
                         onClick = { viewModel.play(state.songs, index) },
                         onLongClick = { songForPlaylist = song },
+                        // Doppioni: conta dove stanno, per andarli a togliere dal telefono.
+                        subtitle = if (state.query.duplicates) {
+                            ((if (song.source == SongSource.DRIVE) listOf(stringResource(R.string.drive)) else emptyList()) +
+                                song.folder + song.fileName).joinToString(" / ")
+                        } else {
+                            null
+                        },
                     )
                     HorizontalDivider(color = Asd.Concrete)
                 }
@@ -209,8 +227,29 @@ private fun Slash() {
     Text("/", style = MaterialTheme.typography.labelMedium, color = Asd.Smudge)
 }
 
+/** CARTELLE / ARTISTI / ALBUM. */
 @Composable
-private fun FolderRow(name: String, count: Int?, onClick: () -> Unit) {
+private fun ViewSelector(current: LibraryView, onSelect: (LibraryView) -> Unit) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+    ) {
+        LibraryView.entries.forEach { view ->
+            TapeChip(
+                when (view) {
+                    LibraryView.FOLDERS -> stringResource(R.string.view_folders)
+                    LibraryView.ARTISTS -> stringResource(R.string.view_artists)
+                    LibraryView.ALBUMS -> stringResource(R.string.view_albums)
+                },
+                selected = view == current,
+                onClick = { onSelect(view) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun FolderRow(name: String, count: Int?, onClick: () -> Unit, icon: ImageVector = Icons.Filled.Folder) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -219,7 +258,7 @@ private fun FolderRow(name: String, count: Int?, onClick: () -> Unit) {
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
-        Icon(Icons.Filled.Folder, contentDescription = null, tint = Asd.Spray, modifier = Modifier.size(20.dp))
+        Icon(icon, contentDescription = null, tint = Asd.Spray, modifier = Modifier.size(20.dp))
         Spacer(Modifier.width(12.dp))
         Text(
             name.uppercase(),
@@ -307,9 +346,10 @@ private fun FilterBar(state: LibraryUiState, viewModel: LibraryViewModel) {
             .padding(horizontal = 16.dp, vertical = 6.dp),
     ) {
         val q = state.query
-        if (q.formats.isNotEmpty() || q.sources.isNotEmpty() || q.artist != null || q.text.isNotBlank()) {
+        if (q.filtering) {
             TapeChip(stringResource(R.string.filters_reset), selected = false, onClick = viewModel::clearFilters)
         }
+        TapeChip(stringResource(R.string.duplicates), selected = q.duplicates, onClick = viewModel::toggleDuplicates)
         Box {
             TapeChip(stringResource(R.string.sort_chip, sort.field.label(), if (sort.ascending) "↑" else "↓"), selected = false, onClick = { sortMenu = true })
             DropdownMenu(expanded = sortMenu, onDismissRequest = { sortMenu = false }, containerColor = Asd.Asphalt) {

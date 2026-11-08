@@ -25,14 +25,14 @@ interface MusicLibraryRepository {
     /** Aggiunge un singolo brano appena comparso in una fonte (es. caricato su Drive dal Tubo). */
     suspend fun add(file: ScannedFile, metadata: AudioMetadata, source: SongSource)
 
-    /** Ci sono brani di [source] indicizzati prima che ASD ricordasse le cartelle? */
-    suspend fun needsFolders(source: SongSource): Boolean
+    /** Ci sono brani di [source] indicizzati da una versione vecchia (senza cartella o tag nuovi)? */
+    suspend fun needsRescan(source: SongSource): Boolean
 
     /** Brani di cui non si conosce ancora il volume percepito. */
     suspend fun unmeasured(): List<Song>
 
-    /** [lufs] null = file illeggibile, da non riprovare. */
-    suspend fun setLoudness(songId: Long, lufs: Double?, peakDb: Double?)
+    /** [lufs] null = file illeggibile, da non riprovare. [startMs]/[endMs]: il suono, senza il silenzio ai lati. */
+    suspend fun setAnalysis(songId: Long, lufs: Double?, peakDb: Double?, startMs: Long?, endMs: Long?)
 
     /** Toglie dal catalogo tutti i brani di una fonte (es. account Drive scollegato). */
     suspend fun clearSource(source: SongSource)

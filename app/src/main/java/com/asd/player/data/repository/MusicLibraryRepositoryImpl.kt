@@ -51,7 +51,8 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
                 // Metadati riletti solo per file nuovi o modificati: le riscansioni restano veloci.
                 val changed = files.filter { file ->
                     val old = existing[file.uri]
-                    old == null || old.fileSize != file.size || old.modifiedAt != file.lastModified
+                    old == null || old.fileSize != file.size || old.modifiedAt != file.lastModified ||
+                        old.tagsVersion < SongEntity.TAGS_VERSION
                 }
                 // Stesso file, cartella diversa (o mai salvata): basta aggiornarla, i tag restano quelli.
                 val changedUris = changed.mapTo(HashSet()) { it.uri }
@@ -97,24 +98,35 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
     override suspend fun add(file: ScannedFile, metadata: AudioMetadata, source: SongSource) =
         withContext(Dispatchers.IO) { songDao.upsert(entityOf(file, metadata, source)) }
 
-    override suspend fun needsFolders(source: SongSource): Boolean = withContext(Dispatchers.IO) {
-        songDao.countWithoutFolder(source.name) > 0
+    override suspend fun needsRescan(source: SongSource): Boolean = withContext(Dispatchers.IO) {
+        songDao.countOutdated(source.name) > 0
     }
 
     override suspend fun unmeasured(): List<Song> = withContext(Dispatchers.IO) {
         songDao.getUnmeasured().map { it.toDomain() }
     }
 
-    override suspend fun setLoudness(songId: Long, lufs: Double?, peakDb: Double?) = withContext(Dispatchers.IO) {
-        songDao.setLoudness(songId, lufs ?: SongEntity.LOUDNESS_FAILED, peakDb)
-    }
+    override suspend fun setAnalysis(songId: Long, lufs: Double?, peakDb: Double?, startMs: Long?, endMs: Long?) =
+        withContext(Dispatchers.IO) {
+            songDao.setAnalysis(songId, lufs ?: SongEntity.LOUDNESS_FAILED, peakDb, startMs, endMs)
+        }
 
     override suspend fun clearSource(source: SongSource) = withContext(Dispatchers.IO) {
         songDao.deleteBySource(source.name)
     }
 
-    private fun toEntity(scanner: SourceScanner, file: ScannedFile, old: SongEntity?): SongEntity =
-        entityOf(file, scanner.readMetadata(file), scanner.source, old?.id ?: 0)
+    private fun toEntity(scanner: SourceScanner, file: ScannedFile, old: SongEntity?): SongEntity {
+        val fresh = entityOf(file, scanner.readMetadata(file), scanner.source, old?.id ?: 0)
+        // Stesso file, tag solo riletti (versione nuova della lettura): l'analisi audio vale ancora.
+        return if (old != null && old.fileSize == file.size && old.modifiedAt == file.lastModified) {
+            fresh.copy(
+                loudnessLufs = old.loudnessLufs, peakDb = old.peakDb,
+                soundStartMs = old.soundStartMs, soundEndMs = old.soundEndMs, analysis = old.analysis,
+            )
+        } else {
+            fresh
+        }
+    }
 
     private fun entityOf(file: ScannedFile, meta: AudioMetadata, source: SongSource, id: Long = 0): SongEntity {
         // Senza tag il titolo è il nome del file: artista e titolo li ricava SongNames con tutta la libreria.
@@ -131,6 +143,8 @@ class MusicLibraryRepositoryImpl(private val songDao: SongDao) : MusicLibraryRep
             modifiedAt = file.lastModified,
             source = source.name,
             folder = SongEntity.encodeFolder(file.folder),
+            trackNumber = meta.trackNumber,
+            discNumber = meta.discNumber,
         )
     }
 }

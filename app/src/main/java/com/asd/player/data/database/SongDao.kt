@@ -19,15 +19,18 @@ interface SongDao {
     @Insert
     suspend fun insertAll(songs: List<SongEntity>)
 
-    /** Brani indicizzati prima delle cartelle: la riscansione gliele assegna. */
-    @Query("SELECT COUNT(*) FROM songs WHERE source = :source AND folder IS NULL")
-    suspend fun countWithoutFolder(source: String): Int
+    /** Brani indicizzati da una versione vecchia (senza cartella o con meno tag): la riscansione li sistema. */
+    @Query("SELECT COUNT(*) FROM songs WHERE source = :source AND (folder IS NULL OR tagsVersion < ${SongEntity.TAGS_VERSION})")
+    suspend fun countOutdated(source: String): Int
 
-    @Query("SELECT * FROM songs WHERE loudnessLufs IS NULL")
+    @Query("SELECT * FROM songs WHERE loudnessLufs IS NULL OR analysis < ${SongEntity.ANALYSIS_VERSION}")
     suspend fun getUnmeasured(): List<SongEntity>
 
-    @Query("UPDATE songs SET loudnessLufs = :lufs, peakDb = :peakDb WHERE id = :id")
-    suspend fun setLoudness(id: Long, lufs: Double, peakDb: Double?)
+    @Query(
+        """UPDATE songs SET loudnessLufs = :lufs, peakDb = :peakDb, soundStartMs = :startMs, soundEndMs = :endMs,
+        analysis = ${SongEntity.ANALYSIS_VERSION} WHERE id = :id"""
+    )
+    suspend fun setAnalysis(id: Long, lufs: Double, peakDb: Double?, startMs: Long?, endMs: Long?)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(song: SongEntity)

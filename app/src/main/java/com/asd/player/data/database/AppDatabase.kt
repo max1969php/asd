@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [SongEntity::class, PlaylistEntity::class, PlaylistEntryEntity::class],
-    version = 5,
+    version = 6,
     exportSchema = true,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -19,7 +19,7 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         fun build(context: Context): AppDatabase =
             Room.databaseBuilder(context, AppDatabase::class.java, "asd.db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                 .build()
 
         /** v2: arriva Google Drive, ogni brano ricorda da quale fonte viene. */
@@ -48,6 +48,21 @@ abstract class AppDatabase : RoomDatabase() {
         private val MIGRATION_4_5 = object : Migration(4, 5) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE songs ADD COLUMN folder TEXT")
+            }
+        }
+
+        /**
+         * v6: numero di traccia e di disco (viste Artisti e Album), inizio e fine del suono (silenzio
+         * saltato). tagsVersion e analysis a 0: riscansione e analisi li rifanno una volta.
+         */
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE songs ADD COLUMN trackNumber INTEGER")
+                db.execSQL("ALTER TABLE songs ADD COLUMN discNumber INTEGER")
+                db.execSQL("ALTER TABLE songs ADD COLUMN tagsVersion INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE songs ADD COLUMN soundStartMs INTEGER")
+                db.execSQL("ALTER TABLE songs ADD COLUMN soundEndMs INTEGER")
+                db.execSQL("ALTER TABLE songs ADD COLUMN analysis INTEGER NOT NULL DEFAULT 0")
             }
         }
     }

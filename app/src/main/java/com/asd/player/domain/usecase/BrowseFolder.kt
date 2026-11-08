@@ -6,14 +6,22 @@ import com.asd.player.domain.model.SongSource
 import java.text.Collator
 import java.util.Locale
 
-/** Dove si è in ROBA: la fonte (null = radice con tutte le fonti, o fonte unica) e le sottocartelle. */
+/** Come si sfoglia ROBA: per cartelle del telefono/Drive, per artista o per album (dai tag). */
+enum class LibraryView { FOLDERS, ARTISTS, ALBUMS }
+
+/**
+ * Dove si è in ROBA. In [LibraryView.FOLDERS]: la fonte (null = radice con tutte le fonti, o fonte
+ * unica) e le sottocartelle. In [LibraryView.ARTISTS]: [artista] o [artista, album]. In
+ * [LibraryView.ALBUMS]: [album].
+ */
 data class FolderPath(
     val source: SongSource? = null,
     val dirs: List<String> = emptyList(),
+    val view: LibraryView = LibraryView.FOLDERS,
 ) {
     val isRoot: Boolean get() = source == null && dirs.isEmpty()
 
-    fun up(): FolderPath = if (dirs.isNotEmpty()) copy(dirs = dirs.dropLast(1)) else FolderPath()
+    fun up(): FolderPath = if (dirs.isNotEmpty()) copy(dirs = dirs.dropLast(1)) else FolderPath(view = view)
 }
 
 /** Una riga cartella: [source] valorizzata solo per le fonti mostrate come cartelle alla radice. */
@@ -30,9 +38,12 @@ data class FolderView(
 )
 
 /**
- * ROBA come cartelle: si vedono le sottocartelle della cartella corrente e i suoi file audio.
- * Con più fonti (telefono e Drive) alla radice ogni fonte è una cartella.
- * Con ricerca o filtri attivi niente cartelle: i risultati di tutto l'albero sotto la cartella corrente.
+ * ROBA a livelli: si vedono le "cartelle" del livello corrente e i suoi file audio.
+ * - Cartelle: le sottocartelle vere; con più fonti (telefono e Drive) alla radice ogni fonte è una cartella.
+ * - Artisti: gli artisti, poi i loro album (i pezzi senza album stanno accanto agli album).
+ * - Album: gli album (i pezzi senza album stanno alla radice).
+ * Dentro un album l'ordine è quello delle tracce, se i tag lo dicono.
+ * Con ricerca o filtri attivi niente cartelle: i risultati di tutto quello che c'è sotto il livello corrente.
  */
 class BrowseFolder(private val search: SearchSongs) {
 
@@ -40,36 +51,79 @@ class BrowseFolder(private val search: SearchSongs) {
         strength = Collator.PRIMARY
     }
 
-    operator fun invoke(all: List<Song>, path: FolderPath, query: LibraryQuery): FolderView {
-        val filtering = query.text.isNotBlank() || query.formats.isNotEmpty() ||
-            query.sources.isNotEmpty() || query.artist != null
+    operator fun invoke(all: List<Song>, path: FolderPath, query: LibraryQuery): FolderView = when (path.view) {
+        LibraryView.FOLDERS -> folders(all, path, query)
+        LibraryView.ARTISTS -> levels(all, path, query, listOf({ it.displayArtist }, { it.albumName() }))
+        LibraryView.ALBUMS -> levels(all, path, query, listOf { it.albumName() })
+    }
+
+    private fun folders(all: List<Song>, path: FolderPath, query: LibraryQuery): FolderView {
         val sources = all.mapTo(sortedSetOf()) { it.source }
         val multiSource = sources.size > 1
         val source = if (multiSource) path.source?.takeIf { it in sources } else sources.firstOrNull()
 
         if (source == null) {
-            val below = search(all, query)
-            val folders = if (filtering) emptyList() else sources.map { s ->
+            val below = filtered(all, query)
+            val folders = if (query.filtering) emptyList() else sources.map { s ->
                 FolderEntry(s.name, all.count { it.source == s }, s)
             }
-            return FolderView(FolderPath(), folders, if (filtering) below else emptyList(), below)
+            return FolderView(FolderPath(), folders, if (query.filtering) below else emptyList(), below)
         }
 
         val inSource = all.filter { it.source == source }
-        var dirs = path.dirs
-        while (dirs.isNotEmpty() && inSource.none { it.folder.startsWith(dirs) }) dirs = dirs.dropLast(1)
-        val scope = inSource.filter { it.folder.startsWith(dirs) }
-        val below = search(scope, query)
-        val folders = if (filtering) emptyList() else scope
-            .filter { it.folder.size > dirs.size }
-            .groupingBy { it.folder[dirs.size] }
+        val level = levels(inSource, path.copy(source = null), query, keys = null)
+        return level.copy(path = level.path.copy(source = source.takeIf { multiSource }))
+    }
+
+    /**
+     * Un livello di un albero: con [keys] null l'albero sono le cartelle dei file, altrimenti ogni
+     * livello è un tag (artista, album). Un pezzo senza il tag di un livello sta tra i file di quel livello.
+     */
+    private fun levels(all: List<Song>, path: FolderPath, query: LibraryQuery, keys: List<(Song) -> String?>?): FolderView {
+        val depth = keys?.size ?: Int.MAX_VALUE
+        fun branch(song: Song): List<String> = keys?.let { k ->
+            k.map { it(song) }.takeWhile { it != null }.map { it!! }
+        } ?: song.folder
+
+        var dirs = path.dirs.take(depth)
+        while (dirs.isNotEmpty() && all.none { branch(it).startsWith(dirs) }) dirs = dirs.dropLast(1)
+        val scope = all.filter { branch(it).startsWith(dirs) }
+        val below = filtered(scope, query)
+        val folders = if (query.filtering) emptyList() else scope
+            .mapNotNull { song -> branch(song).getOrNull(dirs.size) }
+            .groupingBy { it.lowercase() to it }
             .eachCount()
-            .map { (name, count) -> FolderEntry(name, count) }
+            .let { counts ->
+                // "Ramones" e "RAMONES" sono lo stesso artista: un nome solo, il primo trovato.
+                counts.entries.groupBy({ it.key.first }, { it.key.second to it.value })
+                    .map { (_, variants) -> FolderEntry(variants.first().first, variants.sumOf { it.second }) }
+            }
             .sortedWith { a, b -> collator.compare(a.name, b.name) }
-        val songs = if (filtering) below else below.filter { it.folder.size == dirs.size }
-        return FolderView(FolderPath(source.takeIf { multiSource }, dirs), folders, songs, below)
+        val here = below.filter { branch(it).size == dirs.size }
+        val songs = when {
+            query.filtering -> below
+            // Dentro un album: l'ordine dei tag, se c'è (disco, poi traccia).
+            keys != null && dirs.size == keys.size && here.any { it.trackNumber != null } ->
+                here.sortedWith(compareBy<Song>({ it.discNumber ?: 1 }, { it.trackNumber ?: Int.MAX_VALUE }))
+            else -> here
+        }
+        return FolderView(path.copy(dirs = dirs), folders, songs, below)
+    }
+
+    /** Ricerca e filtri; con "doppioni" solo i gruppi di pezzi uguali, uno vicino all'altro. */
+    private fun filtered(songs: List<Song>, query: LibraryQuery): List<Song> {
+        val found = search(songs, query)
+        if (!query.duplicates) return found
+        val order = found.withIndex().associate { (i, song) -> song.id to i }
+        return Duplicates.groups(found)
+            .map { group -> group.sortedBy { order[it.id] } }
+            .sortedBy { group -> order[group.first().id] }
+            .flatten()
     }
 
     private fun List<String>.startsWith(prefix: List<String>) =
-        size >= prefix.size && subList(0, prefix.size) == prefix
+        size >= prefix.size && prefix.indices.all { this[it].equals(prefix[it], ignoreCase = true) }
 }
+
+/** L'album come livello della vista Album: null se il tag manca. */
+private fun Song.albumName(): String? = album?.trim()?.takeIf { it.isNotEmpty() }

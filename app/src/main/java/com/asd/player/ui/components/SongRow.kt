@@ -29,6 +29,8 @@ fun SongRow(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     onLongClick: (() -> Unit)? = null,
+    /** Al posto di "artista // album" (es. il percorso, per i doppioni). */
+    subtitle: String? = null,
     trailing: @Composable (() -> Unit)? = null,
 ) {
     Row(
@@ -56,7 +58,7 @@ fun SongRow(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                listOfNotNull(song.displayArtist, song.album).joinToString(" // "),
+                subtitle ?: listOfNotNull(song.displayArtist, song.album).joinToString(" // "),
                 style = MaterialTheme.typography.bodySmall,
                 color = faded,
                 maxLines = 1,

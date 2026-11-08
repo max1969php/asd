@@ -35,7 +35,13 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
   un mixtape: un mixtape può avere brani di cartelle diverse e non cambia quando ci si sposta tra
   le cartelle. Cambiando cartella in SETUP i brani della vecchia escono dai mixtape e i mixtape
   rimasti vuoti spariscono. Alla riapertura ROBA torna nella cartella e nel punto della lista
-  dov'eri.
+  dov'eri, e riscansiona da sola la cartella (solo file nuovi, cambiati o spariti; nella full anche
+  Drive, se c'è rete e l'ultima scansione ha più di un'ora).
+- **Viste** CARTELLE / ARTISTI / ALBUM in ROBA (`BrowseFolder`): artisti → loro album → pezzi
+  (i pezzi senza album accanto agli album), album → pezzi; dentro un album l'ordine delle tracce
+  dai tag (disco, poi traccia). **DOPPIONI**: filtro che mostra a gruppi i pezzi uguali (stesso
+  artista e titolo, o durata ±1 s e dimensione ±2%) con il loro percorso; ASD non cancella, si
+  tolgono dal telefono.
 - **Nomi puliti** (`SongNames`, solo quello che si vede: i file non si toccano): via i numeri di
   catalogazione in testa (`001 - `, `01. `, `1) `, `(03) `, `CD1-03 `) e le code dei download
   (`(Official Video)`, `[HD]`, `(Lyric Video)`, `(Video ufficiale)`…), e " - Topic" dagli artisti.
@@ -51,6 +57,18 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
   e sulle cuffie. Alla riapertura riparte dall'ultimo ascolto (stessa coda, pezzo e punto, in
   pausa: `PlaybackMemory`, la coda in un file dell'app). Timer di spegnimento (icona luna in alto
   nel player): 15, 30, 60 minuti o a fine pezzo; negli ultimi 10 secondi il volume sfuma, poi pausa.
+  Copertina incorporata nel file al posto del vinile (anche in notifica e schermata di blocco, via
+  Media3); **INFO** (album, anno, genere, traccia, formato, bitrate, frequenza, dimensione, percorso,
+  loudness e correzione) e **TESTO** (solo quello scritto nel file: ID3 USLT, Vorbis LYRICS, M4A
+  ©lyr; altrimenti "Mancano testi nel file"), letti con il `MetadataRetriever` di Media3
+  (`TrackDetailsReader`). Riproduzione gapless (ExoPlayer, con i dati di encoder delay del file).
+- **Silenzio a inizio e fine** (SETUP, acceso di default): l'analisi in sottofondo che misura il
+  volume trova anche dove comincia e finisce il suono (soglia −54 dBFS); i silenzi di almeno 0,4 s
+  all'inizio e 0,7 s alla fine si saltano con una `ClippingConfiguration`, con un margine; le
+  pause dentro il pezzo restano (`SilenceTrim`).
+- **Equalizzatore** (SETUP): l'equalizzatore e i bassi di Android sulla sessione audio di ASD,
+  preset del telefono o bande a mano; con bande alzate il player abbassa del guadagno aggiunto,
+  per non distorcere (`AudioEffects`). Permesso `MODIFY_AUDIO_SETTINGS`, nessuna rete.
 - **Lingue**: italiano di base più tutte le altre lingue dell'UE, norvegese, ucraino, cinese
   semplificato, hindi, arabo, farsi, swahili, wolof, hausa, yoruba, igbo, amarico, tigrino e somalo
   (38 in tutto). Si sceglie in SETUP → Lingua

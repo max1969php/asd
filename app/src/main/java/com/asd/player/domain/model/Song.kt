@@ -18,6 +18,12 @@ data class Song(
     val loudnessLufs: Double? = null,
     /** Sottocartelle dalla cartella scelta al file: vuota = direttamente nella cartella. */
     val folder: List<String> = emptyList(),
+    /** Numero di traccia e di disco dai tag, per l'ordine dentro un album. */
+    val trackNumber: Int? = null,
+    val discNumber: Int? = null,
+    /** Dove comincia e finisce il suono (silenzio a inizio e fine saltato); null = non misurato o niente da saltare. */
+    val soundStartMs: Long? = null,
+    val soundEndMs: Long? = null,
 ) {
     /** Estensione in maiuscolo (MP3, WAV, ...), usata per il filtro per formato. */
     val format: String

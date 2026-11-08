@@ -3,12 +3,14 @@ package com.asd.player.playback
 import android.content.ComponentName
 import android.content.Context
 import androidx.core.content.ContextCompat
+import androidx.media3.common.C
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.asd.player.L10n
 import com.asd.player.R
+import com.asd.player.data.settings.SettingsStore
 import com.asd.player.domain.model.Song
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +40,7 @@ data class PlaybackState(
  * Unico punto di contatto tra UI e motore audio: la UI vede Song e StateFlow,
  * mai ExoPlayer. Si collega al PlaybackService tramite MediaController.
  */
-class PlaybackController(private val context: Context) {
+class PlaybackController(private val context: Context, private val settings: SettingsStore) {
 
     private var controller: MediaController? = null
     private var pendingAction: ((MediaController) -> Unit)? = null
@@ -90,7 +92,8 @@ class PlaybackController(private val context: Context) {
         if (songs.isEmpty()) return
         withController { c ->
             c.shuffleModeEnabled = shuffle
-            c.setMediaItems(songs.map { it.toMediaItem() }, startIndex.coerceIn(songs.indices), 0L)
+            val skip = settings.skipSilence.value
+            c.setMediaItems(songs.map { it.toMediaItem(skip) }, startIndex.coerceIn(songs.indices), C.TIME_UNSET)
             c.prepare()
             c.play()
         }

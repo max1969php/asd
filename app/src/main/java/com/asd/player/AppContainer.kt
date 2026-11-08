@@ -2,6 +2,7 @@ package com.asd.player
 
 import android.content.ContentResolver
 import android.content.Context
+import android.net.ConnectivityManager
 import com.asd.player.data.database.AppDatabase
 import com.asd.player.data.drive.DriveAuth
 import com.asd.player.data.drive.DriveClient
@@ -19,13 +20,18 @@ import com.asd.player.data.tube.TubeDownloader
 import com.asd.player.data.tube.TubeImporter
 import com.asd.player.domain.usecase.BrowseFolder
 import com.asd.player.domain.usecase.SearchSongs
+import com.asd.player.playback.AudioEffects
 import com.asd.player.playback.CloudStreamResolver
 import com.asd.player.playback.PlaybackController
 import com.asd.player.playback.SleepTimer
+import com.asd.player.playback.TrackDetailsReader
 
 /** Dependency injection fatta a mano: per un'app così non serve un framework. */
 class AppContainer(context: Context) {
     private val database = AppDatabase.build(context)
+    private val connectivity = context.getSystemService(ConnectivityManager::class.java)
+
+    fun isOnline(): Boolean = connectivity?.activeNetwork != null
 
     val contentResolver: ContentResolver = context.contentResolver
     val settings = SettingsStore(context)
@@ -45,8 +51,10 @@ class AppContainer(context: Context) {
     val loudnessQueue = LoudnessQueue(
         context, LoudnessAnalyzer(context), libraryRepository, settings, driveAuth,
     ).also { it.start() }
-    val playbackController = PlaybackController(context)
+    val playbackController = PlaybackController(context, settings)
     val sleepTimer = SleepTimer()
+    val audioEffects = AudioEffects(context, settings)
+    val trackDetails = TrackDetailsReader(context, streamResolver)
     val searchSongs = SearchSongs()
     val browseFolder = BrowseFolder(searchSongs)
 }

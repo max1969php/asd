@@ -13,5 +13,10 @@ data class LibraryQuery(
     val formats: Set<String> = emptySet(),
     val sources: Set<SongSource> = emptySet(),
     val artist: String? = null,
+    /** Solo i pezzi che sembrano doppioni, a gruppi. */
+    val duplicates: Boolean = false,
     val sort: SortOrder = SortOrder(),
-)
+) {
+    val filtering: Boolean
+        get() = text.isNotBlank() || formats.isNotEmpty() || sources.isNotEmpty() || artist != null || duplicates
+}

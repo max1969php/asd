@@ -8,6 +8,18 @@ import android.media.MediaFormat
 import android.net.Uri
 import java.io.IOException
 import java.nio.ByteOrder
+import kotlin.math.abs
+
+/**
+ * Il risultato dell'analisi: volume percepito e dove il suono comincia e finisce
+ * (in ms dall'inizio del file decodificato; null se è tutto silenzio).
+ */
+data class AudioAnalysis(
+    val loudness: Loudness,
+    val firstSoundMs: Long?,
+    val lastSoundMs: Long?,
+    val totalMs: Long,
+)
 
 /**
  * Decodifica un brano intero in PCM (MediaCodec, quindi tutti i formati che Android legge)
@@ -15,11 +27,11 @@ import java.nio.ByteOrder
  */
 class LoudnessAnalyzer(private val context: Context) {
 
-    fun analyzeLocal(uri: Uri): Loudness = analyze { setDataSource(context, uri, null) }
+    fun analyzeLocal(uri: Uri): AudioAnalysis = analyze { setDataSource(context, uri, null) }
 
-    fun analyzeRemote(url: String, headers: Map<String, String>): Loudness = analyze { setDataSource(url, headers) }
+    fun analyzeRemote(url: String, headers: Map<String, String>): AudioAnalysis = analyze { setDataSource(url, headers) }
 
-    private fun analyze(open: MediaExtractor.() -> Unit): Loudness {
+    private fun analyze(open: MediaExtractor.() -> Unit): AudioAnalysis {
         val extractor = MediaExtractor()
         var codec: MediaCodec? = null
         try {
@@ -40,7 +52,7 @@ class LoudnessAnalyzer(private val context: Context) {
         }
     }
 
-    private fun decode(extractor: MediaExtractor, codec: MediaCodec, input: MediaFormat): Loudness {
+    private fun decode(extractor: MediaExtractor, codec: MediaCodec, input: MediaFormat): AudioAnalysis {
         var meter: LoudnessMeter? = null
         var channels = input.getInteger(MediaFormat.KEY_CHANNEL_COUNT)
         var sampleRate = input.getInteger(MediaFormat.KEY_SAMPLE_RATE)
@@ -48,6 +60,10 @@ class LoudnessAnalyzer(private val context: Context) {
         var samples = FloatArray(0)
         val info = MediaCodec.BufferInfo()
         var inputDone = false
+        // Tempo in µs già decodificato, e primo/ultimo istante sopra la soglia del silenzio.
+        var decodedUs = 0.0
+        var firstSoundUs = -1.0
+        var lastSoundUs = -1.0
 
         while (true) {
             if (!inputDone) {
@@ -86,15 +102,39 @@ class LoudnessAnalyzer(private val context: Context) {
                     }
                     codec.releaseOutputBuffer(index, false)
                     val m = meter ?: LoudnessMeter(sampleRate, channels).also { meter = it }
-                    m.feed(samples, count / channels)
+                    val frames = count / channels
+                    m.feed(samples, frames)
+                    val usPerFrame = 1_000_000.0 / sampleRate
+                    var first = -1
+                    var last = -1
+                    for (i in 0 until frames * channels) {
+                        if (abs(samples[i]) > SILENCE_THRESHOLD) {
+                            if (first < 0) first = i / channels
+                            last = i / channels
+                        }
+                    }
+                    if (first >= 0) {
+                        if (firstSoundUs < 0) firstSoundUs = decodedUs + first * usPerFrame
+                        lastSoundUs = decodedUs + (last + 1) * usPerFrame
+                    }
+                    decodedUs += frames * usPerFrame
                     if (info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0) break
                 }
             }
         }
-        return meter?.result() ?: throw IOException("Niente audio decodificato")
+        val loudness = meter?.result() ?: throw IOException("Niente audio decodificato")
+        return AudioAnalysis(
+            loudness,
+            firstSoundUs.takeIf { it >= 0 }?.let { (it / 1000).toLong() },
+            lastSoundUs.takeIf { it >= 0 }?.let { (it / 1000).toLong() },
+            (decodedUs / 1000).toLong(),
+        )
     }
 
     private companion object {
         const val TIMEOUT_US = 10_000L
+
+        /** −54 dBFS: sotto è silenzio (anche il fruscio di un vinile o di una cassetta). */
+        const val SILENCE_THRESHOLD = 0.002f
     }
 }

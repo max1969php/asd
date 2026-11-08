@@ -14,6 +14,7 @@ import com.asd.player.R
 import com.asd.player.data.loudness.LoudnessProgress
 import com.asd.player.data.repository.ScanState
 import com.asd.player.data.scanner.LocalSourceScanner
+import com.asd.player.data.settings.EqSettings
 import com.asd.player.data.settings.SettingsStore
 import com.asd.player.domain.model.LibraryQuery
 import com.asd.player.domain.model.Playlist
@@ -22,6 +23,7 @@ import com.asd.player.domain.model.SongSource
 import com.asd.player.domain.model.SortOrder
 import com.asd.player.domain.usecase.FolderEntry
 import com.asd.player.domain.usecase.FolderPath
+import com.asd.player.domain.usecase.LibraryView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -67,7 +69,11 @@ class LibraryViewModel(
 
     /** La cartella aperta in ROBA, ritrovata alla riapertura. Cambiarla non tocca i mixtape. */
     private val path = MutableStateFlow(
-        FolderPath(savedPlace.source?.let { runCatching { SongSource.valueOf(it) }.getOrNull() }, savedPlace.dirs)
+        FolderPath(
+            savedPlace.source?.let { runCatching { SongSource.valueOf(it) }.getOrNull() },
+            savedPlace.dirs,
+            savedPlace.view?.let { runCatching { LibraryView.valueOf(it) }.getOrNull() } ?: LibraryView.FOLDERS,
+        )
     )
 
     /** Posizione nella lista per ogni cartella visitata: risalendo si ritrova il punto. */
@@ -77,7 +83,7 @@ class LibraryViewModel(
 
     fun saveScroll(folder: FolderPath, index: Int, offset: Int) {
         scrolls[folder] = index to offset
-        settings.setLibraryPlace(SettingsStore.LibraryPlace(folder.source?.name, folder.dirs, index, offset))
+        settings.setLibraryPlace(SettingsStore.LibraryPlace(folder.source?.name, folder.dirs, index, offset, folder.view.name))
     }
 
     private val query = combine(filters, settings.sortOrder) { f, sort -> f.copy(sort = sort) }
@@ -116,15 +122,9 @@ class LibraryViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     init {
-        // Primo avvio dopo l'installazione o cartella appena scelta ma mai scansionata.
-        settings.directoryUri.value?.let { dir ->
-            if (settings.lastScanAt.value == 0L) {
-                rescan(dir)
-            } else {
-                // Brani indicizzati da una versione che non ricordava le cartelle: una riscansione le trova.
-                viewModelScope.launch { if (repository.needsFolders(SongSource.LOCAL)) rescan(dir) }
-            }
-        }
+        // A ogni apertura: solo i file nuovi, cambiati o spariti (e i tag di versioni vecchie).
+        // La lista si aggiorna in un colpo solo a fine scansione, non sotto il dito.
+        settings.directoryUri.value?.let(::rescan)
     }
 
     fun openFolder(folder: FolderEntry) = path.update {
@@ -132,12 +132,19 @@ class LibraryViewModel(
         if (folder.source != null) FolderPath(folder.source) else shown.copy(dirs = shown.dirs + folder.name)
     }
 
+    /** CARTELLE / ARTISTI / ALBUM: si riparte dalla radice della vista. */
+    fun setView(view: LibraryView) {
+        if (view != uiState.value.path.view) path.value = FolderPath(view = view)
+    }
+
+    fun toggleDuplicates() = filters.update { it.copy(duplicates = !it.duplicates) }
+
     fun goUp() = path.update { uiState.value.path.up() }
 
     /** Dal percorso in alto: [depth] cartelle sotto la radice della fonte (0 = la radice). */
     fun goTo(depth: Int) = path.update { uiState.value.path.let { it.copy(dirs = it.dirs.take(depth)) } }
 
-    fun goToRoot() = path.update { FolderPath() }
+    fun goToRoot() = path.update { FolderPath(view = uiState.value.path.view) }
 
     /**
      * Testo del campo CERCA_, aggiornato in modo sincrono a ogni tasto. Il campo non deve leggere
@@ -173,6 +180,31 @@ class LibraryViewModel(
     val loudnessProgress: StateFlow<LoudnessProgress> = container.loudnessQueue.progress
 
     fun setNormalizeVolume(enabled: Boolean) = settings.setNormalizeVolume(enabled)
+
+    val skipSilence: StateFlow<Boolean> = settings.skipSilence
+
+    /** Vale dal prossimo pezzo messo in coda. */
+    fun setSkipSilence(enabled: Boolean) = settings.setSkipSilence(enabled)
+
+    val effects = container.audioEffects
+    val eq: StateFlow<EqSettings> = settings.eq
+
+    fun setEqEnabled(enabled: Boolean) = settings.eq.value.let { current ->
+        // Prima accensione: si parte dai livelli attuali del telefono (tutto piatto di solito).
+        val levels = current.levels.takeIf { it.size == effects.bands.size } ?: List(effects.bands.size) { 0 }
+        settings.setEq(current.copy(enabled = enabled, levels = levels))
+    }
+
+    fun setEqPreset(preset: Int) =
+        settings.setEq(settings.eq.value.copy(enabled = true, preset = preset, levels = effects.presetLevels(preset)))
+
+    fun setEqBand(index: Int, level: Int) = settings.eq.value.let { current ->
+        val levels = (current.levels.takeIf { it.size == effects.bands.size } ?: List(effects.bands.size) { 0 })
+            .toMutableList().also { it[index] = level }
+        settings.setEq(current.copy(preset = null, levels = levels))
+    }
+
+    fun setEqBass(strength: Int) = settings.setEq(settings.eq.value.copy(bass = strength))
 
     fun onDirectoryChosen(uri: Uri) {
         val resolver = app.contentResolver

@@ -19,7 +19,7 @@ object AsdViewModels {
         }
         initializer {
             val container = (this[APPLICATION_KEY] as MusicApplication).container
-            PlayerViewModel(container.playbackController, container.sleepTimer)
+            PlayerViewModel(container)
         }
         initializer {
             val container = (this[APPLICATION_KEY] as MusicApplication).container

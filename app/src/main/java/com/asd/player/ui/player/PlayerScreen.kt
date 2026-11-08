@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,10 +20,13 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bedtime
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -33,6 +37,7 @@ import androidx.compose.material.icons.filled.RepeatOne
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -41,6 +46,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -52,19 +58,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player
 import com.asd.player.R
+import com.asd.player.domain.model.SongSource
 import com.asd.player.playback.PlaybackState
 import com.asd.player.playback.SleepTimer
 import com.asd.player.playback.SleepTimerState
 import com.asd.player.ui.components.AnarchyLogo
 import com.asd.player.ui.components.Stamp
+import com.asd.player.ui.components.TapeChip
 import com.asd.player.ui.components.formatDuration
 import com.asd.player.ui.theme.Asd
+import java.util.Locale
 
 @Composable
 fun PlayerScreen(
@@ -75,6 +85,8 @@ fun PlayerScreen(
 ) {
     BackHandler(onBack = onClose)
     val now = state.nowPlaying
+    val info by viewModel.info.collectAsState()
+    var panel by remember { mutableStateOf<Panel?>(null) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -94,7 +106,17 @@ fun PlayerScreen(
         }
 
         Spacer(Modifier.weight(0.5f))
-        SpinningRecord(spinning = state.isPlaying, modifier = Modifier.fillMaxWidth(0.75f))
+        val artwork = info.artwork
+        if (artwork != null) {
+            Image(
+                bitmap = artwork,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxWidth(0.75f).aspectRatio(1f).border(3.dp, Asd.Paper),
+            )
+        } else {
+            SpinningRecord(spinning = state.isPlaying, modifier = Modifier.fillMaxWidth(0.75f))
+        }
         Spacer(Modifier.weight(0.5f))
 
         Text(
@@ -114,7 +136,15 @@ fun PlayerScreen(
             overflow = TextOverflow.Ellipsis,
         )
 
-        Spacer(Modifier.height(24.dp))
+        if (info.song != null) {
+            Spacer(Modifier.height(10.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                TapeChip(stringResource(R.string.info_button), selected = false, onClick = { panel = Panel.INFO })
+                TapeChip(stringResource(R.string.lyrics_button), selected = false, onClick = { panel = Panel.LYRICS })
+            }
+        }
+
+        Spacer(Modifier.height(18.dp))
         SeekBar(positionMs, state.durationMs, viewModel::seekTo)
 
         Spacer(Modifier.height(16.dp))
@@ -140,6 +170,83 @@ fun PlayerScreen(
         }
         Spacer(Modifier.height(24.dp))
     }
+
+    when (panel) {
+        Panel.INFO -> InfoDialog(info, onDismiss = { panel = null })
+        Panel.LYRICS -> LyricsDialog(info, onDismiss = { panel = null })
+        null -> Unit
+    }
+}
+
+private enum class Panel { INFO, LYRICS }
+
+/** Quello che il file dice di sé, più quello che ASD ha misurato. */
+@Composable
+private fun InfoDialog(info: NowPlayingInfo, onDismiss: () -> Unit) {
+    val song = info.song ?: return
+    val d = info.details
+    val rows = buildList {
+        add(stringResource(R.string.sort_album) to song.album)
+        add(stringResource(R.string.info_year) to d?.year?.toString())
+        add(stringResource(R.string.info_genre) to d?.genre)
+        add(stringResource(R.string.info_track) to (d?.trackNumber ?: song.trackNumber)?.let { n -> d?.totalTracks?.let { "$n/$it" } ?: "$n" })
+        add(stringResource(R.string.info_format) to song.format)
+        add(stringResource(R.string.info_bitrate) to d?.bitrate?.let { "${(it + 500) / 1000} kbps" })
+        add(
+            stringResource(R.string.info_sample_rate) to d?.sampleRate?.let { rate ->
+                String.format(Locale.getDefault(), "%.1f kHz", rate / 1000.0) + (d.channels?.let { " · ${it}ch" } ?: "")
+            }
+        )
+        add(stringResource(R.string.info_size) to song.fileSize.takeIf { it > 0 }?.let { String.format(Locale.getDefault(), "%.1f MB", it / 1_048_576.0) })
+        add(
+            stringResource(R.string.info_path) to
+                ((if (song.source == SongSource.DRIVE) listOf("Drive") else emptyList()) + song.folder + song.fileName).joinToString(" / ")
+        )
+        add(
+            stringResource(R.string.info_loudness) to
+                (song.loudnessLufs?.let { String.format(Locale.getDefault(), "%.1f LUFS", it) } ?: stringResource(R.string.info_not_measured))
+        )
+        add(stringResource(R.string.info_gain) to info.gainDb?.let { String.format(Locale.getDefault(), "%+.1f dB", it) })
+    }
+    PlayerDialog(title = stringResource(R.string.info_button), onDismiss = onDismiss) {
+        if (info.loading) Text(stringResource(R.string.info_reading), style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
+        rows.forEach { (label, value) ->
+            if (value.isNullOrBlank()) return@forEach
+            Column(Modifier.padding(vertical = 4.dp)) {
+                Text(label.uppercase(), style = MaterialTheme.typography.labelSmall, color = Asd.Spray)
+                Text(value, style = MaterialTheme.typography.bodyMedium, color = Asd.Paper)
+            }
+        }
+    }
+}
+
+/** Solo il testo scritto nel file: niente rete. */
+@Composable
+private fun LyricsDialog(info: NowPlayingInfo, onDismiss: () -> Unit) {
+    PlayerDialog(title = stringResource(R.string.lyrics_button), onDismiss = onDismiss) {
+        val lyrics = info.details?.lyrics
+        when {
+            lyrics != null -> Text(lyrics, style = MaterialTheme.typography.bodyLarge, color = Asd.Paper)
+            info.loading -> Text(stringResource(R.string.info_reading), style = MaterialTheme.typography.bodyMedium, color = Asd.Smudge)
+            else -> Text(stringResource(R.string.lyrics_missing), style = MaterialTheme.typography.bodyLarge, color = Asd.Smudge)
+        }
+    }
+}
+
+@Composable
+private fun PlayerDialog(title: String, onDismiss: () -> Unit, content: @Composable () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Asd.Asphalt,
+        modifier = Modifier.border(2.dp, Asd.Acid),
+        title = { Text(title.uppercase(), style = MaterialTheme.typography.headlineSmall) },
+        text = {
+            Column(Modifier.heightIn(max = 480.dp).verticalScroll(rememberScrollState())) { content() }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.close).uppercase(), color = Asd.Acid) }
+        },
+    )
 }
 
 /** Timer di spegnimento: icona luna, tempo che manca e menu con le durate. */
