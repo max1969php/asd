@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 nummer</string>
+    <string name="desktop_songs">%1$d nummers</string>
+    <string name="desktop_folder_missing">De map %1$s is er niet meer. Kies een andere in %2$s.</string>
+    <string name="desktop_choose_folder">Kies je muziekmap</string>
+    <string name="desktop_no_folder">Geen map gekozen.</string>
+    <string name="desktop_no_folder_hint">Kies de map met je muziek: ASD leest hem alleen en verwijdert nooit iets.</string>
+    <string name="desktop_language_system">Zoals het systeem</string>
+    <string name="desktop_site">Website</string>
+    <string name="desktop_version">Versie</string>
+    <string name="desktop_nothing_playing">NIETS IN DE WACHTRIJ</string>
+    <string name="desktop_playlists_none_hint">Maak er hier een, of druk op + naast een nummer in %1$s.</string>
+    <string name="desktop_playlist_empty">Leeg bandje. Ga naar %1$s en druk op + naast een nummer.</string>
+    <string name="desktop_sleep_left">stopt over %1$s</string>
+    <string name="desktop_none">Geen</string>
+</resources>

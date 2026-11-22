@@ -1,56 +1,149 @@
 package com.asd.desktop
 
+import com.asd.desktop.I18n.t
+
 /**
- * I testi di ASD Desktop, in italiano. Dove esiste, il testo è lo stesso della chiave indicata in
- * app/src/main/res/values/strings.xml: le altre lingue arriveranno riusando quei file (fase 4).
+ * I testi di ASD Desktop nella lingua scelta. Quasi tutti sono chiavi di strings.xml dell'app
+ * (stesse traduzioni); quelli che iniziano con desktop_ stanno in resources/i18n/desktop.
  */
 object Texts {
     const val APP = "ASD Desktop"
-    const val TAB_LIBRARY = "Roba" // tab_library
-    const val TAB_SETTINGS = "Setup" // tab_settings
-    const val PLAY_ALL = "Tutto" // play_all
-    const val CHAOS = "Caos" // shuffle_button
-    const val SEARCH_HINT = "titolo, artista, album, file…" // search_hint
-    const val SORT_TITLE = "Titolo" // sort_title
-    const val SORT_ARTIST = "Artista" // sort_artist
-    const val SORT_ALBUM = "Album" // sort_album
-    const val SORT_DURATION = "Durata" // sort_duration
-    const val SORT_RECENT = "Recenti" // sort_recent
-    const val VIEW_FOLDERS = "Cartelle" // view_folders
-    const val VIEW_ARTISTS = "Artisti" // view_artists
-    const val VIEW_ALBUMS = "Album" // view_albums
-    const val UNKNOWN_ARTIST = "Anonimo" // unknown_artist
-    const val LIBRARY_EMPTY = "CARTELLA VUOTA." // library_empty
-    const val LIBRARY_EMPTY_HINT = "Buttaci dentro qualche MP3, WAV, FLAC o M4A e premi Riscansiona in SETUP."
-    const val CHANGE_FOLDER = "Cambia cartella" // change_folder
-    const val CHOOSE_FOLDER = "Scegli la cartella della musica"
-    const val NO_FOLDER = "Nessuna cartella scelta."
-    const val NO_FOLDER_HINT = "Scegli la cartella con la tua musica: ASD la legge e basta, non scrive e non cancella niente."
-    const val RESCAN = "Riscansiona" // rescan
-    const val FOLDER = "Cartella" // folder
-    const val SCAN_LISTING = "FRUGANDO NELLA CARTELLA…"
-    const val NOTHING_PLAYING = "NIENTE IN CODA"
-    const val SITE = "Sito"
-    const val ON = "Acceso" // on
-    const val OFF = "Spento" // off
-    const val VOLUME_TITLE = "Volume uniforme" // volume_title
-    const val VOLUME_HINT =
-        "Ogni pezzo viene misurato una volta (EBU R128) e suonato a -14 LUFS, lo stesso livello di Spotify e YouTube: " +
-            "niente più salti di volume tra un MP3 e l'altro. I pezzi forti vengono abbassati e quelli deboli alzati, " +
-            "con un limitatore che non fa distorcere." // volume_hint (senza la frase su Drive)
-    const val SILENCE_TITLE = "Silenzio a inizio e fine" // silence_title
-    const val SILENCE_HINT =
-        "Salta i secondi muti all'inizio e alla fine dei pezzi; le pause dentro il pezzo restano. " +
-            "Si misura in sottofondo insieme al volume." // silence_hint, senza "vale dal prossimo pezzo" (qui vale subito)
-    const val ALL_MEASURED = "tutti i pezzi misurati" // volume_all_measured
-    const val VERSION = "Versione"
-    const val MISSING_AAC =
-        "Per gli M4A/AAC (anche quelli del TUBO) serve il decoder di GStreamer: sudo apt install gstreamer1.0-libav"
 
-    fun scanIndexing(done: Int, total: Int) = "INDICIZZO $done/$total…" // scan_indexing
-    fun scanSummary(added: Int, changed: Int, removed: Int) = "+$added nuovi · ~$changed cambiati · -$removed spariti" // scan_summary
-    fun scanError(message: String) = "ERRORE: $message"
-    fun folderMissing(folder: String) = "La cartella $folder non c'è più. Scegline un'altra in SETUP."
-    fun measuring(n: Int) = "misuro il volume: ne mancano $n" // volume_measuring
-    fun songs(n: Int) = if (n == 1) "1 pezzo" else "$n pezzi"
+    // Schede
+    val TAB_LIBRARY get() = t("tab_library")
+    val TAB_PLAYLISTS get() = t("tab_playlists")
+    val TAB_TUBE get() = t("tab_tube")
+    val TAB_SETTINGS get() = t("tab_settings")
+
+    // ROBA
+    val PLAY_ALL get() = t("play_all")
+    val CHAOS get() = t("shuffle_button")
+    val SEARCH_HINT get() = t("search_hint")
+    val SORT_TITLE get() = t("sort_title")
+    val SORT_ARTIST get() = t("sort_artist")
+    val SORT_ALBUM get() = t("sort_album")
+    val SORT_DURATION get() = t("sort_duration")
+    val SORT_RECENT get() = t("sort_recent")
+    val VIEW_FOLDERS get() = t("view_folders")
+    val VIEW_ARTISTS get() = t("view_artists")
+    val VIEW_ALBUMS get() = t("view_albums")
+    val UNKNOWN_ARTIST get() = t("unknown_artist")
+    val LIBRARY_EMPTY get() = t("library_empty")
+    val LIBRARY_EMPTY_HINT get() = t("library_empty_hint")
+    val LIBRARY_NOTHING get() = t("library_nothing")
+    val LIBRARY_NO_MATCH get() = t("library_no_match")
+    val RESET_FILTERS get() = t("library_reset_filters")
+    val FILTERS_RESET get() = t("filters_reset")
+    val DUPLICATES get() = t("duplicates")
+    val ARTIST_ALL get() = t("artist_chip_all")
+    fun artistChip(name: String) = t("artist_chip", name)
+    fun songs(n: Int) = if (n == 1) t("desktop_one_song") else t("desktop_songs", n)
+
+    // Scansione
+    private val lib get() = TAB_LIBRARY.uppercase()
+    val SCAN_LISTING get() = t("scan_listing", lib)
+    fun scanIndexing(done: Int, total: Int) = t("scan_indexing", lib, done, total)
+    fun scanSummary(added: Int, changed: Int, removed: Int) = t("scan_summary", added, changed, removed)
+    fun scanError(message: String) = t("scan_error", lib, message)
+    fun folderMissing(folder: String) = t("desktop_folder_missing", folder, TAB_SETTINGS.uppercase())
+
+    // SETUP
+    val FOLDER get() = t("folder")
+    val CHANGE_FOLDER get() = t("change_folder")
+    val CHOOSE_FOLDER get() = t("desktop_choose_folder")
+    val NO_FOLDER get() = t("desktop_no_folder")
+    val NO_FOLDER_HINT get() = t("desktop_no_folder_hint")
+    val RESCAN get() = t("rescan")
+    val ON get() = t("on")
+    val OFF get() = t("off")
+    val VOLUME_TITLE get() = t("volume_title")
+    val VOLUME_HINT get() = t("volume_hint")
+    val SILENCE_TITLE get() = t("silence_title")
+    val SILENCE_HINT get() = t("silence_hint")
+    val ALL_MEASURED get() = t("volume_all_measured")
+    fun measuring(n: Int) = t("volume_measuring", n)
+    val LANGUAGE get() = t("language_title")
+    val LANGUAGE_SYSTEM get() = t("desktop_language_system")
+    val SITE get() = t("desktop_site")
+    val VERSION get() = t("desktop_version")
+    val MISSING_AAC get() = t("desktop_missing_aac")
+    val MANIFESTO get() = t("manifesto")
+
+    // Mixtape
+    val PLAYLISTS_SUBTITLE get() = t("playlists_subtitle")
+    fun playlistsStamp(n: Int) = t("playlists_stamp", n)
+    val NEW_PLAYLIST get() = t("new_playlist")
+    val NEW_PLAYLIST_CAPS get() = t("new_playlist_caps")
+    val PLAYLISTS_NONE get() = t("playlists_none")
+    val PLAYLISTS_NONE_HINT get() = t("desktop_playlists_none_hint", lib)
+    val PLAYLIST_EMPTY get() = t("desktop_playlist_empty", lib)
+    val PLAYLIST_NAME_HINT get() = t("playlist_name_hint")
+    fun sideA(n: Int) = t("playlist_side_a", n)
+    val CREATE get() = t("create")
+    val CREATE_AND_ADD get() = t("create_and_add")
+    val ADD_TO_PLAYLIST get() = t("add_to_playlist")
+    val BACK get() = t("back")
+    val RENAME get() = t("rename")
+    val DELETE_PLAYLIST get() = t("delete_playlist")
+    val PLAY get() = t("play")
+    val MOVE_UP get() = t("move_up")
+    val MOVE_DOWN get() = t("move_down")
+    val REMOVE_FROM_PLAYLIST get() = t("remove_from_playlist")
+    val BURN_TITLE get() = t("burn_title")
+    fun burnMessage(name: String) = t("burn_message", name)
+    val BURN get() = t("burn")
+    val CANCEL get() = t("cancel")
+    val OK get() = t("ok")
+
+    // Player
+    val NOTHING_PLAYING get() = t("desktop_nothing_playing")
+    val ON_AIR get() = t("on_air")
+    val PAUSED get() = t("paused")
+    val INFO get() = t("info_button")
+    val LYRICS get() = t("lyrics_button")
+    val LYRICS_MISSING get() = t("lyrics_missing")
+    val INFO_YEAR get() = t("info_year")
+    val INFO_GENRE get() = t("info_genre")
+    val INFO_TRACK get() = t("info_track")
+    val INFO_FORMAT get() = t("info_format")
+    val INFO_BITRATE get() = t("info_bitrate")
+    val INFO_SAMPLE_RATE get() = t("info_sample_rate")
+    val INFO_SIZE get() = t("info_size")
+    val INFO_PATH get() = t("info_path")
+    val INFO_LOUDNESS get() = t("info_loudness")
+    val INFO_GAIN get() = t("info_gain")
+    val INFO_NOT_MEASURED get() = t("info_not_measured")
+    val INFO_READING get() = t("info_reading")
+    val SLEEP_TIMER get() = t("sleep_timer")
+    fun sleepMinutes(n: Int) = t("sleep_minutes", n)
+    val SLEEP_END get() = t("sleep_end_of_song")
+    val SLEEP_OFF get() = t("sleep_off")
+    fun sleepLeft(time: String) = t("desktop_sleep_left", time)
+
+    // TUBO
+    val TUBE_SUBTITLE get() = t("tube_subtitle")
+    val TUBE_STEAL get() = t("tube_steal")
+    val TUBE_LOOT get() = t("tube_loot")
+    val TUBE_STAMP get() = t("tube_stamp")
+    val CLEAN_UP get() = t("clean_up")
+    val JOB_QUEUED get() = t("job_queued")
+    fun jobDownloading(percent: Int) = t("job_downloading", percent)
+    val JOB_SAVING get() = t("job_saving")
+    val RETRY get() = t("retry")
+    val NOT_YOUTUBE_LINK get() = t("not_youtube_link")
+    val YTDLP_UPDATE get() = t("ytdlp_update")
+    val YTDLP_UPDATING get() = t("ytdlp_updating")
+    fun ytdlpUpdated(v: String) = t("ytdlp_updated", v)
+    fun ytdlpUpdateFailed(m: String) = t("ytdlp_update_failed", m)
+    val YTDLP_FAILED get() = t("ytdlp_failed")
+    val YTDLP_NO_M4A get() = t("ytdlp_no_m4a")
+    val YTDLP_NOTHING get() = t("ytdlp_nothing")
+    fun queued(what: String) = t("queued", what)
+    val YTDLP_MISSING get() = t("desktop_ytdlp_missing")
+    val YTDLP_INSTALL get() = t("desktop_ytdlp_install")
+    fun tubeSavesTo(folder: String) = t("desktop_tube_saves_to", folder)
+    val YT_COOKIES get() = t("desktop_yt_cookies")
+    val YT_COOKIES_HINT get() = t("desktop_yt_cookies_hint")
+    val NONE get() = t("desktop_none")
+    val YT_BOT get() = t("desktop_yt_bot")
 }

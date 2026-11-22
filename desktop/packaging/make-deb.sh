@@ -41,12 +41,14 @@ Architecture: amd64
 Installed-Size: $SIZE_KB
 Depends: gstreamer1.0-plugins-base, gstreamer1.0-plugins-good, gstreamer1.0-libav
 Recommends: zenity
+Suggests: yt-dlp, pipx
 Maintainer: ASD <noreply@users.noreply.github.com>
 Homepage: https://asd-eight-rust.vercel.app
 Description: ASD Desktop, lettore musicale per la tua musica
  La cartella della musica sfogliata per cartelle, artisti e album, con ricerca,
- riproduzione gapless e ripresa dell'ultimo ascolto. Niente account, niente rete,
- niente tracciamento: ASD legge i file e non li tocca mai.
+ mixtape, riproduzione gapless, volume uniforme e ripresa dell'ultimo ascolto.
+ Niente account, niente tracciamento: ASD legge i file e non li cancella mai.
+ Va in rete solo il TUBO, tramite yt-dlp, quando incolli un link.
 EOF
 
 mkdir -p "$(dirname "$OUT")"

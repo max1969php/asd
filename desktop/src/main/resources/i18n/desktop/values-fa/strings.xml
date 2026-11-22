@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">۱ قطعه</string>
+    <string name="desktop_songs">%1$d قطعه</string>
+    <string name="desktop_folder_missing">پوشه‌ی %1$s دیگر وجود ندارد. در %2$s یکی دیگر انتخاب کن.</string>
+    <string name="desktop_choose_folder">پوشه‌ی موسیقی را انتخاب کن</string>
+    <string name="desktop_no_folder">پوشه‌ای انتخاب نشده.</string>
+    <string name="desktop_no_folder_hint">پوشه‌ی موسیقی‌ات را انتخاب کن: ASD فقط آن را می‌خواند و هرگز چیزی پاک نمی‌کند.</string>
+    <string name="desktop_language_system">مثل سیستم</string>
+    <string name="desktop_site">وب‌سایت</string>
+    <string name="desktop_version">نسخه</string>
+    <string name="desktop_nothing_playing">صف خالی است</string>
+    <string name="desktop_playlists_none_hint">یکی اینجا بساز، یا در %1$s کنار یک قطعه + را بزن.</string>
+    <string name="desktop_playlist_empty">نوار خالی. به %1$s برو و کنار یک قطعه + را بزن.</string>
+    <string name="desktop_sleep_left">تا %1$s دیگر قطع می‌شود</string>
+    <string name="desktop_none">هیچ</string>
+</resources>

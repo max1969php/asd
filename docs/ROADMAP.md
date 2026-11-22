@@ -103,9 +103,15 @@ Kotlin + Compose Desktop nello stesso repo, GStreamer per suonare, logica comune
   di inizio pezzo, limitatore solo quando si alza), silenzio a inizio e fine saltato, MPRIS
   (controlli multimediali di GNOME, tasti). Interruttori in SETUP, accesi di default. Da provare a
   orecchio dal titolare.
-- [ ] **Fase 4 — il resto**: mixtape, doppioni, filtri per formato/artista, info/copertina/testo,
-  timer, le 38 lingue (riusando i `strings.xml`).
-- [ ] **Fase 5 — TUBO** con lo yt-dlp di sistema.
+- [x] desktop 0.3.0 **Fase 4 — il resto** (2026-11-22): mixtape, doppioni, filtro per formato,
+  info/copertina/testo, timer, le 38 lingue (gli `strings.xml` dell'app nel jar, più le chiavi
+  `desktop_*`). Il filtro per artista non serve: c'è la vista Artisti. Copertina solo dai tag
+  (niente cover.jpg, scartato il 2026-11-07).
+- [x] desktop 0.3.0 **Fase 5 — TUBO** (2026-11-22) con lo yt-dlp di sistema: m4a in
+  `<cartella>/TUBO`, aggiornamento e cookie dal browser in SETUP. Provato con un finto yt-dlp;
+  da provare con quello vero (qui non installato).
+- [ ] Testi solo desktop del TUBO (`desktop_ytdlp_*`, `desktop_yt_*`, `desktop_tube_saves_to`,
+  `desktop_missing_aac`) solo in italiano e inglese: le altre lingue li vedono in inglese.
 - [ ] Dopo: equalizzatore (`equalizer-10bands`). Più leggero il `.deb`: le icone Material estese
   pesano 37 MB per otto icone usate.
 

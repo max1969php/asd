@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 κομμάτι</string>
+    <string name="desktop_songs">%1$d κομμάτια</string>
+    <string name="desktop_folder_missing">Ο φάκελος %1$s δεν υπάρχει πια. Διάλεξε άλλον στο %2$s.</string>
+    <string name="desktop_choose_folder">Διάλεξε τον φάκελο με τη μουσική</string>
+    <string name="desktop_no_folder">Δεν έχει επιλεγεί φάκελος.</string>
+    <string name="desktop_no_folder_hint">Διάλεξε τον φάκελο με τη μουσική σου: το ASD μόνο τον διαβάζει, δεν σβήνει ποτέ τίποτα.</string>
+    <string name="desktop_language_system">Όπως το σύστημα</string>
+    <string name="desktop_site">Ιστότοπος</string>
+    <string name="desktop_version">Έκδοση</string>
+    <string name="desktop_nothing_playing">ΤΙΠΟΤΑ ΣΤΗΝ ΟΥΡΑ</string>
+    <string name="desktop_playlists_none_hint">Φτιάξε μία εδώ ή πάτα + δίπλα σε ένα κομμάτι στο %1$s.</string>
+    <string name="desktop_playlist_empty">Άγραφη κασέτα. Πήγαινε στο %1$s και πάτα + δίπλα σε ένα κομμάτι.</string>
+    <string name="desktop_sleep_left">σταματά σε %1$s</string>
+    <string name="desktop_none">Κανένα</string>
+</resources>

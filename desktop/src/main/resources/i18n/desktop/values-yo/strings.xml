@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">Orin 1</string>
+    <string name="desktop_songs">Orin %1$d</string>
+    <string name="desktop_folder_missing">Fódà %1$s kò sí mọ́. Yan òmíràn ní %2$s.</string>
+    <string name="desktop_choose_folder">Yan fódà orin rẹ</string>
+    <string name="desktop_no_folder">A kò yan fódà kankan.</string>
+    <string name="desktop_no_folder_hint">Yan fódà tí orin rẹ wà: ASD kàn ń kà á ni, kò ní pa nǹkan rẹ́ láé.</string>
+    <string name="desktop_language_system">Bí ètò ṣe rí</string>
+    <string name="desktop_site">Ojú òpó</string>
+    <string name="desktop_version">Ẹ̀dà</string>
+    <string name="desktop_nothing_playing">KÒ SÍ NǸKAN NÍ ÌLÀ</string>
+    <string name="desktop_playlists_none_hint">Ṣe ọ̀kan níbí, tàbí tẹ + lẹ́gbẹ̀ẹ́ orin kan ní %1$s.</string>
+    <string name="desktop_playlist_empty">Kásẹ́ẹ̀tì òfo. Lọ sí %1$s kí o tẹ + lẹ́gbẹ̀ẹ́ orin kan.</string>
+    <string name="desktop_sleep_left">yóò dúró lẹ́yìn %1$s</string>
+    <string name="desktop_none">Kò sí</string>
+</resources>

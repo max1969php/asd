@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">مقطع واحد</string>
+    <string name="desktop_songs">%1$d مقاطع</string>
+    <string name="desktop_folder_missing">المجلد %1$s لم يعد موجودًا. اختر مجلدًا آخر في %2$s.</string>
+    <string name="desktop_choose_folder">اختر مجلد الموسيقى</string>
+    <string name="desktop_no_folder">لم يتم اختيار مجلد.</string>
+    <string name="desktop_no_folder_hint">اختر المجلد الذي فيه موسيقاك: ASD يقرؤه فقط ولا يحذف أي شيء أبدًا.</string>
+    <string name="desktop_language_system">مثل النظام</string>
+    <string name="desktop_site">الموقع</string>
+    <string name="desktop_version">الإصدار</string>
+    <string name="desktop_nothing_playing">لا شيء في الطابور</string>
+    <string name="desktop_playlists_none_hint">أنشئ واحدًا هنا، أو اضغط + بجانب مقطع في %1$s.</string>
+    <string name="desktop_playlist_empty">شريط فارغ. اذهب إلى %1$s واضغط + بجانب مقطع.</string>
+    <string name="desktop_sleep_left">يتوقف بعد %1$s</string>
+    <string name="desktop_none">لا شيء</string>
+</resources>

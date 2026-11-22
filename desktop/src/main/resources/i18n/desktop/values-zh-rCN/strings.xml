@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 首</string>
+    <string name="desktop_songs">%1$d 首</string>
+    <string name="desktop_folder_missing">文件夹 %1$s 已经不在了。请在 %2$s 里另选一个。</string>
+    <string name="desktop_choose_folder">选择你的音乐文件夹</string>
+    <string name="desktop_no_folder">还没有选择文件夹。</string>
+    <string name="desktop_no_folder_hint">选择放音乐的文件夹：ASD 只读取，从不删除任何东西。</string>
+    <string name="desktop_language_system">跟随系统</string>
+    <string name="desktop_site">网站</string>
+    <string name="desktop_version">版本</string>
+    <string name="desktop_nothing_playing">队列是空的</string>
+    <string name="desktop_playlists_none_hint">在这里新建一个，或者在 %1$s 里点歌曲旁边的 +。</string>
+    <string name="desktop_playlist_empty">空白磁带。去 %1$s 点歌曲旁边的 +。</string>
+    <string name="desktop_sleep_left">%1$s 后停止</string>
+    <string name="desktop_none">无</string>
+</resources>

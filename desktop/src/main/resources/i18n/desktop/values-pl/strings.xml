@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 utwór</string>
+    <string name="desktop_songs">%1$d utworów</string>
+    <string name="desktop_folder_missing">Folderu %1$s już nie ma. Wybierz inny w %2$s.</string>
+    <string name="desktop_choose_folder">Wybierz folder z muzyką</string>
+    <string name="desktop_no_folder">Nie wybrano folderu.</string>
+    <string name="desktop_no_folder_hint">Wybierz folder ze swoją muzyką: ASD tylko go czyta, nigdy niczego nie usuwa.</string>
+    <string name="desktop_language_system">Jak w systemie</string>
+    <string name="desktop_site">Strona</string>
+    <string name="desktop_version">Wersja</string>
+    <string name="desktop_nothing_playing">NIC W KOLEJCE</string>
+    <string name="desktop_playlists_none_hint">Zrób ją tutaj albo naciśnij + obok utworu w %1$s.</string>
+    <string name="desktop_playlist_empty">Czysta kaseta. Idź do %1$s i naciśnij + obok utworu.</string>
+    <string name="desktop_sleep_left">wyłączy się za %1$s</string>
+    <string name="desktop_none">Brak</string>
+</resources>

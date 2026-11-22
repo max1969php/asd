@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 woy</string>
+    <string name="desktop_songs">%1$d woy</string>
+    <string name="desktop_folder_missing">Dossier %1$s amatul. Tannal beneen ci %2$s.</string>
+    <string name="desktop_choose_folder">Tannal sa dossier musik</string>
+    <string name="desktop_no_folder">Tànnuñu benn dossier.</string>
+    <string name="desktop_no_folder_hint">Tannal dossier bi am sa musik: ASD dafay jàng rekk, du far dara mukk.</string>
+    <string name="desktop_language_system">Ni sistem bi</string>
+    <string name="desktop_site">Site</string>
+    <string name="desktop_version">Version</string>
+    <string name="desktop_nothing_playing">DARA AMUL CI RÉEN BI</string>
+    <string name="desktop_playlists_none_hint">Defal benn fii, walla bësal + ci wetu benn woy ci %1$s.</string>
+    <string name="desktop_playlist_empty">Kaaset bu amul dara. Demal ci %1$s te bësal + ci wetu benn woy.</string>
+    <string name="desktop_sleep_left">dina taxaw ci %1$s</string>
+    <string name="desktop_none">Dara</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 песен</string>
+    <string name="desktop_songs">%1$d песни</string>
+    <string name="desktop_folder_missing">Папката %1$s вече я няма. Избери друга в %2$s.</string>
+    <string name="desktop_choose_folder">Избери папката с музиката</string>
+    <string name="desktop_no_folder">Няма избрана папка.</string>
+    <string name="desktop_no_folder_hint">Избери папката с музиката си: ASD само я чете, никога не трие нищо.</string>
+    <string name="desktop_language_system">Като системата</string>
+    <string name="desktop_site">Сайт</string>
+    <string name="desktop_version">Версия</string>
+    <string name="desktop_nothing_playing">НИЩО НА ОПАШКА</string>
+    <string name="desktop_playlists_none_hint">Създай една тук или натисни + до песен в %1$s.</string>
+    <string name="desktop_playlist_empty">Празна касета. Иди в %1$s и натисни + до песен.</string>
+    <string name="desktop_sleep_left">спира след %1$s</string>
+    <string name="desktop_none">Няма</string>
+</resources>

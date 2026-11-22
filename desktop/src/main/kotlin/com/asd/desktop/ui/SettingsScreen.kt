@@ -3,6 +3,8 @@ package com.asd.desktop.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.asd.desktop.Desktop
+import com.asd.desktop.I18n
 import com.asd.desktop.Texts
 import com.asd.desktop.Version
 import com.asd.player.ui.components.PunkButton
@@ -29,7 +32,8 @@ import com.asd.player.ui.components.Stamp
 import com.asd.player.ui.components.TapeChip
 import com.asd.player.ui.theme.Asd
 
-/** SETUP: la cartella della musica, la riscansione, i link. */
+/** SETUP: cartella, riscansione, volume e silenzio, lingua, link. */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SettingsScreen(desktop: Desktop) {
     val settings by desktop.settings.state.collectAsState()
@@ -64,6 +68,19 @@ fun SettingsScreen(desktop: Desktop) {
         if (!desktop.player.canPlayAac) {
             Spacer(Modifier.height(24.dp))
             Text(Texts.MISSING_AAC, style = MaterialTheme.typography.bodyMedium, color = Asd.Spray)
+        }
+
+        Spacer(Modifier.height(32.dp))
+        TubeSettings(desktop)
+
+        Spacer(Modifier.height(32.dp))
+        Stamp(Texts.LANGUAGE, color = Asd.Paper)
+        Spacer(Modifier.height(10.dp))
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.widthIn(max = 900.dp)) {
+            TapeChip(Texts.LANGUAGE_SYSTEM, selected = settings.language == null, onClick = { desktop.setLanguage(null) })
+            I18n.SUPPORTED.forEach { tag ->
+                TapeChip(I18n.nativeName(tag), selected = settings.language == tag, onClick = { desktop.setLanguage(tag) })
+            }
         }
 
         Spacer(Modifier.height(32.dp))

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">Wimbo 1</string>
+    <string name="desktop_songs">Nyimbo %1$d</string>
+    <string name="desktop_folder_missing">Folda %1$s haipo tena. Chagua nyingine katika %2$s.</string>
+    <string name="desktop_choose_folder">Chagua folda yako ya muziki</string>
+    <string name="desktop_no_folder">Hakuna folda iliyochaguliwa.</string>
+    <string name="desktop_no_folder_hint">Chagua folda yenye muziki wako: ASD inaisoma tu, haifuti chochote kamwe.</string>
+    <string name="desktop_language_system">Kama mfumo</string>
+    <string name="desktop_site">Tovuti</string>
+    <string name="desktop_version">Toleo</string>
+    <string name="desktop_nothing_playing">HAKUNA KITU FOLENINI</string>
+    <string name="desktop_playlists_none_hint">Tengeneza moja hapa, au bonyeza + kando ya wimbo katika %1$s.</string>
+    <string name="desktop_playlist_empty">Kanda tupu. Nenda %1$s na ubonyeze + kando ya wimbo.</string>
+    <string name="desktop_sleep_left">inasimama baada ya %1$s</string>
+    <string name="desktop_none">Hakuna</string>
+</resources>

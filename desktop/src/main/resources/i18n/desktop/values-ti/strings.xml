@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 ደርፊ</string>
+    <string name="desktop_songs">%1$d ደርፍታት</string>
+    <string name="desktop_folder_missing">እቲ ማህደር %1$s የለን። ኣብ %2$s ካልእ ምረጽ።</string>
+    <string name="desktop_choose_folder">ማህደር ሙዚቃኻ ምረጽ</string>
+    <string name="desktop_no_folder">ዝተመርጸ ማህደር የለን።</string>
+    <string name="desktop_no_folder_hint">ሙዚቃኻ ዘለዎ ማህደር ምረጽ፦ ASD የንብቦ ጥራይ፣ ዋላ ሓንቲ ኣይድምስስን።</string>
+    <string name="desktop_language_system">ከም ሲስተም</string>
+    <string name="desktop_site">መርበብ</string>
+    <string name="desktop_version">ስሪት</string>
+    <string name="desktop_nothing_playing">ኣብ መስርዕ ዋላ ሓንቲ የለን</string>
+    <string name="desktop_playlists_none_hint">ኣብዚ ሓደ ፍጠር፣ ወይ ኣብ %1$s ጥቓ ደርፊ + ጠውቕ።</string>
+    <string name="desktop_playlist_empty">ባዶ ካሴት። ናብ %1$s ኪድ እሞ ጥቓ ደርፊ + ጠውቕ።</string>
+    <string name="desktop_sleep_left">ድሕሪ %1$s ደው ይብል</string>
+    <string name="desktop_none">የለን</string>
+</resources>

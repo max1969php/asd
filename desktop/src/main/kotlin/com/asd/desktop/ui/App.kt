@@ -22,17 +22,39 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.key
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import com.asd.desktop.Desktop
+import com.asd.desktop.I18n
 import com.asd.desktop.Texts
 import com.asd.player.ui.components.AnarchyLogo
 import com.asd.player.ui.theme.Asd
 
-private enum class Tab(val label: String) { LIBRARY(Texts.TAB_LIBRARY), SETTINGS(Texts.TAB_SETTINGS) }
+private enum class Tab(val label: () -> String) {
+    LIBRARY({ Texts.TAB_LIBRARY }),
+    PLAYLISTS({ Texts.TAB_PLAYLISTS }),
+    TUBE({ Texts.TAB_TUBE }),
+    SETTINGS({ Texts.TAB_SETTINGS }),
+}
 
 /** La finestra: schede in alto, contenuto, player sempre visibile in basso. */
 @Composable
 fun App(desktop: Desktop) {
     var tab by rememberSaveable { mutableStateOf(Tab.LIBRARY) }
+    // Cambio lingua: si ridisegna tutto, da destra a sinistra per arabo e persiano.
+    val language by I18n.language.collectAsState()
+    key(language) {
+        CompositionLocalProvider(LocalLayoutDirection provides if (I18n.isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
+            Content(desktop, tab) { tab = it }
+        }
+    }
+}
+
+@Composable
+private fun Content(desktop: Desktop, tab: Tab, setTab: (Tab) -> Unit) {
     Column(Modifier.fillMaxSize().background(Asd.Toner)) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -45,12 +67,12 @@ fun App(desktop: Desktop) {
             Tab.entries.forEach { t ->
                 val selected = t == tab
                 Text(
-                    t.label.uppercase(),
+                    t.label().uppercase(),
                     style = MaterialTheme.typography.titleMedium,
                     color = if (selected) Asd.Toner else Asd.Paper,
                     modifier = Modifier
                         .background(if (selected) Asd.Acid else Asd.Toner)
-                        .clickable { tab = t }
+                        .clickable { setTab(t) }
                         .padding(horizontal = 14.dp, vertical = 6.dp),
                 )
                 Spacer(Modifier.width(6.dp))
@@ -59,12 +81,14 @@ fun App(desktop: Desktop) {
         HorizontalDivider(color = Asd.Concrete, thickness = 2.dp)
         Box(Modifier.weight(1f).fillMaxWidth()) {
             when (tab) {
-                Tab.LIBRARY -> LibraryScreen(desktop, onOpenSettings = { tab = Tab.SETTINGS })
+                Tab.LIBRARY -> LibraryScreen(desktop, onOpenSettings = { setTab(Tab.SETTINGS) })
+                Tab.PLAYLISTS -> PlaylistsScreen(desktop)
+                Tab.TUBE -> TubeScreen(desktop)
                 Tab.SETTINGS -> SettingsScreen(desktop)
             }
         }
         HorizontalDivider(color = Asd.Spray, thickness = 2.dp)
-        PlayerBar(desktop.player)
+        PlayerBar(desktop)
         Spacer(Modifier.height(2.dp))
     }
 }

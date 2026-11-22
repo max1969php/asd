@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 skladba</string>
+    <string name="desktop_songs">%1$d skladieb</string>
+    <string name="desktop_folder_missing">Priečinok %1$s už neexistuje. Vyber iný v %2$s.</string>
+    <string name="desktop_choose_folder">Vyber priečinok s hudbou</string>
+    <string name="desktop_no_folder">Nie je vybraný žiadny priečinok.</string>
+    <string name="desktop_no_folder_hint">Vyber priečinok so svojou hudbou: ASD ho len číta, nikdy nič nemaže.</string>
+    <string name="desktop_language_system">Podľa systému</string>
+    <string name="desktop_site">Web</string>
+    <string name="desktop_version">Verzia</string>
+    <string name="desktop_nothing_playing">NIČ VO FRONTE</string>
+    <string name="desktop_playlists_none_hint">Vytvor si ho tu alebo stlač + vedľa skladby v %1$s.</string>
+    <string name="desktop_playlist_empty">Prázdna kazeta. Choď do %1$s a stlač + vedľa skladby.</string>
+    <string name="desktop_sleep_left">vypne sa o %1$s</string>
+    <string name="desktop_none">Žiadny</string>
+</resources>

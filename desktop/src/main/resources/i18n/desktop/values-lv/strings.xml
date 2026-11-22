@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 dziesma</string>
+    <string name="desktop_songs">%1$d dziesmas</string>
+    <string name="desktop_folder_missing">Mapes %1$s vairs nav. Izvēlies citu sadaļā %2$s.</string>
+    <string name="desktop_choose_folder">Izvēlies mūzikas mapi</string>
+    <string name="desktop_no_folder">Mape nav izvēlēta.</string>
+    <string name="desktop_no_folder_hint">Izvēlies mapi ar savu mūziku: ASD to tikai lasa, nekad neko nedzēš.</string>
+    <string name="desktop_language_system">Kā sistēmā</string>
+    <string name="desktop_site">Vietne</string>
+    <string name="desktop_version">Versija</string>
+    <string name="desktop_nothing_playing">RINDĀ NEKĀ NAV</string>
+    <string name="desktop_playlists_none_hint">Izveido to šeit vai nospied + blakus dziesmai sadaļā %1$s.</string>
+    <string name="desktop_playlist_empty">Tukša kasete. Ej uz %1$s un nospied + blakus dziesmai.</string>
+    <string name="desktop_sleep_left">apstāsies pēc %1$s</string>
+    <string name="desktop_none">Nav</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 lugu</string>
+    <string name="desktop_songs">%1$d lugu</string>
+    <string name="desktop_folder_missing">Kausta %1$s pole enam. Vali %2$s all uus.</string>
+    <string name="desktop_choose_folder">Vali oma muusikakaust</string>
+    <string name="desktop_no_folder">Kausta pole valitud.</string>
+    <string name="desktop_no_folder_hint">Vali oma muusikaga kaust: ASD ainult loeb seda ega kustuta kunagi midagi.</string>
+    <string name="desktop_language_system">Nagu süsteem</string>
+    <string name="desktop_site">Veebileht</string>
+    <string name="desktop_version">Versioon</string>
+    <string name="desktop_nothing_playing">JÄRJEKORD ON TÜHI</string>
+    <string name="desktop_playlists_none_hint">Tee üks siin või vajuta %1$s all loo kõrval +.</string>
+    <string name="desktop_playlist_empty">Tühi kassett. Mine %1$s alla ja vajuta loo kõrval +.</string>
+    <string name="desktop_sleep_left">peatub %1$s pärast</string>
+    <string name="desktop_none">Puudub</string>
+</resources>

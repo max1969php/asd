@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">Egwu 1</string>
+    <string name="desktop_songs">Egwu %1$d</string>
+    <string name="desktop_folder_missing">Folda %1$s adịghịzi. Họrọ ọzọ na %2$s.</string>
+    <string name="desktop_choose_folder">Họrọ folda egwu gị</string>
+    <string name="desktop_no_folder">Ọ dịghị folda a họrọla.</string>
+    <string name="desktop_no_folder_hint">Họrọ folda egwu gị dị na ya: ASD na-agụ ya naanị, ọ naghị ehichapụ ihe ọ bụla.</string>
+    <string name="desktop_language_system">Dị ka sistemụ</string>
+    <string name="desktop_site">Weebụsaịtị</string>
+    <string name="desktop_version">Ụdị</string>
+    <string name="desktop_nothing_playing">Ọ DỊGHỊ IHE NỌ N’AHỊRỊ</string>
+    <string name="desktop_playlists_none_hint">Mepụta otu ebe a, ma ọ bụ pịa + n’akụkụ egwu na %1$s.</string>
+    <string name="desktop_playlist_empty">Teepu efu. Gaa na %1$s pịa + n’akụkụ egwu.</string>
+    <string name="desktop_sleep_left">ga-akwụsị n’ime %1$s</string>
+    <string name="desktop_none">Ọ dịghị</string>
+</resources>

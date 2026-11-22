@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Testi solo di ASD Desktop (gli altri arrivano dagli strings.xml dell'app). -->
+<resources>
+    <string name="desktop_one_song">1 pezzo</string>
+    <string name="desktop_songs">%1$d pezzi</string>
+    <string name="desktop_folder_missing">La cartella %1$s non c\'è più. Scegline un\'altra in %2$s.</string>
+    <string name="desktop_choose_folder">Scegli la cartella della musica</string>
+    <string name="desktop_no_folder">Nessuna cartella scelta.</string>
+    <string name="desktop_no_folder_hint">Scegli la cartella con la tua musica: ASD la legge e basta, non cancella niente.</string>
+    <string name="desktop_language_system">Come il sistema</string>
+    <string name="desktop_site">Sito</string>
+    <string name="desktop_version">Versione</string>
+    <string name="desktop_missing_aac">Per gli M4A/AAC (anche quelli del TUBO) serve il decoder di GStreamer: sudo apt install gstreamer1.0-libav</string>
+    <string name="desktop_nothing_playing">NIENTE IN CODA</string>
+    <string name="desktop_playlists_none_hint">Creane uno qui, oppure premi + accanto a un pezzo in %1$s.</string>
+    <string name="desktop_playlist_empty">Nastro vergine. Vai in %1$s e premi + accanto a un pezzo.</string>
+    <string name="desktop_sleep_left">si spegne tra %1$s</string>
+    <string name="desktop_ytdlp_missing">Per il TUBO serve yt-dlp, che non è installato.</string>
+    <string name="desktop_ytdlp_install">Installalo con: pipx install yt-dlp (consigliato: si aggiorna da SETUP), oppure sudo apt install yt-dlp (spesso troppo vecchio per YouTube). Poi premi RIPROVA.</string>
+    <string name="desktop_tube_saves_to">Salvo in %1$s: i pezzi compaiono in ROBA.</string>
+    <string name="desktop_yt_cookies">Cookie di YouTube</string>
+    <string name="desktop_yt_cookies_hint">Se YouTube chiede di dimostrare che non sei un bot: scegli un browser dove hai fatto l\'accesso a YouTube, yt-dlp usa i suoi cookie.</string>
+    <string name="desktop_none">Nessuno</string>
+    <string name="desktop_yt_bot">YouTube vuole sapere che non sei un bot: in SETUP scegli il browser dove hai fatto l\'accesso a YouTube.</string>
+</resources>

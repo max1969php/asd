@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 track</string>
+    <string name="desktop_songs">%1$d tracks</string>
+    <string name="desktop_folder_missing">The folder %1$s is gone. Pick another one in %2$s.</string>
+    <string name="desktop_choose_folder">Choose your music folder</string>
+    <string name="desktop_no_folder">No folder chosen.</string>
+    <string name="desktop_no_folder_hint">Choose the folder with your music: ASD only reads it, it never deletes anything.</string>
+    <string name="desktop_language_system">Same as the system</string>
+    <string name="desktop_site">Website</string>
+    <string name="desktop_version">Version</string>
+    <string name="desktop_missing_aac">M4A/AAC files (including those from TUBE) need the GStreamer decoder: sudo apt install gstreamer1.0-libav</string>
+    <string name="desktop_nothing_playing">NOTHING QUEUED</string>
+    <string name="desktop_playlists_none_hint">Make one here, or press + next to a track in %1$s.</string>
+    <string name="desktop_playlist_empty">Blank tape. Go to %1$s and press + next to a track.</string>
+    <string name="desktop_sleep_left">stops in %1$s</string>
+    <string name="desktop_ytdlp_missing">TUBE needs yt-dlp, which is not installed.</string>
+    <string name="desktop_ytdlp_install">Install it with: pipx install yt-dlp (recommended: it updates from SETUP), or sudo apt install yt-dlp (often too old for YouTube). Then press RETRY.</string>
+    <string name="desktop_tube_saves_to">Saving to %1$s: the tracks show up in STUFF.</string>
+    <string name="desktop_yt_cookies">YouTube cookies</string>
+    <string name="desktop_yt_cookies_hint">If YouTube asks you to prove you are not a bot: pick a browser where you are signed in to YouTube, yt-dlp uses its cookies.</string>
+    <string name="desktop_none">None</string>
+    <string name="desktop_yt_bot">YouTube wants to know you are not a bot: in SETUP pick the browser where you are signed in to YouTube.</string>
+</resources>

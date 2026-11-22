@@ -13,6 +13,7 @@ object Paths {
     val config: File = File(xdg("XDG_CONFIG_HOME", ".config"), "asd-desktop").apply { mkdirs() }
 
     /** Catalogo e ultimo ascolto: ~/.local/share/asd-desktop */
+    val cache: File = File(xdg("XDG_CACHE_HOME", ".cache"), "asd-desktop").apply { mkdirs() }
     val data: File = File(xdg("XDG_DATA_HOME", ".local/share"), "asd-desktop").apply { mkdirs() }
 
     /** Scrive [text] in [file] passando da un file temporaneo: un'uscita a metà non lascia file rotti. */

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 piesă</string>
+    <string name="desktop_songs">%1$d piese</string>
+    <string name="desktop_folder_missing">Folderul %1$s nu mai există. Alege altul în %2$s.</string>
+    <string name="desktop_choose_folder">Alege folderul cu muzică</string>
+    <string name="desktop_no_folder">Niciun folder ales.</string>
+    <string name="desktop_no_folder_hint">Alege folderul cu muzica ta: ASD doar îl citește, nu șterge niciodată nimic.</string>
+    <string name="desktop_language_system">Ca sistemul</string>
+    <string name="desktop_site">Site</string>
+    <string name="desktop_version">Versiune</string>
+    <string name="desktop_nothing_playing">NIMIC ÎN COADĂ</string>
+    <string name="desktop_playlists_none_hint">Fă una aici sau apasă + lângă o piesă în %1$s.</string>
+    <string name="desktop_playlist_empty">Casetă goală. Mergi în %1$s și apasă + lângă o piesă.</string>
+    <string name="desktop_sleep_left">se oprește în %1$s</string>
+    <string name="desktop_none">Niciunul</string>
+</resources>

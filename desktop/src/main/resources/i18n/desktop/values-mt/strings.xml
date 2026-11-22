@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 kanzunetta</string>
+    <string name="desktop_songs">%1$d kanzunetti</string>
+    <string name="desktop_folder_missing">Il-folder %1$s m’għadux hemm. Agħżel ieħor f’%2$s.</string>
+    <string name="desktop_choose_folder">Agħżel il-folder tal-mużika</string>
+    <string name="desktop_no_folder">L-ebda folder magħżul.</string>
+    <string name="desktop_no_folder_hint">Agħżel il-folder bil-mużika tiegħek: ASD jaqrah biss, qatt ma jħassar xejn.</string>
+    <string name="desktop_language_system">Bħas-sistema</string>
+    <string name="desktop_site">Sit</string>
+    <string name="desktop_version">Verżjoni</string>
+    <string name="desktop_nothing_playing">XEJN FIL-KJU</string>
+    <string name="desktop_playlists_none_hint">Agħmel waħda hawn, jew agħfas + ħdejn kanzunetta f’%1$s.</string>
+    <string name="desktop_playlist_empty">Tejp vojt. Mur f’%1$s u agħfas + ħdejn kanzunetta.</string>
+    <string name="desktop_sleep_left">jieqaf fi %1$s</string>
+    <string name="desktop_none">Xejn</string>
+</resources>

@@ -19,7 +19,11 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.PlaylistAdd
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -42,6 +46,7 @@ import com.asd.desktop.Desktop
 import com.asd.desktop.ScanState
 import com.asd.desktop.Texts
 import com.asd.player.domain.model.LibraryQuery
+import com.asd.player.domain.model.Song
 import com.asd.player.domain.model.SortField
 import com.asd.player.domain.usecase.FolderPath
 import com.asd.player.domain.usecase.FolderView
@@ -62,6 +67,10 @@ fun LibraryScreen(desktop: Desktop, onOpenSettings: () -> Unit) {
     val scan by desktop.library.scan.collectAsState()
     val playing by desktop.player.state.collectAsState()
     var text by remember { mutableStateOf("") }
+    var duplicates by remember { mutableStateOf(false) }
+    var formats by remember { mutableStateOf(emptySet<String>()) }
+    var forMixtape by remember { mutableStateOf<List<Song>?>(null) }
+    forMixtape?.let { AddToMixtapeDialog(desktop, it, onDismiss = { forMixtape = null }) }
 
     if (settings.folder == null) {
         Empty(Texts.NO_FOLDER, Texts.NO_FOLDER_HINT) { PunkButton(Texts.CHOOSE_FOLDER, onClick = desktop::chooseFolder) }
@@ -69,7 +78,8 @@ fun LibraryScreen(desktop: Desktop, onOpenSettings: () -> Unit) {
     }
 
     val path = FolderPath(dirs = settings.path, view = settings.view)
-    val query = LibraryQuery(text = text, sort = settings.sort)
+    val query = LibraryQuery(text = text, formats = formats, duplicates = duplicates, sort = settings.sort)
+    val allFormats = remember(songs) { songs.map { it.format }.filter { it.isNotEmpty() }.distinct().sorted() }
     val view by produceState<FolderView?>(null, songs, path, query) {
         value = withContext(Dispatchers.Default) { desktop.browse(songs, path, query) }
     }
@@ -99,6 +109,18 @@ fun LibraryScreen(desktop: Desktop, onOpenSettings: () -> Unit) {
                         },
                     )
                 }
+                Spacer(Modifier.width(16.dp))
+                TapeChip(Texts.DUPLICATES, selected = duplicates, onClick = { duplicates = !duplicates })
+                if (allFormats.size > 1) {
+                    allFormats.forEach { f ->
+                        TapeChip(f, selected = f in formats, onClick = { formats = if (f in formats) formats - f else formats + f })
+                    }
+                }
+                if (query.filtering) TapeChip(Texts.FILTERS_RESET, selected = false, onClick = {
+                    text = ""
+                    duplicates = false
+                    formats = emptySet()
+                })
                 Spacer(Modifier.weight(1f))
                 ScanLine(scan)
             }
@@ -124,6 +146,10 @@ fun LibraryScreen(desktop: Desktop, onOpenSettings: () -> Unit) {
             Spacer(Modifier.weight(1f))
             Text(Texts.songs(v.below.size), style = MaterialTheme.typography.labelSmall, color = Asd.Smudge)
             Spacer(Modifier.width(12.dp))
+            IconButton(onClick = { forMixtape = v.below }, enabled = v.below.isNotEmpty()) {
+                Icon(Icons.Filled.PlaylistAdd, contentDescription = Texts.ADD_TO_PLAYLIST, tint = Asd.Paper)
+            }
+            Spacer(Modifier.width(6.dp))
             PunkButton(Texts.PLAY_ALL, onClick = { desktop.player.playQueue(v.below) }, icon = Icons.Filled.PlayArrow, enabled = v.below.isNotEmpty())
             Spacer(Modifier.width(6.dp))
             PunkButton(
@@ -134,6 +160,16 @@ fun LibraryScreen(desktop: Desktop, onOpenSettings: () -> Unit) {
 
         if (songs.isEmpty() && scan !is ScanState.Scanning) {
             Empty(Texts.LIBRARY_EMPTY, Texts.LIBRARY_EMPTY_HINT) { PunkButton(Texts.RESCAN, onClick = desktop::rescan) }
+            return@Column
+        }
+        if (query.filtering && v.songs.isEmpty() && v.folders.isEmpty()) {
+            Empty(Texts.LIBRARY_NOTHING, Texts.LIBRARY_NO_MATCH) {
+                PunkButton(Texts.RESET_FILTERS, onClick = {
+                    text = ""
+                    duplicates = false
+                    formats = emptySet()
+                })
+            }
             return@Column
         }
 
@@ -151,7 +187,19 @@ fun LibraryScreen(desktop: Desktop, onOpenSettings: () -> Unit) {
                     FolderRow(f.name, f.songCount) { desktop.settings.update { it.copy(path = v.path.dirs + f.name, scroll = 0) } }
                 }
                 itemsIndexed(v.songs, key = { _, s -> s.id }) { i, s ->
-                    SongRow(s, i, isCurrent = s.uri == playing.current?.uri, onClick = { desktop.player.playQueue(v.songs, i) })
+                    SongRow(
+                        s, i,
+                        isCurrent = s.uri == playing.current?.uri,
+                        onClick = { desktop.player.playQueue(v.songs, i) },
+                        onLongClick = { forMixtape = listOf(s) },
+                        // Con i doppioni si vede dove sta ogni copia.
+                        subtitle = if (duplicates) (s.folder + s.fileName).joinToString("/") else null,
+                        trailing = {
+                            IconButton(onClick = { forMixtape = listOf(s) }) {
+                                Icon(Icons.Filled.Add, contentDescription = Texts.ADD_TO_PLAYLIST, tint = if (s.uri == playing.current?.uri) Asd.Toner else Asd.Smudge)
+                            }
+                        },
+                    )
                 }
             }
         }

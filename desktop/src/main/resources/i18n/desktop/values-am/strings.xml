@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 ዘፈን</string>
+    <string name="desktop_songs">%1$d ዘፈኖች</string>
+    <string name="desktop_folder_missing">አቃፊው %1$s ከእንግዲህ የለም። በ%2$s ሌላ ምረጥ።</string>
+    <string name="desktop_choose_folder">የሙዚቃ አቃፊህን ምረጥ</string>
+    <string name="desktop_no_folder">ምንም አቃፊ አልተመረጠም።</string>
+    <string name="desktop_no_folder_hint">ሙዚቃህ ያለበትን አቃፊ ምረጥ፦ ASD ያነበዋል ብቻ፣ ምንም ነገር አይሰርዝም።</string>
+    <string name="desktop_language_system">እንደ ሲስተሙ</string>
+    <string name="desktop_site">ድረ ገጽ</string>
+    <string name="desktop_version">ስሪት</string>
+    <string name="desktop_nothing_playing">ወረፋው ባዶ ነው</string>
+    <string name="desktop_playlists_none_hint">እዚህ አንድ ፍጠር፣ ወይም በ%1$s ውስጥ ከዘፈን አጠገብ + ተጫን።</string>
+    <string name="desktop_playlist_empty">ባዶ ካሴት። ወደ %1$s ሂድና ከዘፈን አጠገብ + ተጫን።</string>
+    <string name="desktop_sleep_left">በ%1$s ውስጥ ይቆማል</string>
+    <string name="desktop_none">ምንም</string>
+</resources>

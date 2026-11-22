@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 låt</string>
+    <string name="desktop_songs">%1$d låtar</string>
+    <string name="desktop_folder_missing">Mappen %1$s finns inte längre. Välj en annan i %2$s.</string>
+    <string name="desktop_choose_folder">Välj din musikmapp</string>
+    <string name="desktop_no_folder">Ingen mapp vald.</string>
+    <string name="desktop_no_folder_hint">Välj mappen med din musik: ASD läser den bara och raderar aldrig något.</string>
+    <string name="desktop_language_system">Som systemet</string>
+    <string name="desktop_site">Webbplats</string>
+    <string name="desktop_version">Version</string>
+    <string name="desktop_nothing_playing">INGET I KÖN</string>
+    <string name="desktop_playlists_none_hint">Gör ett här, eller tryck + bredvid en låt i %1$s.</string>
+    <string name="desktop_playlist_empty">Tomt band. Gå till %1$s och tryck + bredvid en låt.</string>
+    <string name="desktop_sleep_left">stoppar om %1$s</string>
+    <string name="desktop_none">Ingen</string>
+</resources>

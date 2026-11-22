@@ -76,6 +76,13 @@ class Player {
     private val limiter: Element
     @Volatile private var running = true
 
+    /** Timer "a fine pezzo": finito questo non si passa al prossimo. */
+    @Volatile var stopAtEnd = false
+        set(value) {
+            field = value
+            synchronized(lock) { refreshPending() }
+        }
+
     init {
         GstInit.ensure()
         playbin = PlayBin("asd")
@@ -225,6 +232,19 @@ class Player {
         refreshPending()
     }
 
+    /** Volume generale 0..1, per la sfumatura del timer (il volume uniforme è a parte). */
+    fun setFade(level: Double) {
+        runCatching { playbin.set("volume", level.coerceIn(0.0, 1.0)) }
+    }
+
+    /** Pausa (se suona): per il timer. */
+    fun pause() = synchronized(lock) {
+        if (_state.value.playing) {
+            playbin.pause()
+            _state.value = _state.value.copy(playing = false)
+        }
+    }
+
     /** Misure o impostazioni cambiate: il guadagno del pezzo che suona si rifà subito. */
     fun refreshAdjust() {
         _state.value.current?.let { setGain(adjust(it).gainDb) }
@@ -279,6 +299,7 @@ class Player {
     private fun nextIndex(automatic: Boolean): Int? {
         val s = _state.value
         if (s.queue.isEmpty()) return null
+        if (automatic && stopAtEnd) return null
         if (automatic && s.repeat == Repeat.ONE) return s.index
         val pos = order.indexOf(s.index)
         return when {

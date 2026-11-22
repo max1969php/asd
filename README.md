@@ -256,7 +256,7 @@ con una chiave debug diversa non si installano sopra le versioni precedenti e Dr
 
 ## ASD Desktop (Ubuntu)
 
-Lettore per PC Linux, versione `0.2.0` (`desktopVersion` in `desktop/build.gradle.kts`). Kotlin con
+Lettore per PC Linux, versione `0.3.0` (`desktopVersion` in `desktop/build.gradle.kts`). Kotlin con
 Compose Desktop: tema e componenti (`ui/theme`, `ui/components`, tranne `AsdLinks`) sono compilati
 direttamente dalla cartella dell'app, la logica viene da `shared/`.
 
@@ -275,17 +275,40 @@ direttamente dalla cartella dell'app, la logica viene da `shared/`.
   pezzo dopo appena finisce l'ultimo suono. Tutti e due si spengono in SETUP. **MPRIS** (`Mpris`,
   dbus-java): GNOME mostra ASD Desktop tra i controlli multimediali e gli manda play/pausa, avanti,
   indietro (tastiera, cuffie); nome sul bus `org.mpris.MediaPlayer2.asd_desktop`.
-- **Non ancora**: mixtape, doppioni, info/copertina/testo, timer, altre lingue (fase 4); TUBO
-  (fase 5); equalizzatore. Vedi `docs/ROADMAP.md`.
+- **Il resto (fase 4)**: **MIXTAPE** (`Mixtapes`, `playlists.json`): crea, rinomina, brucia,
+  riordina, togli; in ROBA il + accanto a un pezzo (o tenerlo premuto) e il bottone accanto a
+  Tutto per mettere in un mixtape un pezzo o tutta la cartella. Un file sparito si salta, non
+  sparisce dal nastro. **Doppioni** e **formati** come filtri in ROBA (`Duplicates` di `shared/`,
+  con il percorso di ogni copia). **INFO** (anno, genere, traccia, formato, bitrate, frequenza,
+  dimensione, volume misurato e correzione, percorso), **copertina** dai tag (anche piccola nel
+  player) e **TESTO** dai tag. **Timer di spegnimento** (`SleepTimer`): 15/30/60 minuti con
+  sfumatura negli ultimi 10 secondi, oppure a fine pezzo. **Lingue**: le stesse 38 dell'app, vedi
+  "Testi".
+- **TUBO (fase 5)** (`Tube`): incolli un link YouTube, invio, e lo yt-dlp **installato nel sistema**
+  (pipx consigliato, o apt) scarica solo la traccia audio già pronta (m4a, altrimenti mp3), senza
+  ffmpeg, un pezzo alla volta, con gli stessi argomenti dell'app. Il file va in
+  `<cartella della musica>/TUBO/Artista - Titolo.m4a` (nome da `TubeTrack`; se c'è già diventa
+  "… (2)", mai sopra un file; prima `.part`, poi il nome giusto) e ROBA si riscansiona. Senza yt-dlp
+  il TUBO spiega come installarlo. In SETUP: versione e "Aggiorna yt-dlp" (`pipx upgrade`, o
+  `yt-dlp -U` per il file scaricato dal sito; quello di apt si aggiorna con apt) e il browser da cui
+  prendere i cookie di YouTube (`--cookies-from-browser`) quando chiede "non sei un bot". È l'unica
+  parte che va in rete, e solo quando incolli un link.
+- **Non ancora**: equalizzatore. Vedi `docs/ROADMAP.md`.
 - **Riproduzione**: GStreamer (`playbin`, via `gst1-java-core`), quello di sistema. Gli M4A/AAC
   (anche quelli del TUBO) vogliono `gstreamer1.0-libav`: il `.deb` lo dichiara tra le dipendenze,
   e se manca SETUP lo dice.
 - **Tag**: jaudiotagger (MP3, FLAC, OGG, M4A, WAV); senza tag il titolo è il nome del file.
 - **Dove salva** (regole XDG): impostazioni in `~/.config/asd-desktop/settings.json`, catalogo
   in `~/.local/share/asd-desktop/library.json` (con le misure di volume e silenzio, rifatte se il
-  file cambia), ultimo ascolto in `playback.json` nella stessa cartella. Come l'app, non scrive e non cancella mai nella cartella della musica.
-- **Testi**: per ora solo italiano, in `desktop/.../Texts.kt`, con accanto la chiave di
-  `strings.xml` corrispondente (le lingue arriveranno riusando quei file).
+  file cambia), ultimo ascolto in `playback.json`, mixtape in `playlists.json` nella stessa
+  cartella; file temporanei del TUBO in `~/.cache/asd-desktop/tube`. Nella cartella della musica
+  ASD non cancella né rinomina mai niente: l'unica cosa che scrive sono i file nuovi del TUBO, nella
+  sottocartella `TUBO`.
+- **Testi** (`I18n`, `Texts`): le 38 lingue dell'app. Il task `copyStrings` mette nel jar gli
+  `strings.xml` dell'app (`main`, poi sopra `minimal`, senza Drive), letti con le stesse chiavi;
+  i pochi testi solo desktop (chiavi `desktop_*`) stanno in
+  `desktop/src/main/resources/i18n/desktop/values*/strings.xml`. Lingua in SETUP ("Come il
+  sistema" di default), arabo e persiano da destra a sinistra.
 
 ```
 desktop/
@@ -293,7 +316,11 @@ desktop/
 ├── packaging/make-deb.sh       costruisce il .deb con dpkg-deb (dipendenze GStreamer, niente fakeroot)
 └── src/main/kotlin/com/asd/desktop/
     ├── Main.kt                 finestra
-    ├── Desktop.kt              collega impostazioni, catalogo, player, ultimo ascolto
+    ├── Desktop.kt              collega impostazioni, catalogo, player, ultimo ascolto, mixtape, timer, TUBO
+    ├── Mixtapes.kt             mixtape in playlists.json
+    ├── Sleep.kt                timer di spegnimento
+    ├── Tube.kt                 TUBO con lo yt-dlp di sistema
+    ├── I18n.kt, Texts.kt       le 38 lingue dagli strings.xml dell'app
     ├── Library.kt              scansione incrementale e catalogo JSON
     ├── TagReader.kt            tag con jaudiotagger
     ├── Player.kt               GStreamer playbin: coda, shuffle, repeat, gapless, guadagno, silenzio
@@ -305,14 +332,15 @@ desktop/
     ├── Settings.kt, Paths.kt   impostazioni e cartelle XDG
     ├── FolderChooser.kt        zenity o JFileChooser
     ├── Texts.kt                testi
-    └── ui/                     App, LibraryScreen (ROBA), PlayerBar, SettingsScreen (SETUP)
+    └── ui/                     App, LibraryScreen (ROBA), PlaylistsScreen (MIXTAPE), TubeScreen (TUBO),
+                                SettingsScreen (SETUP), PlayerBar, Dialogs (mixtape, INFO, TESTO, timer)
 ```
 
 ```bash
-./gradlew :shared:test :desktop:test      # test: GStreamer e D-Bus veri (WAV generati, gdbus)
+./gradlew :shared:test :desktop:test      # test: GStreamer e D-Bus veri (WAV generati, gdbus), TUBO con finto yt-dlp
 ./gradlew :desktop:run                    # avvia senza installare
 ./gradlew :desktop:packageAsdDeb          # desktop/build/deb/asd-desktop_<versione>_amd64.deb
-sudo apt install ./desktop/build/deb/asd-desktop_0.2.0_amd64.deb
+sudo apt install ./desktop/build/deb/asd-desktop_0.3.0_amd64.deb
 ```
 
 Il pacchetto (~90 MB) contiene un Java 17 ridotto (jlink): non serve Java installato. ProGuard è

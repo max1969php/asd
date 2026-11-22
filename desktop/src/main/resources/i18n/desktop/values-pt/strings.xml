@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 faixa</string>
+    <string name="desktop_songs">%1$d faixas</string>
+    <string name="desktop_folder_missing">A pasta %1$s já não existe. Escolhe outra em %2$s.</string>
+    <string name="desktop_choose_folder">Escolhe a tua pasta de música</string>
+    <string name="desktop_no_folder">Nenhuma pasta escolhida.</string>
+    <string name="desktop_no_folder_hint">Escolhe a pasta com a tua música: o ASD só a lê, nunca apaga nada.</string>
+    <string name="desktop_language_system">Como o sistema</string>
+    <string name="desktop_site">Site</string>
+    <string name="desktop_version">Versão</string>
+    <string name="desktop_nothing_playing">NADA NA FILA</string>
+    <string name="desktop_playlists_none_hint">Cria uma aqui, ou carrega em + ao lado de uma faixa em %1$s.</string>
+    <string name="desktop_playlist_empty">Cassete virgem. Vai a %1$s e carrega em + ao lado de uma faixa.</string>
+    <string name="desktop_sleep_left">para daqui a %1$s</string>
+    <string name="desktop_none">Nenhum</string>
+</resources>

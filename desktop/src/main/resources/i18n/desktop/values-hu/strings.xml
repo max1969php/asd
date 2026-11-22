@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 szám</string>
+    <string name="desktop_songs">%1$d szám</string>
+    <string name="desktop_folder_missing">A(z) %1$s mappa már nincs meg. Válassz másikat itt: %2$s.</string>
+    <string name="desktop_choose_folder">Válaszd ki a zenemappát</string>
+    <string name="desktop_no_folder">Nincs kiválasztott mappa.</string>
+    <string name="desktop_no_folder_hint">Válaszd ki a zenéidet tartalmazó mappát: az ASD csak olvassa, soha nem töröl semmit.</string>
+    <string name="desktop_language_system">Mint a rendszer</string>
+    <string name="desktop_site">Weboldal</string>
+    <string name="desktop_version">Verzió</string>
+    <string name="desktop_nothing_playing">NINCS SEMMI A SORBAN</string>
+    <string name="desktop_playlists_none_hint">Készíts egyet itt, vagy nyomd meg a + gombot egy szám mellett itt: %1$s.</string>
+    <string name="desktop_playlist_empty">Üres kazetta. Menj ide: %1$s, és nyomd meg a + gombot egy szám mellett.</string>
+    <string name="desktop_sleep_left">leáll %1$s múlva</string>
+    <string name="desktop_none">Nincs</string>
+</resources>

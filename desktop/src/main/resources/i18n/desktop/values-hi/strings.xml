@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 गाना</string>
+    <string name="desktop_songs">%1$d गाने</string>
+    <string name="desktop_folder_missing">फ़ोल्डर %1$s अब नहीं है। %2$s में कोई दूसरा चुनें।</string>
+    <string name="desktop_choose_folder">अपना संगीत फ़ोल्डर चुनें</string>
+    <string name="desktop_no_folder">कोई फ़ोल्डर नहीं चुना गया।</string>
+    <string name="desktop_no_folder_hint">अपने संगीत वाला फ़ोल्डर चुनें: ASD उसे सिर्फ़ पढ़ता है, कभी कुछ नहीं मिटाता।</string>
+    <string name="desktop_language_system">सिस्टम जैसा</string>
+    <string name="desktop_site">वेबसाइट</string>
+    <string name="desktop_version">संस्करण</string>
+    <string name="desktop_nothing_playing">कतार में कुछ नहीं</string>
+    <string name="desktop_playlists_none_hint">यहाँ एक बनाएँ, या %1$s में किसी गाने के पास + दबाएँ।</string>
+    <string name="desktop_playlist_empty">खाली टेप। %1$s में जाएँ और किसी गाने के पास + दबाएँ।</string>
+    <string name="desktop_sleep_left">%1$s में बंद होगा</string>
+    <string name="desktop_none">कोई नहीं</string>
+</resources>

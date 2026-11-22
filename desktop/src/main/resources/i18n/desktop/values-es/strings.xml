@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 tema</string>
+    <string name="desktop_songs">%1$d temas</string>
+    <string name="desktop_folder_missing">La carpeta %1$s ya no está. Elige otra en %2$s.</string>
+    <string name="desktop_choose_folder">Elige tu carpeta de música</string>
+    <string name="desktop_no_folder">No hay carpeta elegida.</string>
+    <string name="desktop_no_folder_hint">Elige la carpeta con tu música: ASD solo la lee, nunca borra nada.</string>
+    <string name="desktop_language_system">Como el sistema</string>
+    <string name="desktop_site">Web</string>
+    <string name="desktop_version">Versión</string>
+    <string name="desktop_nothing_playing">NADA EN COLA</string>
+    <string name="desktop_playlists_none_hint">Crea una aquí, o pulsa + junto a un tema en %1$s.</string>
+    <string name="desktop_playlist_empty">Cinta virgen. Ve a %1$s y pulsa + junto a un tema.</string>
+    <string name="desktop_sleep_left">se apaga en %1$s</string>
+    <string name="desktop_none">Ninguno</string>
+</resources>

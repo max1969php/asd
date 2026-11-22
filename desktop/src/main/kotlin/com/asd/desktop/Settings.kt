@@ -24,6 +24,10 @@ data class DesktopSettings(
     val normalizeVolume: Boolean = true,
     /** Silenzio a inizio e fine saltato: acceso di default. */
     val skipSilence: Boolean = true,
+    /** Lingua scelta (tag di I18n.SUPPORTED); null = come il sistema. */
+    val language: String? = null,
+    /** Browser da cui yt-dlp prende i cookie di YouTube (contro "non sei un bot"); null = nessuno. */
+    val ytBrowser: String? = null,
 )
 
 class SettingsStore(private val file: File = File(Paths.config, "settings.json")) {
@@ -51,6 +55,8 @@ class SettingsStore(private val file: File = File(Paths.config, "settings.json")
             scroll = o.optInt("scroll", 0),
             normalizeVolume = o.optBoolean("normalizeVolume", true),
             skipSilence = o.optBoolean("skipSilence", true),
+            language = o.optString("language").takeIf { it.isNotEmpty() },
+            ytBrowser = o.optString("ytBrowser").takeIf { it.isNotEmpty() },
         )
     }.getOrDefault(DesktopSettings())
 
@@ -63,4 +69,6 @@ class SettingsStore(private val file: File = File(Paths.config, "settings.json")
         .put("scroll", s.scroll)
         .put("normalizeVolume", s.normalizeVolume)
         .put("skipSilence", s.skipSilence)
+        .put("language", s.language ?: "")
+        .put("ytBrowser", s.ytBrowser ?: "")
 }

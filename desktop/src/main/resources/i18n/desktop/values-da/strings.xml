@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 nummer</string>
+    <string name="desktop_songs">%1$d numre</string>
+    <string name="desktop_folder_missing">Mappen %1$s findes ikke længere. Vælg en anden i %2$s.</string>
+    <string name="desktop_choose_folder">Vælg din musikmappe</string>
+    <string name="desktop_no_folder">Ingen mappe valgt.</string>
+    <string name="desktop_no_folder_hint">Vælg mappen med din musik: ASD læser den kun og sletter aldrig noget.</string>
+    <string name="desktop_language_system">Som systemet</string>
+    <string name="desktop_site">Hjemmeside</string>
+    <string name="desktop_version">Version</string>
+    <string name="desktop_nothing_playing">INTET I KØEN</string>
+    <string name="desktop_playlists_none_hint">Lav et her, eller tryk + ved et nummer i %1$s.</string>
+    <string name="desktop_playlist_empty">Tomt bånd. Gå til %1$s og tryk + ved et nummer.</string>
+    <string name="desktop_sleep_left">stopper om %1$s</string>
+    <string name="desktop_none">Ingen</string>
+</resources>

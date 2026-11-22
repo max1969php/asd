@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 kappale</string>
+    <string name="desktop_songs">%1$d kappaletta</string>
+    <string name="desktop_folder_missing">Kansiota %1$s ei enää ole. Valitse toinen kohdassa %2$s.</string>
+    <string name="desktop_choose_folder">Valitse musiikkikansio</string>
+    <string name="desktop_no_folder">Kansiota ei ole valittu.</string>
+    <string name="desktop_no_folder_hint">Valitse kansio, jossa musiikkisi on: ASD vain lukee sitä eikä poista koskaan mitään.</string>
+    <string name="desktop_language_system">Kuten järjestelmä</string>
+    <string name="desktop_site">Sivusto</string>
+    <string name="desktop_version">Versio</string>
+    <string name="desktop_nothing_playing">JONO ON TYHJÄ</string>
+    <string name="desktop_playlists_none_hint">Tee yksi tässä tai paina kappaleen vieressä + kohdassa %1$s.</string>
+    <string name="desktop_playlist_empty">Tyhjä kasetti. Mene kohtaan %1$s ja paina kappaleen vieressä +.</string>
+    <string name="desktop_sleep_left">pysähtyy %1$s päästä</string>
+    <string name="desktop_none">Ei mitään</string>
+</resources>

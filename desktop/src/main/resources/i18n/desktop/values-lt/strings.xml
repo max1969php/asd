@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 kūrinys</string>
+    <string name="desktop_songs">%1$d kūrinių</string>
+    <string name="desktop_folder_missing">Aplanko %1$s nebėra. Pasirink kitą skiltyje %2$s.</string>
+    <string name="desktop_choose_folder">Pasirink muzikos aplanką</string>
+    <string name="desktop_no_folder">Aplankas nepasirinktas.</string>
+    <string name="desktop_no_folder_hint">Pasirink aplanką su savo muzika: ASD jį tik skaito, niekada nieko netrina.</string>
+    <string name="desktop_language_system">Kaip sistemoje</string>
+    <string name="desktop_site">Svetainė</string>
+    <string name="desktop_version">Versija</string>
+    <string name="desktop_nothing_playing">EILĖ TUŠČIA</string>
+    <string name="desktop_playlists_none_hint">Susikurk čia arba spausk + šalia kūrinio skiltyje %1$s.</string>
+    <string name="desktop_playlist_empty">Tuščia kasetė. Eik į %1$s ir spausk + šalia kūrinio.</string>
+    <string name="desktop_sleep_left">išsijungs po %1$s</string>
+    <string name="desktop_none">Nėra</string>
+</resources>

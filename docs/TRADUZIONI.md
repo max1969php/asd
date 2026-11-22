@@ -65,5 +65,9 @@ segnaposto (`%1$d` resta `%1$d`, non `%1$s`), poi aggiungere il codice a `L10n.S
   volume del telefono" è rimasta e va ritradotta dal testo italiano nuovo.
 - Sito, 2026-11-22: chiavi nuove `hero.download_desktop` e `hero.versions_desktop` (ASD Desktop),
   solo in `it.json`: nelle altre lingue si vedono in italiano finché non vengono tradotte.
-- ASD Desktop: per ora solo italiano (`desktop/src/main/kotlin/com/asd/desktop/Texts.kt`); le lingue
-  arriveranno nella fase 4 riusando i `values-*/strings.xml` dell'app.
+- ASD Desktop 0.3.0, 2026-11-22: usa gli stessi `values-*/strings.xml` dell'app (main, poi minimal),
+  copiati nel jar a ogni build: una traduzione nuova dell'app arriva anche al desktop. Le chiavi
+  solo desktop (`desktop_*`) stanno in `desktop/src/main/resources/i18n/desktop/values*/strings.xml`:
+  quelle generali tradotte da Claude in tutte le 38 lingue (da far rivedere, come le altre); quelle
+  del TUBO e `desktop_missing_aac` solo in it/en, nelle altre lingue si vedono in inglese.
+  Attenzione: il `volume_hint` ancora da ritradurre (vedi sopra) si vede anche nel desktop.

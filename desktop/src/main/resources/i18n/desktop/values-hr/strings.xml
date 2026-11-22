@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 pjesma</string>
+    <string name="desktop_songs">%1$d pjesama</string>
+    <string name="desktop_folder_missing">Mape %1$s više nema. Odaberi drugu u %2$s.</string>
+    <string name="desktop_choose_folder">Odaberi mapu s glazbom</string>
+    <string name="desktop_no_folder">Nije odabrana mapa.</string>
+    <string name="desktop_no_folder_hint">Odaberi mapu sa svojom glazbom: ASD je samo čita, nikad ništa ne briše.</string>
+    <string name="desktop_language_system">Kao sustav</string>
+    <string name="desktop_site">Web</string>
+    <string name="desktop_version">Verzija</string>
+    <string name="desktop_nothing_playing">NIŠTA U REDU</string>
+    <string name="desktop_playlists_none_hint">Napravi je ovdje ili pritisni + pokraj pjesme u %1$s.</string>
+    <string name="desktop_playlist_empty">Prazna kazeta. Idi u %1$s i pritisni + pokraj pjesme.</string>
+    <string name="desktop_sleep_left">gasi se za %1$s</string>
+    <string name="desktop_none">Ništa</string>
+</resources>

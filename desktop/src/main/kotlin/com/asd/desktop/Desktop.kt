@@ -24,13 +24,16 @@ import kotlinx.coroutines.withContext
  * dell'ascolto e riscansione.
  */
 class Desktop {
-    val settings = SettingsStore()
+    val settings = SettingsStore().also { I18n.use(it.state.value.language) }
     val library = Library()
     val player = Player()
+    val mixtapes = Mixtapes()
     val analysis = AnalysisQueue(library, settings)
     val browse = BrowseFolder(SearchSongs())
     private val memory = PlaybackMemory()
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    val sleep = SleepTimer(player, scope)
+    val tube = Tube(settings, onSaved = ::rescan)
 
     /** Richieste di portare la finestra davanti (dai controlli multimediali di GNOME). */
     private val _raise = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
@@ -117,6 +120,26 @@ class Desktop {
 
     fun setNormalizeVolume(on: Boolean) = settings.update { it.copy(normalizeVolume = on) }
     fun setSkipSilence(on: Boolean) = settings.update { it.copy(skipSilence = on) }
+    fun setYtBrowser(browser: String?) = settings.update { it.copy(ytBrowser = browser) }
+
+    /** [tag] null = come il sistema. La finestra si ridisegna da sola (I18n.language). */
+    fun setLanguage(tag: String?) {
+        settings.update { it.copy(language = tag) }
+        I18n.use(tag)
+        Song.unknownArtist = Texts.UNKNOWN_ARTIST
+    }
+
+    /** I pezzi di un mixtape che ci sono ancora, nell'ordine del nastro (con l'indice nel nastro). */
+    fun songsOf(mixtape: Mixtape, songs: List<Song>): List<Pair<Int, Song>> {
+        val byUri = songs.associateBy { it.uri }
+        return mixtape.uris.mapIndexedNotNull { i, uri -> byUri[uri]?.let { i to it } }
+    }
+
+    /** INFO e TESTO: tag, copertina dai tag (come nell'app: niente cover.jpg, scartato), testo. */
+    suspend fun details(song: Song): SongDetails = withContext(Dispatchers.IO) {
+        val file = runCatching { java.io.File(java.net.URI(song.uri)) }.getOrNull() ?: return@withContext SongDetails()
+        TagReader.details(file)
+    }
 
     private suspend fun restorePlayback() {
         val saved = memory.load() ?: return
@@ -137,6 +160,7 @@ class Desktop {
 
     /** All'uscita: salva dove si era e le misure, chiude MPRIS e GStreamer. */
     fun close() {
+        sleep.cancel()
         savePlayback()
         library.flush()
         mpris.close()

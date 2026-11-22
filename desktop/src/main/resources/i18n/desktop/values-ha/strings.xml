@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">Waƙa 1</string>
+    <string name="desktop_songs">Waƙoƙi %1$d</string>
+    <string name="desktop_folder_missing">Babban fayil %1$s ba ya nan kuma. Zaɓi wani a %2$s.</string>
+    <string name="desktop_choose_folder">Zaɓi babban fayil na waƙoƙinka</string>
+    <string name="desktop_no_folder">Ba a zaɓi babban fayil ba.</string>
+    <string name="desktop_no_folder_hint">Zaɓi babban fayil mai waƙoƙinka: ASD karanta shi kawai, ba ya taɓa share komai.</string>
+    <string name="desktop_language_system">Kamar tsarin</string>
+    <string name="desktop_site">Shafi</string>
+    <string name="desktop_version">Siga</string>
+    <string name="desktop_nothing_playing">BABU KOMAI A LAYI</string>
+    <string name="desktop_playlists_none_hint">Ƙirƙiri ɗaya a nan, ko danna + kusa da waƙa a %1$s.</string>
+    <string name="desktop_playlist_empty">Kaset mara komai. Je %1$s ka danna + kusa da waƙa.</string>
+    <string name="desktop_sleep_left">zai tsaya bayan %1$s</string>
+    <string name="desktop_none">Babu</string>
+</resources>

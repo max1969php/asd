@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desktop_one_song">1 rian</string>
+    <string name="desktop_songs">%1$d rian</string>
+    <string name="desktop_folder_missing">Níl an fillteán %1$s ann a thuilleadh. Roghnaigh ceann eile in %2$s.</string>
+    <string name="desktop_choose_folder">Roghnaigh d’fhillteán ceoil</string>
+    <string name="desktop_no_folder">Níl aon fhillteán roghnaithe.</string>
+    <string name="desktop_no_folder_hint">Roghnaigh an fillteán le do cheol: ní dhéanann ASD ach é a léamh, ní scriosann sé rud ar bith riamh.</string>
+    <string name="desktop_language_system">Mar an gcóras</string>
+    <string name="desktop_site">Suíomh</string>
+    <string name="desktop_version">Leagan</string>
+    <string name="desktop_nothing_playing">FAIC SA SCUAINE</string>
+    <string name="desktop_playlists_none_hint">Déan ceann anseo, nó brúigh + in aice le rian in %1$s.</string>
+    <string name="desktop_playlist_empty">Téip fholamh. Téigh go %1$s agus brúigh + in aice le rian.</string>
+    <string name="desktop_sleep_left">stopann i gceann %1$s</string>
+    <string name="desktop_none">Dada</string>
+</resources>

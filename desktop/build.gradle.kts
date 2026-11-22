@@ -8,7 +8,7 @@ plugins {
 }
 
 /** Versione di ASD Desktop: finisce nel .deb e nella schermata SETUP. */
-val desktopVersion = "0.2.0"
+val desktopVersion = "0.3.0"
 
 kotlin {
     compilerOptions { jvmTarget.set(JvmTarget.JVM_17) }
@@ -40,6 +40,22 @@ val writeVersion by tasks.registering {
     }
 }
 tasks.named("compileKotlin") { dependsOn(writeVersion) }
+
+// Le traduzioni: gli strings.xml dell'app (main e minimal) finiscono nel jar sotto i18n/, letti da I18n.
+val generatedI18n = layout.buildDirectory.dir("generated/i18n")
+val copyStrings by tasks.registering(Copy::class) {
+    into(generatedI18n.map { it.dir("i18n") })
+    from("../app/src/main/res") {
+        include("values*/strings.xml")
+        into("main")
+    }
+    from("../app/src/minimal/res") {
+        include("values*/strings.xml")
+        into("minimal")
+    }
+}
+sourceSets.main { resources.srcDir(generatedI18n) }
+tasks.named("processResources") { dependsOn(copyStrings) }
 
 dependencies {
     implementation(project(":shared"))
