@@ -22,6 +22,9 @@ chiave debug) e non va su Play Store: scaricare da YouTube è contro le sue rego
 - **Scarica l'APK**: [ultima Release](https://github.com/max1969php/asd/releases/latest), `asd.apk`
   (minimal) o `asd-tubo.apk` (tube).
 
+In più c'è **ASD Desktop**, il lettore per PC con Ubuntu (`desktop/`, pacchetto `asd-desktop.deb`):
+stessa logica dell'app grazie al modulo condiviso `shared/`, vedi [ASD Desktop](#asd-desktop-ubuntu).
+
 Il ragionamento architetturale di partenza è in [`a.md`](a.md).
 
 ## Cosa fa
@@ -170,10 +173,19 @@ app/src/main/java/com/asd/player/
 ├── MainActivity.kt
 └── MusicApplication.kt
 
+shared/src/main/kotlin/com/asd/player/   logica senza Android, usata da app e desktop:
+├── domain/           Song, Playlist, LibraryQuery; usecase: SearchSongs, BrowseFolder, SongNames, Duplicates
+└── data/             loudness: LoudnessMeter, VolumeLeveling, SilenceTrim; tube: TubeLink, TubeTrack
+
+desktop/              ASD Desktop (vedi "ASD Desktop" più sotto)
 site/                 sito statico su Vercel (vedi "Sito" più sotto e site/README.md)
 ```
 
-La UI non vede mai ExoPlayer: passa da `PlaybackController`, che parla al servizio tramite
+I pacchetti non cambiano spostandosi in `shared/` (`com.asd.player.domain…`), quindi gli import
+dell'app sono gli stessi. `shared` è un modulo Kotlin JVM puro: niente classi Android, `org.json`
+solo `compileOnly` (su Android c'è già nel sistema).
+
+Nell'app la UI non vede mai ExoPlayer: passa da `PlaybackController`, che parla al servizio tramite
 `MediaController`. La riscansione è incrementale: i metadati vengono riletti solo per i file
 nuovi o cambiati (confronto su dimensione e data di modifica). I file spariti vengono tolti
 dal catalogo e, in cascata, dai mixtape che li contenevano.
@@ -206,7 +218,8 @@ Il codice comune sta in `src/main`. Le differenze:
   destinazioni Drive del TUBO (la tube salva solo nel telefono); `BuildConfig.TUBE` nasconde la
   scheda TUBO nella minimal.
 
-Servono JDK 17 e l'Android SDK con la piattaforma 34 (`ANDROID_HOME` oppure `local.properties`).
+Servono JDK 17 e l'Android SDK con la piattaforma 34 (`ANDROID_HOME` oppure `local.properties`);
+sul PC di sviluppo stanno in `~/.local/share/asd-build-tools` (vedi `docs/DEPLOY.md`).
 Full e tube hanno solo le librerie native ARM (`arm64-v8a`, `armeabi-v7a`), quelle dei telefoni veri:
 un APK per CPU più uno universale con entrambe. L'universale è il download principale perché alcuni
 telefoni con CPU a 64 bit hanno Android a 32 bit (es. Galaxy A13 SM-A137F) e rifiutano l'APK arm64
@@ -226,8 +239,71 @@ come "non compatibile". La build di debug tiene anche x86/x86_64, per gli emulat
    gh release create v0.5.0 --target main --title "ASD 0.5.0" --notes "..." asd.apk asd-tubo.apk
    ```
 
-Il sito punta a `releases/latest/download/asd.apk` e `.../asd-tubo.apk`: prende sempre l'ultima
-Release, il sito non va toccato.
+3. Allega anche ASD Desktop, con il nome esatto `asd-desktop.deb`:
+
+   ```bash
+   ./gradlew :desktop:packageAsdDeb
+   cp desktop/build/deb/asd-desktop_*_amd64.deb asd-desktop.deb
+   gh release upload v<versionName> asd-desktop.deb
+   ```
+
+Il sito punta a `releases/latest/download/asd.apk`, `.../asd-tubo.apk` e `.../asd-desktop.deb`:
+prende sempre l'ultima Release, il sito non va toccato. **Ogni Release deve avere tutti e tre
+gli asset**, altrimenti il bottone che manca dà errore 404.
+
+Prima di rilasciare APK compilati su una macchina nuova, controlla la firma (vedi `docs/DEPLOY.md`):
+con una chiave debug diversa non si installano sopra le versioni precedenti e Drive non va.
+
+## ASD Desktop (Ubuntu)
+
+Lettore per PC Linux, versione `0.1.0` (`desktopVersion` in `desktop/build.gradle.kts`). Kotlin con
+Compose Desktop: tema e componenti (`ui/theme`, `ui/components`, tranne `AsdLinks`) sono compilati
+direttamente dalla cartella dell'app, la logica viene da `shared/`.
+
+- **Cosa fa (fase 2)**: SETUP per scegliere la cartella della musica (selettore di GNOME con
+  zenity, altrimenti quello di Java) e riscansionare; ROBA per cartelle, artisti e album, con
+  ricerca, ordinamento, Tutto e Caos, nomi puliti come nell'app; player in fondo alla finestra con
+  coda, shuffle, repeat, avanzamento, riproduzione gapless; alla riapertura la stessa cartella, lo
+  stesso punto della lista e l'ultimo ascolto in pausa. Riscansione incrementale a ogni avvio.
+- **Non ancora**: volume uniforme, silenzio saltato, tasti multimediali/MPRIS (fase 3); mixtape,
+  doppioni, info/copertina/testo, timer, altre lingue (fase 4); TUBO (fase 5). Vedi `docs/ROADMAP.md`.
+- **Riproduzione**: GStreamer (`playbin`, via `gst1-java-core`), quello di sistema. Gli M4A/AAC
+  (anche quelli del TUBO) vogliono `gstreamer1.0-libav`: il `.deb` lo dichiara tra le dipendenze,
+  e se manca SETUP lo dice.
+- **Tag**: jaudiotagger (MP3, FLAC, OGG, M4A, WAV); senza tag il titolo è il nome del file.
+- **Dove salva** (regole XDG): impostazioni in `~/.config/asd-desktop/settings.json`, catalogo
+  in `~/.local/share/asd-desktop/library.json`, ultimo ascolto in `playback.json` nella stessa
+  cartella. Come l'app, non scrive e non cancella mai nella cartella della musica.
+- **Testi**: per ora solo italiano, in `desktop/.../Texts.kt`, con accanto la chiave di
+  `strings.xml` corrispondente (le lingue arriveranno riusando quei file).
+
+```
+desktop/
+├── build.gradle.kts            versione, moduli Java, task packageAsdDeb
+├── packaging/make-deb.sh       costruisce il .deb con dpkg-deb (dipendenze GStreamer, niente fakeroot)
+└── src/main/kotlin/com/asd/desktop/
+    ├── Main.kt                 finestra
+    ├── Desktop.kt              collega impostazioni, catalogo, player, ultimo ascolto
+    ├── Library.kt              scansione incrementale e catalogo JSON
+    ├── TagReader.kt            tag con jaudiotagger
+    ├── Player.kt               GStreamer playbin: coda, shuffle, repeat, gapless
+    ├── PlaybackMemory.kt       ultimo ascolto
+    ├── Settings.kt, Paths.kt   impostazioni e cartelle XDG
+    ├── FolderChooser.kt        zenity o JFileChooser
+    ├── Texts.kt                testi
+    └── ui/                     App, LibraryScreen (ROBA), PlayerBar, SettingsScreen (SETUP)
+```
+
+```bash
+./gradlew :shared:test :desktop:test      # test (PlayerTest suona due WAV di silenzio con GStreamer vero)
+./gradlew :desktop:run                    # avvia senza installare
+./gradlew :desktop:packageAsdDeb          # desktop/build/deb/asd-desktop_<versione>_amd64.deb
+sudo apt install ./desktop/build/deb/asd-desktop_0.1.0_amd64.deb
+```
+
+Il pacchetto (~90 MB) contiene un Java 17 ridotto (jlink): non serve Java installato. ProGuard è
+spento (`buildTypes.release.proguard`): GStreamer-Java e JNA vivono di riflessione. Si installa in
+`/opt/asd-desktop`, con `asd-desktop` in `/usr/bin` e la voce nel menu delle applicazioni.
 
 ## Sito
 

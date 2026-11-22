@@ -63,3 +63,7 @@ segnaposto (`%1$d` resta `%1$d`, non `%1$s`), poi aggiungere il codice a `L10n.S
   italiano e inglese (-14 LUFS, i pezzi deboli si alzano). Nelle altre lingue è cambiato solo il
   numero (-18 → -14 LUFS): la frase "i pezzi più forti vengono abbassati, quindi alza un po' il
   volume del telefono" è rimasta e va ritradotta dal testo italiano nuovo.
+- Sito, 2026-11-22: chiavi nuove `hero.download_desktop` e `hero.versions_desktop` (ASD Desktop),
+  solo in `it.json`: nelle altre lingue si vedono in italiano finché non vengono tradotte.
+- ASD Desktop: per ora solo italiano (`desktop/src/main/kotlin/com/asd/desktop/Texts.kt`); le lingue
+  arriveranno nella fase 4 riusando i `values-*/strings.xml` dell'app.

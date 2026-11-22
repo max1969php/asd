@@ -12,10 +12,11 @@ Online su https://asd-eight-rust.vercel.app. Il progetto Vercel `asd` è collega
 ogni push su `main` ripubblica il sito, gli altri branch danno un'anteprima.
 `vercel.json` serve gli script come file da scaricare (`Content-Disposition: attachment`).
 
-I due bottoni di download puntano a
+I tre bottoni di download puntano a
 `https://github.com/max1969php/asd/releases/latest/download/asd.apk` (versione **minimal**: solo
 cartella del telefono, niente rete) e `.../asd-tubo.apk` (versione **tube**: in più il TUBO, che
-salva solo nel telefono). A ogni versione si crea una Release con quegli APK con questi nomi esatti
+salva solo nel telefono) e `.../asd-desktop.deb` (**ASD Desktop**, il lettore per Ubuntu). A ogni
+versione si crea una Release con quei file con questi nomi esatti
 (vedi "Rilasciare una versione" nel README principale). Il sito non parla di Drive: la musica si
 scarica dal computer con yt-dlp e si copia sul telefono (sezione `#phone`), oppure col TUBO di ASD
 Tubo.

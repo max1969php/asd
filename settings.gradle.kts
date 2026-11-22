@@ -14,4 +14,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "asd"
-include(":app")
+include(":app", ":shared", ":desktop")

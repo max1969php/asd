@@ -88,6 +88,25 @@ Stato: `[ ]` da fare, `[~]` in corso, `[x]` fatto (con versione).
   `LoudnessEnhancer` (limitatore incluso). Le misure già salvate valgono: nessuna rianalisi.
   Da provare a orecchio sul telefono.
 
+## ASD Desktop per Ubuntu (deciso il 2026-11-22)
+
+Nome "ASD Desktop", `.deb` sul sito insieme agli APK, con il TUBO (fase 5); equalizzatore dopo.
+Kotlin + Compose Desktop nello stesso repo, GStreamer per suonare, logica comune in `shared/`.
+
+- [x] desktop 0.1.0 **Fase 1 — modulo condiviso**: dominio, misura del volume, SilenceTrim, TubeLink
+  in `shared/` (con i loro test), usato da app e desktop; app Android invariata.
+- [x] desktop 0.1.0 **Fase 2 — desktop minimo**: cartella, ROBA (cartelle/artisti/album, ricerca,
+  ordinamento, Tutto/Caos), player con coda, shuffle, repeat, gapless, ultimo ascolto, posizione
+  nella lista ricordata, riscansione all'avvio, `.deb`.
+- [ ] **Fase 3 — suono**: volume uniforme a −14 LUFS (decodifica GStreamer → `LoudnessMeter`; il
+  `volume` di GStreamer alza anche, con `rglimiter` dopo), silenzio saltato, MPRIS (tasti
+  multimediali e controlli di GNOME).
+- [ ] **Fase 4 — il resto**: mixtape, doppioni, filtri per formato/artista, info/copertina/testo,
+  timer, le 38 lingue (riusando i `strings.xml`).
+- [ ] **Fase 5 — TUBO** con lo yt-dlp di sistema.
+- [ ] Dopo: equalizzatore (`equalizer-10bands`). Più leggero il `.deb`: le icone Material estese
+  pesano 37 MB per otto icone usate.
+
 ## Scartate (2026-11-07)
 
 2 interruttore "titoli puliti" · 4 copertine nella lista · 6 copertina dalla cartella ·

@@ -37,6 +37,15 @@
   loopback) è stata abbandonata il 2026-10-23 in favore delle due versioni; il codice è nella storia
   git (commit e1c8f2d, 5f20c9f, c42a191).
 
+## ASD Desktop (GitHub Releases)
+
+- Asset `asd-desktop.deb` nella stessa Release degli APK (bottone del sito
+  `releases/latest/download/asd-desktop.deb`): `./gradlew :desktop:packageAsdDeb`, poi copia con
+  quel nome. Versione propria (`desktopVersion` in `desktop/build.gradle.kts`, 0.1.0).
+- Il `.deb` è costruito da `desktop/packaging/make-deb.sh` con `dpkg-deb --root-owner-group`
+  (il `packageDeb` di Compose vorrebbe fakeroot e non permette di dichiarare le dipendenze).
+  Dipendenze: `gstreamer1.0-plugins-base`, `-good`, `gstreamer1.0-libav` (AAC); consigliato `zenity`.
+
 ## APK (GitHub Releases)
 
 - Release con `asd.apk` (minimal universale) e, dalla 0.5.0, `asd-tubo.apk` (tube universale).
@@ -48,7 +57,14 @@
 - Galaxy A13 SM-A137F del titolare: Android a 32 bit, rifiuta gli APK solo arm64 ("non compatibile").
   Per la full usare l'universale o armv7.
 - Firma: chiave debug di WSL, SHA-1 `98:D5:A1:C8:C7:A7:95:2C:74:F4:66:A3:5E:04:56:54:10:64:7D:0C`
-  (quella registrata nel client OAuth Android di Google Cloud). Verifica con
+  (quella registrata nel client OAuth Android di Google Cloud).
+- **Attenzione, PC Ubuntu**: la prima build (2026-11-22) ha creato una chiave debug nuova,
+  `~/.android/debug.keystore` con SHA-1 `28:A4:E8:02:04:5F:30:86:BB:BE:6F:C4:3F:24:68:D5:E9:AC:B1:3D`.
+  Gli APK firmati così **non si installano sopra** quelli già sul telefono e nella full **Drive
+  non va**: non rilasciarli. Rimedio: copiare il `debug.keystore` di WSL
+  (`\\wsl$\<distro>\home\<utente>\.android\debug.keystore` da Windows) al posto di quello nuovo e
+  ricompilare; in alternativa registrare la nuova SHA-1 come altro client Android su Google Cloud
+  (ma gli aggiornamenti sopra le versioni vecchie restano impossibili). Verifica con
   `apksigner verify --print-certs` (serve `JAVA_HOME/bin` nel PATH).
 - `gh` autenticato come `max1969php` (scope `repo`, `workflow`).
 
@@ -65,7 +81,9 @@
 
 ## Build
 
-JDK 17 e Android SDK in `~/.local/share/asd-build-tools`:
+Dal 2026-11-22 si compila sul PC Ubuntu 26.04 (14 GB di RAM, prima WSL2 con ~7,4 GB).
+JDK 17 (Temurin) e Android SDK (cmdline-tools, platform 34, build-tools 34.0.0, platform-tools) in
+`~/.local/share/asd-build-tools`, installati a mano (licenze SDK accettate):
 
     S=$HOME/.local/share/asd-build-tools; export JAVA_HOME=$(ls -d $S/jdk-17*) ANDROID_HOME=$S/sdk
     ./gradlew --no-daemon -q testMinimalDebugUnitTest   # poi testTubeDebugUnitTest, testFullDebugUnitTest
