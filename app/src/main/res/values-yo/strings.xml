@@ -132,7 +132,7 @@
     <string name="volume_all_measured">a ti wọn gbogbo orin</string>
     <string name="volume_measuring">à ń wọn ohùn: %1$d ló kù</string>
     <string name="volume_waiting_wifi">orin àwọsánmọ̀ %1$d láti wọn: à ń dúró de Wi-Fi</string>
-    <string name="volume_hint">A máa ń wọn orin kọ̀ọ̀kan lẹ́ẹ̀kan (EBU R128, bíi ReplayGain 2.0) a sì máa ń ṣe é ní -18 LUFS: kò ní sí ìfò ohùn mọ́ láti MP3 kan sí òmíràn. À ń dín àwọn orin tó ròkè kù, nítorí náà gbé ohùn fóònù rẹ sókè díẹ̀. A máa ń wọn àwọn fáìlì Drive pẹ̀lú Wi-Fi nìkan.</string>
+    <string name="volume_hint">A máa ń wọn orin kọ̀ọ̀kan lẹ́ẹ̀kan (EBU R128, bíi ReplayGain 2.0) a sì máa ń ṣe é ní -14 LUFS: kò ní sí ìfò ohùn mọ́ láti MP3 kan sí òmíràn. À ń dín àwọn orin tó ròkè kù, nítorí náà gbé ohùn fóònù rẹ sókè díẹ̀. A máa ń wọn àwọn fáìlì Drive pẹ̀lú Wi-Fi nìkan.</string>
     <string name="default_sort">Ìtòlẹ́sẹẹsẹ àtìbẹ̀rẹ̀</string>
     <string name="ascending">↑ gòkè</string>
     <string name="descending">↓ sọ̀kalẹ̀</string>

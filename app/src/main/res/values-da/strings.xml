@@ -132,7 +132,7 @@
     <string name="volume_all_measured">alle numre målt</string>
     <string name="volume_measuring">måler lydstyrke: %1$d tilbage</string>
     <string name="volume_waiting_wifi">%1$d skynumre skal måles: venter på Wi-Fi</string>
-    <string name="volume_hint">Hvert nummer måles én gang (EBU R128, ligesom ReplayGain 2.0) og afspilles ved -18 LUFS: ikke flere spring i lydstyrken fra en MP3 til den næste. Højere numre skrues ned, så skru lidt op på telefonen. Filer på Drive måles kun på Wi-Fi.</string>
+    <string name="volume_hint">Hvert nummer måles én gang (EBU R128, ligesom ReplayGain 2.0) og afspilles ved -14 LUFS: ikke flere spring i lydstyrken fra en MP3 til den næste. Højere numre skrues ned, så skru lidt op på telefonen. Filer på Drive måles kun på Wi-Fi.</string>
     <string name="default_sort">Standardrækkefølge</string>
     <string name="ascending">↑ stigende</string>
     <string name="descending">↓ faldende</string>

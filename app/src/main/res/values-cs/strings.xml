@@ -132,7 +132,7 @@
     <string name="volume_all_measured">všechny skladby změřeny</string>
     <string name="volume_measuring">měřím hlasitost: zbývá %1$d</string>
     <string name="volume_waiting_wifi">%1$d skladeb v cloudu k měření: čekám na Wi-Fi</string>
-    <string name="volume_hint">Každá skladba se změří jednou (EBU R128, jako ReplayGain 2.0) a hraje na -18 LUFS: konec skoků hlasitosti mezi MP3. Hlasitější skladby se ztlumí, tak si telefon trochu zesil. Soubory na Drive se měří jen přes Wi-Fi.</string>
+    <string name="volume_hint">Každá skladba se změří jednou (EBU R128, jako ReplayGain 2.0) a hraje na -14 LUFS: konec skoků hlasitosti mezi MP3. Hlasitější skladby se ztlumí, tak si telefon trochu zesil. Soubory na Drive se měří jen přes Wi-Fi.</string>
     <string name="default_sort">Výchozí řazení</string>
     <string name="ascending">↑ vzestupně</string>
     <string name="descending">↓ sestupně</string>

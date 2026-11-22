@@ -132,7 +132,7 @@
     <string name="volume_all_measured">ኩሎም ደርፍታት ተለኪዮም</string>
     <string name="volume_measuring">ድምጺ ንለክዕ ኣለና፦ %1$d ተሪፎም</string>
     <string name="volume_waiting_wifi">%1$d ናይ ደበና ደርፍታት ክለኩ ኣለዎም፦ Wi-Fi ንጽበ ኣለና</string>
-    <string name="volume_hint">ነፍሲ ወከፍ ደርፊ ሓንሳብ ይለኸዕ (EBU R128፣ ከም ReplayGain 2.0) ብ-18 LUFS ድማ ይጫወት፦ ካብ ሓደ MP3 ናብ ካልእ ዝዘሉ ድምጺ ከቶ የለን። ዝለዓሉ ደርፍታት ይወሃሃዱ እዮም፣ ስለዚ ድምጺ ተሌፎንካ ቁሩብ ልዕል ግበሮ። ፋይላት Drive ብ Wi-Fi ጥራይ እዮም ዝለኩ።</string>
+    <string name="volume_hint">ነፍሲ ወከፍ ደርፊ ሓንሳብ ይለኸዕ (EBU R128፣ ከም ReplayGain 2.0) ብ-14 LUFS ድማ ይጫወት፦ ካብ ሓደ MP3 ናብ ካልእ ዝዘሉ ድምጺ ከቶ የለን። ዝለዓሉ ደርፍታት ይወሃሃዱ እዮም፣ ስለዚ ድምጺ ተሌፎንካ ቁሩብ ልዕል ግበሮ። ፋይላት Drive ብ Wi-Fi ጥራይ እዮም ዝለኩ።</string>
     <string name="default_sort">ቀዳማይ ድርድር</string>
     <string name="ascending">↑ ዝደይብ</string>
     <string name="descending">↓ ዝወርድ</string>

@@ -16,7 +16,7 @@
   "tabs.title": "The tabs",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: your playlists. Create, rename, burn. To move a track, long-press it, choose <em>↕ Move</em>, use the ↑ ↓ arrows and press OK. Burning a mixtape doesn't touch your files.",
   "volume.title": "Even volume",
-  "volume.text": "Each track is measured once (EBU R128, the same standard as ReplayGain 2.0) and played at -18 LUFS: no volume jumps between one MP3 and the next. Louder tracks are turned down, so raise your phone's volume a bit. You can turn it off in SETUP.",
+  "volume.text": "Each track is measured once (EBU R128) and played at -14 LUFS, the same level as Spotify and YouTube: no volume jumps between one MP3 and the next. Loud tracks are turned down and quiet ones turned up, with a limiter so nothing distorts. You can turn it off in SETUP.",
   "rules.title": "House rules",
   "rules.legal": "Only download things that are yours or free to use: YouTube's terms forbid the rest.",
   "yt.title": "// yt-dlp ON THE COMPUTER",

@@ -132,7 +132,7 @@
     <string name="volume_all_measured">toate piesele măsurate</string>
     <string name="volume_measuring">măsor volumul: mai sunt %1$d</string>
     <string name="volume_waiting_wifi">%1$d piese din cloud de măsurat: aștept Wi-Fi</string>
-    <string name="volume_hint">Fiecare piesă e măsurată o dată (EBU R128, ca ReplayGain 2.0) și cântată la -18 LUFS: gata cu săriturile de volum între MP3-uri. Piesele mai tari sunt coborâte, așa că dă puțin mai tare telefonul. Fișierele de pe Drive se măsoară doar pe Wi-Fi.</string>
+    <string name="volume_hint">Fiecare piesă e măsurată o dată (EBU R128, ca ReplayGain 2.0) și cântată la -14 LUFS: gata cu săriturile de volum între MP3-uri. Piesele mai tari sunt coborâte, așa că dă puțin mai tare telefonul. Fișierele de pe Drive se măsoară doar pe Wi-Fi.</string>
     <string name="default_sort">Ordine implicită</string>
     <string name="ascending">↑ crescător</string>
     <string name="descending">↓ descrescător</string>

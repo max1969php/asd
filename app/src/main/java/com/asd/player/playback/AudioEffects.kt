@@ -4,9 +4,10 @@ import android.content.Context
 import android.media.AudioManager
 import android.media.audiofx.BassBoost
 import android.media.audiofx.Equalizer
+import android.media.audiofx.LoudnessEnhancer
 import com.asd.player.data.settings.EqSettings
 import com.asd.player.data.settings.SettingsStore
-import kotlin.math.pow
+import kotlin.math.roundToInt
 
 /** Una banda dell'equalizzatore del telefono: frequenza centrale in Hz. */
 data class EqBand(val index: Int, val centerHz: Int)
@@ -22,6 +23,9 @@ class AudioEffects(context: Context, private val settings: SettingsStore) {
 
     private val equalizer: Equalizer? = runCatching { Equalizer(0, sessionId) }.getOrNull()
     private val bassBoost: BassBoost? = runCatching { BassBoost(0, sessionId) }.getOrNull()?.takeIf { it.strengthSupported }
+
+    /** Alza i pezzi deboli del volume uniforme: guadagno con limitatore, niente distorsione. */
+    private val enhancer: LoudnessEnhancer? = runCatching { LoudnessEnhancer(sessionId) }.getOrNull()
 
     val available: Boolean get() = equalizer != null
     val bassAvailable: Boolean get() = bassBoost != null
@@ -64,13 +68,30 @@ class AudioEffects(context: Context, private val settings: SettingsStore) {
 
     /**
      * Le bande alzate (e i bassi) aggiungono guadagno: con il volume uniforme e i pezzi già forti
-     * distorcerebbero. Il player abbassa del guadagno massimo aggiunto.
+     * distorcerebbero. Il player abbassa del guadagno massimo aggiunto: dB, 0 o negativo.
      */
-    fun headroom(eq: EqSettings): Float {
-        if (!eq.enabled || equalizer == null) return 1f
+    fun headroomDb(eq: EqSettings): Double {
+        if (!eq.enabled || equalizer == null) return 0.0
         val maxBoostDb = (eq.levels.take(bands.size).maxOrNull() ?: 0).coerceAtLeast(0) / 100.0 +
             (if (bassBoost != null) eq.bass.coerceIn(0, 1000) * BASS_DB_PER_UNIT else 0.0)
-        return 10.0.pow(-maxBoostDb / 20).toFloat()
+        return -maxBoostDb
+    }
+
+    /**
+     * Guadagno positivo del volume uniforme ([db] > 0), che il volume del player (max 1) non può
+     * dare. 0 o meno: spento. Se il telefono non ha il LoudnessEnhancer i pezzi deboli restano come sono.
+     */
+    fun setBoost(db: Double) {
+        val e = enhancer ?: return
+        runCatching {
+            val mB = (db * 100).roundToInt()
+            if (mB > 0) {
+                e.setTargetGain(mB)
+                e.enabled = true
+            } else {
+                e.enabled = false
+            }
+        }
     }
 
     init {

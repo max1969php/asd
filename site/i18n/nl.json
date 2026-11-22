@@ -16,7 +16,7 @@
   "tabs.title": "De tabbladen",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: je afspeellijsten. Maak aan, hernoem, brand. Om een nummer te verplaatsen houd je het ingedrukt, kies je <em>↕ Verplaatsen</em>, gebruik je de pijlen ↑ ↓ en druk je op OK. Een mixtape branden raakt je bestanden niet aan.",
   "volume.title": "Gelijk volume",
-  "volume.text": "Elk nummer wordt één keer gemeten (EBU R128, dezelfde standaard als ReplayGain 2.0) en afgespeeld op -18 LUFS: geen volumesprongen tussen de ene mp3 en de andere. Luidere nummers worden zachter gezet, dus zet het volume van je telefoon wat hoger. Uit te zetten in SETUP.",
+  "volume.text": "Elk nummer wordt één keer gemeten (EBU R128, dezelfde standaard als ReplayGain 2.0) en afgespeeld op -14 LUFS: geen volumesprongen tussen de ene mp3 en de andere. Luidere nummers worden zachter gezet, dus zet het volume van je telefoon wat hoger. Uit te zetten in SETUP.",
   "rules.title": "Huisregels",
   "rules.legal": "Download alleen eigen of vrije dingen: de voorwaarden van YouTube verbieden de rest.",
   "yt.title": "// yt-dlp OP DE COMPUTER",

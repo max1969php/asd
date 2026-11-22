@@ -132,7 +132,7 @@
     <string name="volume_all_measured">tous les morceaux sont mesurés</string>
     <string name="volume_measuring">je mesure le volume : il en reste %1$d</string>
     <string name="volume_waiting_wifi">%1$d morceaux cloud à mesurer : j\'attends le Wi-Fi</string>
-    <string name="volume_hint">Chaque morceau est mesuré une fois (EBU R128, comme ReplayGain 2.0) et joué à -18 LUFS : fini les sauts de volume d\'un MP3 à l\'autre. Les morceaux plus forts sont baissés, alors monte un peu le volume du téléphone. Les fichiers sur Drive ne sont mesurés qu\'en Wi-Fi.</string>
+    <string name="volume_hint">Chaque morceau est mesuré une fois (EBU R128, comme ReplayGain 2.0) et joué à -14 LUFS : fini les sauts de volume d\'un MP3 à l\'autre. Les morceaux plus forts sont baissés, alors monte un peu le volume du téléphone. Les fichiers sur Drive ne sont mesurés qu\'en Wi-Fi.</string>
     <string name="default_sort">Ordre par défaut</string>
     <string name="ascending">↑ croissant</string>
     <string name="descending">↓ décroissant</string>

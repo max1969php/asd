@@ -16,7 +16,7 @@
   "tabs.title": "Os separadores",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: as tuas playlists. Cria, muda o nome, queima. Para mover uma faixa mantém-na premida, escolhe <em>↕ Mover</em>, usa as setas ↑ ↓ e prime OK. Queimar um mixtape não toca nos ficheiros.",
   "volume.title": "Volume uniforme",
-  "volume.text": "Cada faixa é medida uma vez (EBU R128, o mesmo padrão do ReplayGain 2.0) e tocada a -18 LUFS: sem saltos de volume entre um MP3 e outro. As faixas mais fortes são baixadas, por isso sobe um pouco o volume do telemóvel. Desliga-se em SETUP.",
+  "volume.text": "Cada faixa é medida uma vez (EBU R128, o mesmo padrão do ReplayGain 2.0) e tocada a -14 LUFS: sem saltos de volume entre um MP3 e outro. As faixas mais fortes são baixadas, por isso sobe um pouco o volume do telemóvel. Desliga-se em SETUP.",
   "rules.title": "Regras da casa",
   "rules.legal": "Descarrega só coisas tuas ou livres: os termos do YouTube proíbem o resto.",
   "yt.title": "// yt-dlp NO COMPUTADOR",

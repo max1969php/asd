@@ -132,7 +132,7 @@
     <string name="volume_all_measured">усі треки виміряно</string>
     <string name="volume_measuring">вимірюю гучність: залишилось %1$d</string>
     <string name="volume_waiting_wifi">%1$d хмарних треків для вимірювання: чекаю на Wi-Fi</string>
-    <string name="volume_hint">Кожен трек вимірюється один раз (EBU R128, як ReplayGain 2.0) і грає на рівні -18 LUFS: більше жодних стрибків гучності між MP3. Гучніші треки приглушуються, тож трохи додай гучності на телефоні. Файли на Drive вимірюються лише через Wi-Fi.</string>
+    <string name="volume_hint">Кожен трек вимірюється один раз (EBU R128, як ReplayGain 2.0) і грає на рівні -14 LUFS: більше жодних стрибків гучності між MP3. Гучніші треки приглушуються, тож трохи додай гучності на телефоні. Файли на Drive вимірюються лише через Wi-Fi.</string>
     <string name="default_sort">Порядок за замовчуванням</string>
     <string name="ascending">↑ за зростанням</string>
     <string name="descending">↓ за спаданням</string>

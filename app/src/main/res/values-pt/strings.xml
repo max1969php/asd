@@ -132,7 +132,7 @@
     <string name="volume_all_measured">todas as músicas medidas</string>
     <string name="volume_measuring">a medir o volume: faltam %1$d</string>
     <string name="volume_waiting_wifi">%1$d músicas na nuvem por medir: à espera do Wi-Fi</string>
-    <string name="volume_hint">Cada música é medida uma vez (EBU R128, como ReplayGain 2.0) e tocada a -18 LUFS: acabaram-se os saltos de volume entre um MP3 e outro. As músicas mais fortes são baixadas, por isso sobe um pouco o volume do telemóvel. Os ficheiros no Drive só são medidos em Wi-Fi.</string>
+    <string name="volume_hint">Cada música é medida uma vez (EBU R128, como ReplayGain 2.0) e tocada a -14 LUFS: acabaram-se os saltos de volume entre um MP3 e outro. As músicas mais fortes são baixadas, por isso sobe um pouco o volume do telemóvel. Os ficheiros no Drive só são medidos em Wi-Fi.</string>
     <string name="default_sort">Ordem predefinida</string>
     <string name="ascending">↑ crescente</string>
     <string name="descending">↓ decrescente</string>

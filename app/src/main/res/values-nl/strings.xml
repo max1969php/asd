@@ -132,7 +132,7 @@
     <string name="volume_all_measured">alle nummers gemeten</string>
     <string name="volume_measuring">volume meten: nog %1$d te gaan</string>
     <string name="volume_waiting_wifi">%1$d cloudnummers te meten: wacht op wifi</string>
-    <string name="volume_hint">Elk nummer wordt één keer gemeten (EBU R128, zoals ReplayGain 2.0) en afgespeeld op -18 LUFS: geen volumesprongen meer tussen MP3\'s. Hardere nummers worden zachter gezet, dus zet je telefoon iets harder. Bestanden op Drive worden alleen via wifi gemeten.</string>
+    <string name="volume_hint">Elk nummer wordt één keer gemeten (EBU R128, zoals ReplayGain 2.0) en afgespeeld op -14 LUFS: geen volumesprongen meer tussen MP3\'s. Hardere nummers worden zachter gezet, dus zet je telefoon iets harder. Bestanden op Drive worden alleen via wifi gemeten.</string>
     <string name="default_sort">Standaardvolgorde</string>
     <string name="ascending">↑ oplopend</string>
     <string name="descending">↓ aflopend</string>

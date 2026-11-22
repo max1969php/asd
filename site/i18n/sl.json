@@ -16,7 +16,7 @@
   "tabs.title": "Zavihki",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: tvoji seznami predvajanja. Ustvari, preimenuj, zažgi. Skladbo premakneš tako, da jo dolgo pritisneš, izbereš <em>↕ Premakni</em>, uporabiš puščici ↑ ↓ in pritisneš OK. Zažig mixtapa se datotek ne dotakne.",
   "volume.title": "Enakomerna glasnost",
-  "volume.text": "Vsaka skladba se izmeri enkrat (EBU R128, isti standard kot ReplayGain 2.0) in se predvaja pri -18 LUFS: brez skokov glasnosti med enim MP3 in drugim. Glasnejše skladbe se utišajo, zato malo povečaj glasnost telefona. Izklopi se v SETUP.",
+  "volume.text": "Vsaka skladba se izmeri enkrat (EBU R128, isti standard kot ReplayGain 2.0) in se predvaja pri -14 LUFS: brez skokov glasnosti med enim MP3 in drugim. Glasnejše skladbe se utišajo, zato malo povečaj glasnost telefona. Izklopi se v SETUP.",
   "rules.title": "Hišna pravila",
   "rules.legal": "Prenašaj samo svoje ali proste stvari: pogoji YouTuba prepovedujejo ostalo.",
   "yt.title": "// yt-dlp NA RAČUNALNIKU",

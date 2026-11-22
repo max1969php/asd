@@ -132,7 +132,7 @@
     <string name="volume_all_measured">alle spor målt</string>
     <string name="volume_measuring">måler lydstyrke: %1$d igjen</string>
     <string name="volume_waiting_wifi">%1$d skyspor må måles: venter på Wi-Fi</string>
-    <string name="volume_hint">Hvert spor måles én gang (EBU R128, som ReplayGain 2.0) og spilles av på -18 LUFS: ikke flere hopp i lydstyrke fra en MP3 til den neste. Høyere spor skrus ned, så skru opp telefonen litt. Filer på Drive måles bare på Wi-Fi.</string>
+    <string name="volume_hint">Hvert spor måles én gang (EBU R128, som ReplayGain 2.0) og spilles av på -14 LUFS: ikke flere hopp i lydstyrke fra en MP3 til den neste. Høyere spor skrus ned, så skru opp telefonen litt. Filer på Drive måles bare på Wi-Fi.</string>
     <string name="default_sort">Standardrekkefølge</string>
     <string name="ascending">↑ stigende</string>
     <string name="descending">↓ synkende</string>

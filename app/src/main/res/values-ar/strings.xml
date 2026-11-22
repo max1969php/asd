@@ -132,7 +132,7 @@
     <string name="volume_all_measured">تم قياس كل المقاطع</string>
     <string name="volume_measuring">نقيس مستوى الصوت: بقي %1$d</string>
     <string name="volume_waiting_wifi">%1$d من مقاطع السحابة بانتظار القياس: ننتظر Wi-Fi</string>
-    <string name="volume_hint">يُقاس كل مقطع مرة واحدة (EBU R128، مثل ReplayGain 2.0) ويُشغَّل عند -18 LUFS: لا مزيد من قفزات مستوى الصوت بين ملف MP3 وآخر. المقاطع الأعلى صوتًا تُخفَض، لذا ارفع صوت هاتفك قليلًا. ملفات Drive لا تُقاس إلا عبر Wi-Fi.</string>
+    <string name="volume_hint">يُقاس كل مقطع مرة واحدة (EBU R128، مثل ReplayGain 2.0) ويُشغَّل عند -14 LUFS: لا مزيد من قفزات مستوى الصوت بين ملف MP3 وآخر. المقاطع الأعلى صوتًا تُخفَض، لذا ارفع صوت هاتفك قليلًا. ملفات Drive لا تُقاس إلا عبر Wi-Fi.</string>
     <string name="default_sort">الترتيب الافتراضي</string>
     <string name="ascending">↑ تصاعدي</string>
     <string name="descending">↓ تنازلي</string>

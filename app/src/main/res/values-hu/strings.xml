@@ -132,7 +132,7 @@
     <string name="volume_all_measured">minden szám lemérve</string>
     <string name="volume_measuring">hangerőt mérek: még %1$d</string>
     <string name="volume_waiting_wifi">%1$d felhős szám vár mérésre: várom a Wi-Fit</string>
-    <string name="volume_hint">Minden számot egyszer megmérünk (EBU R128, mint a ReplayGain 2.0), és -18 LUFS-on szól: vége a hangerőugrásoknak az MP3-ak között. A hangosabb számokat lehalkítjuk, úgyhogy hangosítsd fel kicsit a telefont. A Drive-on lévő fájlokat csak Wi-Fin mérjük.</string>
+    <string name="volume_hint">Minden számot egyszer megmérünk (EBU R128, mint a ReplayGain 2.0), és -14 LUFS-on szól: vége a hangerőugrásoknak az MP3-ak között. A hangosabb számokat lehalkítjuk, úgyhogy hangosítsd fel kicsit a telefont. A Drive-on lévő fájlokat csak Wi-Fin mérjük.</string>
     <string name="default_sort">Alapértelmezett sorrend</string>
     <string name="ascending">↑ növekvő</string>
     <string name="descending">↓ csökkenő</string>

@@ -132,7 +132,7 @@
     <string name="volume_all_measured">e tụọla egwu niile</string>
     <string name="volume_measuring">na-atụ ụda: %1$d fọdụrụ</string>
     <string name="volume_waiting_wifi">egwu igwe ojii %1$d ka a ga-atụ: na-eche Wi-Fi</string>
-    <string name="volume_hint">A na-atụ egwu ọ bụla otu ugboro (EBU R128, dị ka ReplayGain 2.0) wee kpọọ ya na -18 LUFS: enwekwaghị mmeghe ụda site na otu MP3 gaa na nke ọzọ. A na-ebelata egwu ndị ruru elu, ya mere bulie ụda ekwentị gị nwa ntakịrị. A na-atụ faịlụ Drive naanị na Wi-Fi.</string>
+    <string name="volume_hint">A na-atụ egwu ọ bụla otu ugboro (EBU R128, dị ka ReplayGain 2.0) wee kpọọ ya na -14 LUFS: enwekwaghị mmeghe ụda site na otu MP3 gaa na nke ọzọ. A na-ebelata egwu ndị ruru elu, ya mere bulie ụda ekwentị gị nwa ntakịrị. A na-atụ faịlụ Drive naanị na Wi-Fi.</string>
     <string name="default_sort">Usoro ndabara</string>
     <string name="ascending">↑ ịrị elu</string>
     <string name="descending">↓ ịdalata</string>

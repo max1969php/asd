@@ -1,3 +1,5 @@
+*non est reditus*
+
 Io lo implementerei come un'app Android nativa, volutamente semplice, con un'architettura che separi la gestione della libreria musicale, le playlist e il motore di riproduzione. Per la riproduzione audio non svilupperei nulla da zero: utilizzerei una libreria open source consolidata, integrata con le API Android per la riproduzione in background.
 
 L'obiettivo sarebbe un lettore musicale offline-first, senza streaming di rete, senza account, senza backend e senza database server. Tutti i brani risiedono in una directory locale scelta dall'utente; l'app indicizza i file supportati e permette di cercarli, filtrarli, riprodurli e organizzarli in playlist.

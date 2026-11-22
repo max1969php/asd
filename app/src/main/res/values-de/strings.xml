@@ -132,7 +132,7 @@
     <string name="volume_all_measured">alle Stücke gemessen</string>
     <string name="volume_measuring">messe die Lautstärke: noch %1$d</string>
     <string name="volume_waiting_wifi">%1$d Cloud-Stücke zu messen: warte auf WLAN</string>
-    <string name="volume_hint">Jedes Stück wird einmal gemessen (EBU R128, wie ReplayGain 2.0) und mit -18 LUFS abgespielt: keine Lautstärkesprünge mehr zwischen MP3s. Lautere Stücke werden leiser gemacht, also dreh das Handy etwas lauter. Dateien auf Drive werden nur im WLAN gemessen.</string>
+    <string name="volume_hint">Jedes Stück wird einmal gemessen (EBU R128, wie ReplayGain 2.0) und mit -14 LUFS abgespielt: keine Lautstärkesprünge mehr zwischen MP3s. Lautere Stücke werden leiser gemacht, also dreh das Handy etwas lauter. Dateien auf Drive werden nur im WLAN gemessen.</string>
     <string name="default_sort">Standardsortierung</string>
     <string name="ascending">↑ aufsteigend</string>
     <string name="descending">↓ absteigend</string>

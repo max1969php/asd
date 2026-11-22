@@ -132,7 +132,7 @@
     <string name="volume_all_measured">all tracks measured</string>
     <string name="volume_measuring">measuring volume: %1$d to go</string>
     <string name="volume_waiting_wifi">%1$d cloud tracks to measure: waiting for Wi-Fi</string>
-    <string name="volume_hint">Each track is measured once (EBU R128, like ReplayGain 2.0) and played at -18 LUFS: no more volume jumps from one MP3 to the next. Louder tracks get turned down, so turn your phone up a bit. Files on Drive are only measured on Wi-Fi.</string>
+    <string name="volume_hint">Each track is measured once (EBU R128) and played at -14 LUFS, the same level as Spotify and YouTube: no more volume jumps from one MP3 to the next. Loud tracks get turned down and quiet ones turned up, with a limiter so nothing distorts. Files on Drive are only measured on Wi-Fi.</string>
     <string name="default_sort">Default order</string>
     <string name="ascending">↑ ascending</string>
     <string name="descending">↓ descending</string>

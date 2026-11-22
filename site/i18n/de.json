@@ -16,7 +16,7 @@
   "tabs.title": "Die Tabs",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: deine Playlists. Erstellen, umbenennen, verbrennen. Um einen Titel zu verschieben, halte ihn gedrückt, wähle <em>↕ Verschieben</em>, nutze die Pfeile ↑ ↓ und drücke OK. Ein Mixtape zu verbrennen berührt die Dateien nicht.",
   "volume.title": "Einheitliche Lautstärke",
-  "volume.text": "Jeder Titel wird einmal gemessen (EBU R128, derselbe Standard wie ReplayGain 2.0) und mit -18 LUFS abgespielt: keine Lautstärkesprünge zwischen einem MP3 und dem nächsten. Lautere Titel werden leiser gestellt, also dreh die Handylautstärke etwas auf. In SETUP abschaltbar.",
+  "volume.text": "Jeder Titel wird einmal gemessen (EBU R128, derselbe Standard wie ReplayGain 2.0) und mit -14 LUFS abgespielt: keine Lautstärkesprünge zwischen einem MP3 und dem nächsten. Lautere Titel werden leiser gestellt, also dreh die Handylautstärke etwas auf. In SETUP abschaltbar.",
   "rules.title": "Hausregeln",
   "rules.legal": "Lade nur Eigenes oder Freies herunter: Die YouTube-Bedingungen verbieten den Rest.",
   "yt.title": "// yt-dlp AM COMPUTER",

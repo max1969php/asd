@@ -16,7 +16,7 @@
   "tabs.title": "Las pestañas",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: tus listas. Crea, renombra, quema. Para mover una pista mantenla pulsada, elige <em>↕ Mover</em>, usa las flechas ↑ ↓ y pulsa OK. Quemar un mixtape no toca los archivos.",
   "volume.title": "Volumen uniforme",
-  "volume.text": "Cada pista se mide una vez (EBU R128, el mismo estándar que ReplayGain 2.0) y se reproduce a -18 LUFS: sin saltos de volumen entre un MP3 y otro. Las pistas más fuertes se bajan, así que sube un poco el volumen del teléfono. Se desactiva en SETUP.",
+  "volume.text": "Cada pista se mide una vez (EBU R128, el mismo estándar que ReplayGain 2.0) y se reproduce a -14 LUFS: sin saltos de volumen entre un MP3 y otro. Las pistas más fuertes se bajan, así que sube un poco el volumen del teléfono. Se desactiva en SETUP.",
   "rules.title": "Reglas de la casa",
   "rules.legal": "Descarga solo cosas tuyas o libres: los términos de YouTube prohíben lo demás.",
   "yt.title": "// yt-dlp EN EL ORDENADOR",

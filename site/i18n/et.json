@@ -16,7 +16,7 @@
   "tabs.title": "Vahekaardid",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: sinu esitusloendid. Loo, nimeta ümber, põleta. Loo liigutamiseks hoia seda all, vali <em>↕ Liiguta</em>, kasuta nooli ↑ ↓ ja vajuta OK. Mixtape'i põletamine ei puuduta faile.",
   "volume.title": "Ühtlane helitugevus",
-  "volume.text": "Iga lugu mõõdetakse üks kord (EBU R128, sama standard mis ReplayGain 2.0) ja mängitakse tasemel -18 LUFS: ei mingeid helitugevuse hüppeid ühe MP3 ja teise vahel. Valjemaid lugusid vaigistatakse, nii et keera telefoni helitugevust veidi üles. SETUPis saab välja lülitada.",
+  "volume.text": "Iga lugu mõõdetakse üks kord (EBU R128, sama standard mis ReplayGain 2.0) ja mängitakse tasemel -14 LUFS: ei mingeid helitugevuse hüppeid ühe MP3 ja teise vahel. Valjemaid lugusid vaigistatakse, nii et keera telefoni helitugevust veidi üles. SETUPis saab välja lülitada.",
   "rules.title": "Maja reeglid",
   "rules.legal": "Laadi alla ainult enda või vabu asju: YouTube'i tingimused keelavad ülejäänu.",
   "yt.title": "// yt-dlp ARVUTIS",

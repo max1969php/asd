@@ -16,7 +16,7 @@
   "tabs.title": "Àwọn táàbù",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: àwọn àtòjọ orin rẹ. Ṣẹ̀dá, tún orúkọ sọ, jó. Láti gbé orin, tẹ̀ ẹ́ mọ́lẹ̀ fún ìgbà pípẹ́, yan <em>↕ Gbé</em>, lo àwọn ọfà ↑ ↓ kí o sì tẹ OK. Jíjó mixtape kò fọwọ́ kan àwọn fáìlì rẹ.",
   "volume.title": "Ìwọ̀n ohùn déédé",
-  "volume.text": "A máa ń wọn orin kọ̀ọ̀kan lẹ́ẹ̀kan (EBU R128, ìlànà kan náà pẹ̀lú ReplayGain 2.0) a sì ń ṣe é ní -18 LUFS: kò sí fífò ohùn láàrin MP3 kan àti èyí tó tẹ̀lé e. A máa ń dín ohùn àwọn orin tó ròkè kù, nítorí náà gbé ohùn fóònù sókè díẹ̀. A lè pa á nínú SETUP.",
+  "volume.text": "A máa ń wọn orin kọ̀ọ̀kan lẹ́ẹ̀kan (EBU R128, ìlànà kan náà pẹ̀lú ReplayGain 2.0) a sì ń ṣe é ní -14 LUFS: kò sí fífò ohùn láàrin MP3 kan àti èyí tó tẹ̀lé e. A máa ń dín ohùn àwọn orin tó ròkè kù, nítorí náà gbé ohùn fóònù sókè díẹ̀. A lè pa á nínú SETUP.",
   "rules.title": "Àwọn òfin ilé",
   "rules.legal": "Gba ohun tó jẹ́ tìrẹ tàbí tó ṣí sílẹ̀ nìkan: àwọn àdéhùn YouTube kò gba ìyókù.",
   "yt.title": "// yt-dlp LÓRÍ KỌ̀MPÚTÀ",

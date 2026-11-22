@@ -16,7 +16,7 @@
   "tabs.title": "Fanene",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: spillelistene dine. Lag, gi nytt navn, brenn. For å flytte en sang holder du den inne, velger <em>↕ Flytt</em>, bruker pilene ↑ ↓ og trykker OK. Å brenne en mixtape rører ikke filene.",
   "volume.title": "Jevn lydstyrke",
-  "volume.text": "Hver sang måles én gang (EBU R128, samme standard som ReplayGain 2.0) og spilles på -18 LUFS: ingen volumhopp mellom en MP3 og den neste. De høyeste sangene dempes, så skru opp lydstyrken på telefonen litt. Kan slås av i SETUP.",
+  "volume.text": "Hver sang måles én gang (EBU R128, samme standard som ReplayGain 2.0) og spilles på -14 LUFS: ingen volumhopp mellom en MP3 og den neste. De høyeste sangene dempes, så skru opp lydstyrken på telefonen litt. Kan slås av i SETUP.",
   "rules.title": "Husregler",
   "rules.legal": "Last bare ned ting som er dine egne eller frie: YouTubes vilkår forbyr resten.",
   "yt.title": "// yt-dlp PÅ DATAMASKINEN",

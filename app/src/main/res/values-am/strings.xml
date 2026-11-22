@@ -132,7 +132,7 @@
     <string name="volume_all_measured">ሁሉም ዘፈኖች ተለክተዋል</string>
     <string name="volume_measuring">የድምፅ መጠን እየለካን ነው፦ %1$d ቀርተዋል</string>
     <string name="volume_waiting_wifi">%1$d የደመና ዘፈኖች ሊለኩ ይቀራሉ፦ Wi-Fi እየጠበቅን ነው</string>
-    <string name="volume_hint">እያንዳንዱ ዘፈን አንድ ጊዜ ይለካል (EBU R128፣ እንደ ReplayGain 2.0) እና በ-18 LUFS ይጫወታል፦ ከአንድ MP3 ወደ ሌላው የድምፅ መዝለል አይኖርም። ከፍተኛ ድምፅ ያላቸው ዘፈኖች ይቀነሳሉ፣ ስለዚህ የስልክህን ድምፅ ትንሽ ከፍ አድርግ። የDrive ፋይሎች የሚለኩት በWi-Fi ብቻ ነው።</string>
+    <string name="volume_hint">እያንዳንዱ ዘፈን አንድ ጊዜ ይለካል (EBU R128፣ እንደ ReplayGain 2.0) እና በ-14 LUFS ይጫወታል፦ ከአንድ MP3 ወደ ሌላው የድምፅ መዝለል አይኖርም። ከፍተኛ ድምፅ ያላቸው ዘፈኖች ይቀነሳሉ፣ ስለዚህ የስልክህን ድምፅ ትንሽ ከፍ አድርግ። የDrive ፋይሎች የሚለኩት በWi-Fi ብቻ ነው።</string>
     <string name="default_sort">ነባሪ ቅደም ተከተል</string>
     <string name="ascending">↑ ከትንሽ ወደ ትልቅ</string>
     <string name="descending">↓ ከትልቅ ወደ ትንሽ</string>

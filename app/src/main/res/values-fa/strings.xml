@@ -132,7 +132,7 @@
     <string name="volume_all_measured">صدای همه آهنگ‌ها سنجیده شد</string>
     <string name="volume_measuring">در حال سنجش صدا: %1$d مانده</string>
     <string name="volume_waiting_wifi">%1$d آهنگ ابری برای سنجش: منتظر Wi-Fi</string>
-    <string name="volume_hint">صدای هر آهنگ یک بار سنجیده می‌شود (EBU R128، مثل ReplayGain 2.0) و با -18 LUFS پخش می‌شود: دیگر از یک MP3 به MP3 دیگر صدا بالا و پایین نمی‌پرد. آهنگ‌های بلندتر آرام‌تر می‌شوند، پس صدای گوشی‌ات را کمی بیشتر کن. فایل‌های روی Drive فقط با Wi-Fi سنجیده می‌شوند.</string>
+    <string name="volume_hint">صدای هر آهنگ یک بار سنجیده می‌شود (EBU R128، مثل ReplayGain 2.0) و با -14 LUFS پخش می‌شود: دیگر از یک MP3 به MP3 دیگر صدا بالا و پایین نمی‌پرد. آهنگ‌های بلندتر آرام‌تر می‌شوند، پس صدای گوشی‌ات را کمی بیشتر کن. فایل‌های روی Drive فقط با Wi-Fi سنجیده می‌شوند.</string>
     <string name="default_sort">ترتیب پیش‌فرض</string>
     <string name="ascending">↑ صعودی</string>
     <string name="descending">↓ نزولی</string>

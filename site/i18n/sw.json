@@ -16,7 +16,7 @@
   "tabs.title": "Vichupo",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: orodha zako za kucheza. Unda, badilisha jina, choma. Kuhamisha wimbo, ubonyeze kwa muda mrefu, chagua <em>↕ Hamisha</em>, tumia mishale ↑ ↓ kisha bonyeza OK. Kuchoma mixtape hakuguswi faili zako.",
   "volume.title": "Sauti sawa",
-  "volume.text": "Kila wimbo hupimwa mara moja (EBU R128, kiwango kile kile cha ReplayGain 2.0) na huchezwa kwa -18 LUFS: hakuna miruko ya sauti kati ya MP3 moja na nyingine. Nyimbo zenye sauti kubwa hupunguzwa, kwa hiyo ongeza kidogo sauti ya simu. Inaweza kuzimwa kwenye SETUP.",
+  "volume.text": "Kila wimbo hupimwa mara moja (EBU R128, kiwango kile kile cha ReplayGain 2.0) na huchezwa kwa -14 LUFS: hakuna miruko ya sauti kati ya MP3 moja na nyingine. Nyimbo zenye sauti kubwa hupunguzwa, kwa hiyo ongeza kidogo sauti ya simu. Inaweza kuzimwa kwenye SETUP.",
   "rules.title": "Sheria za nyumbani",
   "rules.legal": "Pakua tu vilivyo vyako au vilivyo huru: masharti ya YouTube yanakataza vingine vyote.",
   "yt.title": "// yt-dlp KWENYE KOMPYUTA",

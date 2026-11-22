@@ -132,7 +132,7 @@
     <string name="volume_all_measured">visi kūriniai išmatuoti</string>
     <string name="volume_measuring">matuoju garsumą: liko %1$d</string>
     <string name="volume_waiting_wifi">%1$d debesies kūriniai laukia matavimo: laukiu „Wi-Fi“</string>
-    <string name="volume_hint">Kiekvienas kūrinys išmatuojamas vieną kartą (EBU R128, kaip ReplayGain 2.0) ir grojamas -18 LUFS lygiu: nebebus garsumo šuolių tarp MP3. Garsesni kūriniai pritildomi, tad šiek tiek pagarsink telefoną. „Drive“ failai matuojami tik per „Wi-Fi“.</string>
+    <string name="volume_hint">Kiekvienas kūrinys išmatuojamas vieną kartą (EBU R128, kaip ReplayGain 2.0) ir grojamas -14 LUFS lygiu: nebebus garsumo šuolių tarp MP3. Garsesni kūriniai pritildomi, tad šiek tiek pagarsink telefoną. „Drive“ failai matuojami tik per „Wi-Fi“.</string>
     <string name="default_sort">Numatytoji tvarka</string>
     <string name="ascending">↑ didėjimo tvarka</string>
     <string name="descending">↓ mažėjimo tvarka</string>

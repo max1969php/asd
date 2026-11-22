@@ -16,7 +16,7 @@
   "tabs.title": "Filele",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: listele tale de redare. Creezi, redenumești, arzi. Ca să muți o piesă, ține-o apăsată, alege <em>↕ Mută</em>, folosește săgețile ↑ ↓ și apasă OK. Arderea unui mixtape nu atinge fișierele.",
   "volume.title": "Volum uniform",
-  "volume.text": "Fiecare piesă e măsurată o dată (EBU R128, același standard ca ReplayGain 2.0) și redată la -18 LUFS: fără salturi de volum între un MP3 și altul. Piesele mai tari sunt coborâte, așa că mărește puțin volumul telefonului. Se oprește din SETUP.",
+  "volume.text": "Fiecare piesă e măsurată o dată (EBU R128, același standard ca ReplayGain 2.0) și redată la -14 LUFS: fără salturi de volum între un MP3 și altul. Piesele mai tari sunt coborâte, așa că mărește puțin volumul telefonului. Se oprește din SETUP.",
   "rules.title": "Regulile casei",
   "rules.legal": "Descarcă doar lucruri ale tale sau libere: termenii YouTube le interzic pe celelalte.",
   "yt.title": "// yt-dlp PE CALCULATOR",

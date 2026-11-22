@@ -16,7 +16,7 @@
   "tabs.title": "Skirtukai",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: tavo grojaraščiai. Kurk, pervadink, išdegink. Norėdamas perkelti kūrinį, ilgai paspausk jį, pasirink <em>↕ Perkelti</em>, naudok rodykles ↑ ↓ ir spausk OK. Išdeginus mixtape'ą failai neliečiami.",
   "volume.title": "Vienodas garsumas",
-  "volume.text": "Kiekvienas kūrinys išmatuojamas vieną kartą (EBU R128, tas pats standartas kaip „ReplayGain 2.0“) ir grojamas -18 LUFS lygiu: jokių garsumo šuolių tarp vieno MP3 ir kito. Garsesni kūriniai nutildomi, todėl šiek tiek padidink telefono garsumą. Išjungiama SETUP.",
+  "volume.text": "Kiekvienas kūrinys išmatuojamas vieną kartą (EBU R128, tas pats standartas kaip „ReplayGain 2.0“) ir grojamas -14 LUFS lygiu: jokių garsumo šuolių tarp vieno MP3 ir kito. Garsesni kūriniai nutildomi, todėl šiek tiek padidink telefono garsumą. Išjungiama SETUP.",
   "rules.title": "Namų taisyklės",
   "rules.legal": "Siųskis tik savo ar laisvus dalykus: „YouTube“ sąlygos draudžia likusius.",
   "yt.title": "// yt-dlp KOMPIUTERYJE",

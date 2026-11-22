@@ -132,7 +132,7 @@
     <string name="volume_all_measured">visi ieraksti izmērīti</string>
     <string name="volume_measuring">mēru skaļumu: atlikuši %1$d</string>
     <string name="volume_waiting_wifi">%1$d mākoņa ieraksti jāizmēra: gaidu Wi-Fi</string>
-    <string name="volume_hint">Katrs ieraksts tiek izmērīts vienreiz (EBU R128, kā ReplayGain 2.0) un atskaņots ar -18 LUFS: vairs nekādu skaļuma lēcienu starp MP3. Skaļākie ieraksti tiek pieklusināti, tāpēc palielini tālruņa skaļumu. Drive faili tiek mērīti tikai ar Wi-Fi.</string>
+    <string name="volume_hint">Katrs ieraksts tiek izmērīts vienreiz (EBU R128, kā ReplayGain 2.0) un atskaņots ar -14 LUFS: vairs nekādu skaļuma lēcienu starp MP3. Skaļākie ieraksti tiek pieklusināti, tāpēc palielini tālruņa skaļumu. Drive faili tiek mērīti tikai ar Wi-Fi.</string>
     <string name="default_sort">Noklusējuma secība</string>
     <string name="ascending">↑ augošā</string>
     <string name="descending">↓ dilstošā</string>

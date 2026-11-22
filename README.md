@@ -1,3 +1,5 @@
+*non est reditus*
+
 # ASD — Anarchic Streaming Device
 
 Lettore musicale Android per la **tua** musica, zero abbonamenti. Niente account ASD, niente
@@ -84,12 +86,14 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
   (un brano, mai la playlist) e si scarica solo l'audio con **yt-dlp**. Una select **SALVA IN** sceglie
   la destinazione: cartella del telefono o Google Drive (la cartella scelta in SETUP). Il brano compare subito in ROBA.
 - **Volume uniforme**: niente salti di volume tra un brano e l'altro. Ogni brano viene misurato
-  una volta secondo **EBU R128 / ITU-R BS.1770-4** (lo standard di ReplayGain 2.0 e della
-  normalizzazione di Spotify e YouTube) e suonato a **-18 LUFS**, il riferimento ReplayGain.
+  una volta secondo **EBU R128 / ITU-R BS.1770-4** e suonato a **-14 LUFS**, lo stesso livello di
+  Spotify (normale), YouTube e Amazon Music: allo stesso volume del telefono ASD suona forte quanto loro.
   La misura gira in sottofondo un brano alla volta (prima quello in riproduzione) e resta salvata;
-  i file di Drive si misurano solo su rete non a consumo. Il guadagno passa dal volume del
-  player, che può solo abbassare: i brani più bassi di -18 LUFS restano com'erano (niente clipping,
-  niente limiter). Si spegne in SETUP.
+  finché un brano non è misurato vale la mediana della libreria. I file di Drive si misurano solo su
+  rete non a consumo. I pezzi forti si abbassano con il volume del player, quelli deboli si alzano
+  (al massimo +12 dB) con il `LoudnessEnhancer` di Android sulla sessione di ASD, che ha un
+  limitatore: niente distorsione (`VolumeLeveling`, `AudioEffects.setBoost`). Sui telefoni senza
+  LoudnessEnhancer i pezzi deboli restano come sono. Si spegne in SETUP.
 - **Setup**: per cambiare cartella, riscansionare e scegliere l'ordinamento predefinito.
 - **Due fonti**: la cartella del telefono (SAF) e una cartella di **Google Drive**. La libreria le
   unisce; il filtro TELEFONO / DRIVE compare quando le usi entrambe, e i brani di Drive hanno il simbolo ☁.
@@ -149,13 +153,17 @@ app/src/main/java/com/asd/player/
 ├── data/
 │   ├── database/     Room: entità, SongDao, PlaylistDao
 │   ├── scanner/      SourceScanner, AudioScanner (visita SAF), MetadataReader (tag)
-│   ├── drive/        DriveAuth (OAuth), DriveClient (REST), DriveSourceScanner, DriveStreamResolver
-│   ├── loudness/     LoudnessMeter (BS.1770), LoudnessAnalyzer (MediaCodec), LoudnessQueue, VolumeLeveling
-│   ├── tube/         TubeLink, TubeTrack, TubeDownloader (yt-dlp), TubeImporter (coda → Drive)
+│   ├── drive/        DriveAuth (OAuth), DriveClient (REST), DriveSourceScanner
+│   ├── loudness/     LoudnessMeter (BS.1770), LoudnessAnalyzer (MediaCodec), LoudnessQueue,
+│   │                 VolumeLeveling (guadagno del volume uniforme), SilenceTrim
+│   ├── tube/         TubeLink, TubeTrack, TubeCookies, TubeImporter (coda: YouTube → telefono/Drive,
+│   │                 Drive → telefono); TubeDownloader sta in src/ytdlp (stub in src/minimal)
 │   ├── repository/   MusicLibraryRepository, PlaylistRepository
-│   └── settings/     SettingsStore (cartella, ordinamento, ultima scansione)
-├── domain/           Song, Playlist, LibraryQuery, SearchSongs
-├── playback/         PlaybackService (MediaSession), PlaybackController, CloudStreamResolver
+│   └── settings/     SettingsStore (cartella, ordinamento, Drive, volume, silenzio, equalizzatore…)
+├── domain/           Song, Playlist, LibraryQuery; usecase: SearchSongs, BrowseFolder, SongNames, Duplicates
+├── playback/         PlaybackService (MediaSession), PlaybackController, CloudStreamResolver (Drive),
+│                     MediaItems, PlaybackMemory (ultimo ascolto), SleepTimer, AudioEffects
+│                     (equalizzatore, bassi, guadagno), TrackDetailsReader (copertina, info, testo)
 ├── ui/               theme, components, library, playlists, player, tube, cloud, settings
 ├── AppContainer.kt
 ├── L10n.kt           lingua dell'app (LocaleManager da Android 13, pref prima)
@@ -270,5 +278,6 @@ l'avviso "app non verificata". Per distribuire l'app a chiunque serve la verific
 
 ## Fuori dall'MVP
 
-Esportazione M3U, ripristino della coda dopo il riavvio, copertine degli album, FFmpeg per codec
-esotici, cache offline dei brani di Drive.
+FFmpeg per codec esotici, cache offline dei brani di Drive. Scartate (vedi `docs/ROADMAP.md`):
+mixtape in `.m3u`, copertine nella lista, crossfade. Fatte nella 0.7.0: ripresa dell'ultimo
+ascolto e copertina nel player.

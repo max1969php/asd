@@ -16,7 +16,7 @@
   "tabs.title": "标签页",
   "tabs.mixtape": "<strong>MIXTAPE</strong>：你的播放列表。创建、重命名、烧掉。要移动曲目，长按它，选择<em>↕ 移动</em>，用 ↑ ↓ 箭头调整后按 OK。烧掉混音带不会动你的文件。",
   "volume.title": "统一音量",
-  "volume.text": "每首曲目只测量一次（EBU R128，与 ReplayGain 2.0 同一标准），并以 -18 LUFS 播放：不同 MP3 之间不会有音量忽大忽小。较响的曲目会被调低，所以请把手机音量调高一点。可在 SETUP 中关闭。",
+  "volume.text": "每首曲目只测量一次（EBU R128，与 ReplayGain 2.0 同一标准），并以 -14 LUFS 播放：不同 MP3 之间不会有音量忽大忽小。较响的曲目会被调低，所以请把手机音量调高一点。可在 SETUP 中关闭。",
   "rules.title": "使用须知",
   "rules.legal": "只下载属于你自己或可自由使用的内容：YouTube 的条款禁止其余的一切。",
   "yt.title": "// 电脑上的 yt-dlp",

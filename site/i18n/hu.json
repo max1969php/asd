@@ -16,7 +16,7 @@
   "tabs.title": "A fülek",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: a lejátszási listáid. Létrehozás, átnevezés, égetés. Egy szám mozgatásához tartsd nyomva, válaszd a <em>↕ Mozgatás</em> lehetőséget, használd a ↑ ↓ nyilakat, és nyomd meg az OK-t. A mixtape elégetése nem érinti a fájlokat.",
   "volume.title": "Egyenletes hangerő",
-  "volume.text": "Minden számot egyszer megmér (EBU R128, ugyanaz a szabvány, mint a ReplayGain 2.0), és -18 LUFS-on játssza le: nincsenek hangerőugrások az egyik MP3 és a másik között. A hangosabb számokat lehalkítja, ezért emeld meg kicsit a telefon hangerejét. A SETUP-ban kikapcsolható.",
+  "volume.text": "Minden számot egyszer megmér (EBU R128, ugyanaz a szabvány, mint a ReplayGain 2.0), és -14 LUFS-on játssza le: nincsenek hangerőugrások az egyik MP3 és a másik között. A hangosabb számokat lehalkítja, ezért emeld meg kicsit a telefon hangerejét. A SETUP-ban kikapcsolható.",
   "rules.title": "Házirend",
   "rules.legal": "Csak a saját vagy szabad dolgokat tölts le: a YouTube feltételei a többit tiltják.",
   "yt.title": "// yt-dlp A SZÁMÍTÓGÉPEN",

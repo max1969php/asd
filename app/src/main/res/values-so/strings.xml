@@ -132,7 +132,7 @@
     <string name="volume_all_measured">dhammaan heesaha waa la cabbiray</string>
     <string name="volume_measuring">codka ayaa la cabbirayaa: %1$d ayaa hadhay</string>
     <string name="volume_waiting_wifi">%1$d hees oo daruur ah ayaa la cabbirayaa: Wi-Fi ayaa la sugayaa</string>
-    <string name="volume_hint">Hees kasta mar bay cabbiraan (EBU R128, sida ReplayGain 2.0) waxaana lagu ciyaaraa -18 LUFS: weli kor-u-booday cod MP3 kasta u dhexeeya ma jirto. Heesaha ugu dheer waa la hoosaysiiyaa, sidaa darteed kor u qaad codka taleefankaaga wax yar. Faylasha Drive waxaa la cabbiraa Wi-Fi keliya.</string>
+    <string name="volume_hint">Hees kasta mar bay cabbiraan (EBU R128, sida ReplayGain 2.0) waxaana lagu ciyaaraa -14 LUFS: weli kor-u-booday cod MP3 kasta u dhexeeya ma jirto. Heesaha ugu dheer waa la hoosaysiiyaa, sidaa darteed kor u qaad codka taleefankaaga wax yar. Faylasha Drive waxaa la cabbiraa Wi-Fi keliya.</string>
     <string name="default_sort">Habka caadiga ah</string>
     <string name="ascending">↑ kor u kaca</string>
     <string name="descending">↓ hoos u dhaca</string>

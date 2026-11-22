@@ -132,7 +132,7 @@
     <string name="volume_all_measured">alla låtar mätta</string>
     <string name="volume_measuring">mäter volym: %1$d kvar</string>
     <string name="volume_waiting_wifi">%1$d molnlåtar att mäta: väntar på Wi-Fi</string>
-    <string name="volume_hint">Varje låt mäts en gång (EBU R128, som ReplayGain 2.0) och spelas på -18 LUFS: inga fler volymhopp mellan olika MP3-filer. Högljudda låtar skruvas ner, så höj volymen på telefonen lite. Filer på Drive mäts bara på Wi-Fi.</string>
+    <string name="volume_hint">Varje låt mäts en gång (EBU R128, som ReplayGain 2.0) och spelas på -14 LUFS: inga fler volymhopp mellan olika MP3-filer. Högljudda låtar skruvas ner, så höj volymen på telefonen lite. Filer på Drive mäts bara på Wi-Fi.</string>
     <string name="default_sort">Standardordning</string>
     <string name="ascending">↑ stigande</string>
     <string name="descending">↓ fallande</string>

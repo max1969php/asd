@@ -16,7 +16,7 @@
   "tabs.title": "Onglet yi",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: sa liste de lecture yi. Sos, soppi tur, lakk. Ngir yëkkati woy, téye ko, tànn <em>↕ Dem</em>, jëfandikoo flèch ↑ ↓ te bësal OK. Lakk mixtape dootu laal sa fichier yi.",
   "volume.title": "Kaw bu yem",
-  "volume.text": "Woy bu nekk dañu koy natt benn yoon (EBU R128, norme bi ReplayGain 2.0 di jëfandikoo) te di ko tëb ci -18 LUFS: amul yoon bu kaw bi di dem ak di dikk diggante benn MP3 ak bi ci topp. Woy yu tar dañuy suuxat, kon yokkal tuuti kaw telefon bi. Mën nga ko tëj ci SETUP.",
+  "volume.text": "Woy bu nekk dañu koy natt benn yoon (EBU R128, norme bi ReplayGain 2.0 di jëfandikoo) te di ko tëb ci -14 LUFS: amul yoon bu kaw bi di dem ak di dikk diggante benn MP3 ak bi ci topp. Woy yu tar dañuy suuxat, kon yokkal tuuti kaw telefon bi. Mën nga ko tëj ci SETUP.",
   "rules.title": "Yoon yu kër gi",
   "rules.legal": "Yebal rekk li sa bopp walla li ñépp mën a jëfandikoo: yoon yu YouTube tere nañu ñeneen yi.",
   "yt.title": "// yt-dlp CI ORDINATEUR BI",

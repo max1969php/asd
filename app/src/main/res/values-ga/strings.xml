@@ -132,7 +132,7 @@
     <string name="volume_all_measured">gach ceol tomhaiste</string>
     <string name="volume_measuring">ag tomhas airde fuaime: %1$d fágtha</string>
     <string name="volume_waiting_wifi">%1$d ceol scamall le tomhas: ag fanacht le Wi-Fi</string>
-    <string name="volume_hint">Tomhaistear gach ceol uair amháin (EBU R128, cosúil le ReplayGain 2.0) agus seinntear ag -18 LUFS é: gan léimeanna airde fuaime idir MP3anna a thuilleadh. Íslítear na ceolta níos airde, mar sin cuir an guthán beagán níos airde. Ní thomhaistear comhaid ar Drive ach ar Wi-Fi.</string>
+    <string name="volume_hint">Tomhaistear gach ceol uair amháin (EBU R128, cosúil le ReplayGain 2.0) agus seinntear ag -14 LUFS é: gan léimeanna airde fuaime idir MP3anna a thuilleadh. Íslítear na ceolta níos airde, mar sin cuir an guthán beagán níos airde. Ní thomhaistear comhaid ar Drive ach ar Wi-Fi.</string>
     <string name="default_sort">Ord réamhshocraithe</string>
     <string name="ascending">↑ ardaitheach</string>
     <string name="descending">↓ íslitheach</string>

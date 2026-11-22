@@ -132,7 +132,7 @@
     <string name="volume_all_measured">kaikki kappaleet mitattu</string>
     <string name="volume_measuring">mitataan äänenvoimakkuutta: %1$d jäljellä</string>
     <string name="volume_waiting_wifi">%1$d pilvikappaletta mitattavana: odotetaan Wi-Fiä</string>
-    <string name="volume_hint">Jokainen kappale mitataan kerran (EBU R128, kuten ReplayGain 2.0) ja soitetaan tasolla -18 LUFS: ei enää äänenvoimakkuuden hyppyjä MP3:sta toiseen. Kovempia kappaleita hiljennetään, joten nosta puhelimen ääntä hieman. Driven tiedostot mitataan vain Wi-Fillä.</string>
+    <string name="volume_hint">Jokainen kappale mitataan kerran (EBU R128, kuten ReplayGain 2.0) ja soitetaan tasolla -14 LUFS: ei enää äänenvoimakkuuden hyppyjä MP3:sta toiseen. Kovempia kappaleita hiljennetään, joten nosta puhelimen ääntä hieman. Driven tiedostot mitataan vain Wi-Fillä.</string>
     <string name="default_sort">Oletusjärjestys</string>
     <string name="ascending">↑ nouseva</string>
     <string name="descending">↓ laskeva</string>

@@ -132,7 +132,7 @@
     <string name="volume_all_measured">woy yépp ñu natt leen</string>
     <string name="volume_measuring">dafa ci natt baat bi: des na %1$d</string>
     <string name="volume_waiting_wifi">%1$d woy yu niir ngir natt: dafa ci xaar Wi-Fi</string>
-    <string name="volume_hint">Benn woy bu nekk dañu koy natt ben yoon (EBU R128, ni ReplayGain 2.0) te di ko woyal ci -18 LUFS: du am yeneen tëb ci baat bi ci diggante MP3 yi. Woy yu ëpp kàttan dañuy leen suuxat, kon yokkal baat bi ci sa telefon tuuti. Fichier yu Drive dañuy leen natt rekk ci Wi-Fi.</string>
+    <string name="volume_hint">Benn woy bu nekk dañu koy natt ben yoon (EBU R128, ni ReplayGain 2.0) te di ko woyal ci -14 LUFS: du am yeneen tëb ci baat bi ci diggante MP3 yi. Woy yu ëpp kàttan dañuy leen suuxat, kon yokkal baat bi ci sa telefon tuuti. Fichier yu Drive dañuy leen natt rekk ci Wi-Fi.</string>
     <string name="default_sort">Tëral bu jëkk</string>
     <string name="ascending">↑ di yokku</string>
     <string name="descending">↓ di wàññiku</string>

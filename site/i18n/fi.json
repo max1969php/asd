@@ -16,7 +16,7 @@
   "tabs.title": "Välilehdet",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: soittolistasi. Luo, nimeä uudelleen, polta. Siirtääksesi kappaleen paina sitä pitkään, valitse <em>↕ Siirrä</em>, käytä nuolia ↑ ↓ ja paina OK. Mixtapen polttaminen ei koske tiedostoihin.",
   "volume.title": "Tasainen äänenvoimakkuus",
-  "volume.text": "Jokainen kappale mitataan kerran (EBU R128, sama standardi kuin ReplayGain 2.0) ja soitetaan tasolla -18 LUFS: ei voimakkuushyppyjä yhden MP3:n ja seuraavan välillä. Kovempia kappaleita hiljennetään, joten nosta puhelimen äänenvoimakkuutta vähän. Voi poistaa käytöstä SETUPissa.",
+  "volume.text": "Jokainen kappale mitataan kerran (EBU R128, sama standardi kuin ReplayGain 2.0) ja soitetaan tasolla -14 LUFS: ei voimakkuushyppyjä yhden MP3:n ja seuraavan välillä. Kovempia kappaleita hiljennetään, joten nosta puhelimen äänenvoimakkuutta vähän. Voi poistaa käytöstä SETUPissa.",
   "rules.title": "Talon säännöt",
   "rules.legal": "Lataa vain omaa tai vapaata aineistoa: YouTuben ehdot kieltävät lopun.",
   "yt.title": "// yt-dlp TIETOKONEELLA",

@@ -132,7 +132,7 @@
     <string name="volume_all_measured">sve pjesme izmjerene</string>
     <string name="volume_measuring">mjerim glasnoću: još %1$d</string>
     <string name="volume_waiting_wifi">%1$d pjesama u oblaku za mjerenje: čekam Wi-Fi</string>
-    <string name="volume_hint">Svaka pjesma izmjeri se jednom (EBU R128, kao ReplayGain 2.0) i svira na -18 LUFS: nema više skokova glasnoće između MP3-ova. Glasnije pjesme se stišaju, pa malo pojačaj mobitel. Datoteke na Driveu mjere se samo preko Wi-Fija.</string>
+    <string name="volume_hint">Svaka pjesma izmjeri se jednom (EBU R128, kao ReplayGain 2.0) i svira na -14 LUFS: nema više skokova glasnoće između MP3-ova. Glasnije pjesme se stišaju, pa malo pojačaj mobitel. Datoteke na Driveu mjere se samo preko Wi-Fija.</string>
     <string name="default_sort">Zadani redoslijed</string>
     <string name="ascending">↑ uzlazno</string>
     <string name="descending">↓ silazno</string>

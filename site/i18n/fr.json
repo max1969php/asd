@@ -16,7 +16,7 @@
   "tabs.title": "Les onglets",
   "tabs.mixtape": "<strong>MIXTAPE</strong> : tes playlists. Crée, renomme, brûle. Pour déplacer un morceau, maintiens-le appuyé, choisis <em>↕ Déplacer</em>, utilise les flèches ↑ ↓ et appuie sur OK. Brûler un mixtape ne touche pas aux fichiers.",
   "volume.title": "Volume uniforme",
-  "volume.text": "Chaque morceau est mesuré une fois (EBU R128, le même standard que ReplayGain 2.0) et joué à -18 LUFS : pas de sauts de volume d'un MP3 à l'autre. Les morceaux les plus forts sont baissés, donc monte un peu le volume du téléphone. Se désactive dans SETUP.",
+  "volume.text": "Chaque morceau est mesuré une fois (EBU R128, le même standard que ReplayGain 2.0) et joué à -14 LUFS : pas de sauts de volume d'un MP3 à l'autre. Les morceaux les plus forts sont baissés, donc monte un peu le volume du téléphone. Se désactive dans SETUP.",
   "rules.title": "Règles de la maison",
   "rules.legal": "Ne télécharge que ce qui est à toi ou libre : les conditions de YouTube interdisent le reste.",
   "yt.title": "// yt-dlp SUR L'ORDINATEUR",

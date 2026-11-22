@@ -16,7 +16,7 @@
   "tabs.title": "Cilnes",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: tavi atskaņošanas saraksti. Izveido, pārsauc, sadedzini. Lai pārvietotu dziesmu, turi to nospiestu, izvēlies <em>↕ Pārvietot</em>, izmanto bultiņas ↑ ↓ un spied OK. Mixtape'a sadedzināšana failus neskar.",
   "volume.title": "Vienāds skaļums",
-  "volume.text": "Katra dziesma tiek izmērīta vienu reizi (EBU R128, tas pats standarts, kas ReplayGain 2.0) un atskaņota ar -18 LUFS: nekādu skaļuma lēcienu starp vienu MP3 un nākamo. Skaļākās dziesmas tiek pazeminātas, tāpēc nedaudz palielini tālruņa skaļumu. Izslēdzams SETUP.",
+  "volume.text": "Katra dziesma tiek izmērīta vienu reizi (EBU R128, tas pats standarts, kas ReplayGain 2.0) un atskaņota ar -14 LUFS: nekādu skaļuma lēcienu starp vienu MP3 un nākamo. Skaļākās dziesmas tiek pazeminātas, tāpēc nedaudz palielini tālruņa skaļumu. Izslēdzams SETUP.",
   "rules.title": "Mājas noteikumi",
   "rules.legal": "Lejupielādē tikai savu vai brīvu saturu: YouTube noteikumi aizliedz pārējo.",
   "yt.title": "// yt-dlp DATORĀ",

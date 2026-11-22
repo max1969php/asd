@@ -132,7 +132,7 @@
     <string name="volume_all_measured">всички песни са измерени</string>
     <string name="volume_measuring">измервам силата на звука: остават %1$d</string>
     <string name="volume_waiting_wifi">%1$d облачни песни за измерване: чакам Wi-Fi</string>
-    <string name="volume_hint">Всяка песен се измерва веднъж (EBU R128, като ReplayGain 2.0) и се пуска на -18 LUFS: край на скоковете в силата на звука между отделните MP3. По-силните песни се приглушават, така че усили малко телефона. Файловете в Drive се измерват само през Wi-Fi.</string>
+    <string name="volume_hint">Всяка песен се измерва веднъж (EBU R128, като ReplayGain 2.0) и се пуска на -14 LUFS: край на скоковете в силата на звука между отделните MP3. По-силните песни се приглушават, така че усили малко телефона. Файловете в Drive се измерват само през Wi-Fi.</string>
     <string name="default_sort">Подредба по подразбиране</string>
     <string name="ascending">↑ възходящо</string>
     <string name="descending">↓ низходящо</string>

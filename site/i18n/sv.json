@@ -16,7 +16,7 @@
   "tabs.title": "Flikarna",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: dina spellistor. Skapa, byt namn, bränn. För att flytta en låt håller du ner den, väljer <em>↕ Flytta</em>, använder pilarna ↑ ↓ och trycker OK. Att bränna en mixtape rör inte filerna.",
   "volume.title": "Jämn volym",
-  "volume.text": "Varje låt mäts en gång (EBU R128, samma standard som ReplayGain 2.0) och spelas på -18 LUFS: inga volymhopp mellan en MP3 och nästa. De högsta låtarna sänks, så höj telefonens volym lite. Kan stängas av i SETUP.",
+  "volume.text": "Varje låt mäts en gång (EBU R128, samma standard som ReplayGain 2.0) och spelas på -14 LUFS: inga volymhopp mellan en MP3 och nästa. De högsta låtarna sänks, så höj telefonens volym lite. Kan stängas av i SETUP.",
   "rules.title": "Husregler",
   "rules.legal": "Ladda bara ner sådant som är ditt eget eller fritt: YouTubes villkor förbjuder resten.",
   "yt.title": "// yt-dlp PÅ DATORN",

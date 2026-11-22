@@ -132,7 +132,7 @@
     <string name="volume_all_measured">सभी गानों की आवाज़ नापी जा चुकी है</string>
     <string name="volume_measuring">आवाज़ नाप रहे हैं: %1$d बाकी</string>
     <string name="volume_waiting_wifi">%1$d क्लाउड गाने नापने बाकी हैं: Wi-Fi का इंतज़ार</string>
-    <string name="volume_hint">हर गाना एक बार नापा जाता है (EBU R128, ReplayGain 2.0 की तरह) और -18 LUFS पर बजता है: एक MP3 से दूसरे में आवाज़ की उछल-कूद अब नहीं होगी। तेज़ गानों की आवाज़ घटा दी जाती है, इसलिए फ़ोन की आवाज़ थोड़ी बढ़ा लीजिए। Drive की फ़ाइलें सिर्फ़ Wi-Fi पर नापी जाती हैं।</string>
+    <string name="volume_hint">हर गाना एक बार नापा जाता है (EBU R128, ReplayGain 2.0 की तरह) और -14 LUFS पर बजता है: एक MP3 से दूसरे में आवाज़ की उछल-कूद अब नहीं होगी। तेज़ गानों की आवाज़ घटा दी जाती है, इसलिए फ़ोन की आवाज़ थोड़ी बढ़ा लीजिए। Drive की फ़ाइलें सिर्फ़ Wi-Fi पर नापी जाती हैं।</string>
     <string name="default_sort">डिफ़ॉल्ट क्रम</string>
     <string name="ascending">↑ बढ़ते क्रम में</string>
     <string name="descending">↓ घटते क्रम में</string>

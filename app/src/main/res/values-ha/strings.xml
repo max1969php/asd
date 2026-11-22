@@ -132,7 +132,7 @@
     <string name="volume_all_measured">an auna duk waƙoƙi</string>
     <string name="volume_measuring">ana auna sauti: saura %1$d</string>
     <string name="volume_waiting_wifi">waƙoƙin gajimare %1$d da za a auna: ana jiran Wi-Fi</string>
-    <string name="volume_hint">Ana auna kowace waƙa sau ɗaya (EBU R128, kamar ReplayGain 2.0) kuma a kunna ta a -18 LUFS: babu sauran tsallen sauti tsakanin MP3 da MP3. Ana rage waƙoƙin da suka fi ƙarfi, saboda haka ƙara sautin wayarka kaɗan. Ana auna fayilolin Drive ne kawai da Wi-Fi.</string>
+    <string name="volume_hint">Ana auna kowace waƙa sau ɗaya (EBU R128, kamar ReplayGain 2.0) kuma a kunna ta a -14 LUFS: babu sauran tsallen sauti tsakanin MP3 da MP3. Ana rage waƙoƙin da suka fi ƙarfi, saboda haka ƙara sautin wayarka kaɗan. Ana auna fayilolin Drive ne kawai da Wi-Fi.</string>
     <string name="default_sort">Tsarin da aka saba</string>
     <string name="ascending">↑ hawa</string>
     <string name="descending">↓ sauka</string>

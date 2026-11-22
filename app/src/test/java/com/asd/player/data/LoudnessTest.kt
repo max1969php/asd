@@ -57,13 +57,15 @@ class LoudnessTest {
     }
 
     @Test
-    fun `il volume abbassa i pezzi forti e non alza quelli deboli`() {
-        assertEquals(10.0.pow(-10.0 / 20).toFloat(), VolumeLeveling.volumeFor(-8.0, null), 1e-4f)
-        assertEquals(1f, VolumeLeveling.volumeFor(-18.0, null), 1e-4f)
-        assertEquals(1f, VolumeLeveling.volumeFor(-24.0, null), 1e-4f)
+    fun `il volume porta tutto a -14 LUFS, alzando al massimo di 12 dB`() {
+        assertEquals(-6.0, VolumeLeveling.gainDb(-8.0, null), 1e-9)
+        assertEquals(0.0, VolumeLeveling.gainDb(-14.0, null), 1e-9)
+        assertEquals(6.0, VolumeLeveling.gainDb(-20.0, null), 1e-9)
+        assertEquals(12.0, VolumeLeveling.gainDb(-40.0, null), 1e-9)
         // Non ancora misurato: si usa la mediana della libreria.
-        assertEquals(10.0.pow(-4.0 / 20).toFloat(), VolumeLeveling.volumeFor(null, -14.0), 1e-4f)
-        assertEquals(1f, VolumeLeveling.volumeFor(null, null), 1e-4f)
+        assertEquals(-4.0, VolumeLeveling.gainDb(null, -10.0), 1e-9)
+        assertEquals(0.0, VolumeLeveling.gainDb(null, null), 1e-9)
+        assertEquals(10.0.pow(-10.0 / 20).toFloat(), VolumeLeveling.linear(-10.0), 1e-6f)
     }
 
     @Test

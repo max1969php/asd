@@ -132,7 +132,7 @@
     <string name="volume_all_measured">όλα τα κομμάτια μετρήθηκαν</string>
     <string name="volume_measuring">μετράω την ένταση: απομένουν %1$d</string>
     <string name="volume_waiting_wifi">%1$d κομμάτια cloud προς μέτρηση: περιμένω Wi-Fi</string>
-    <string name="volume_hint">Κάθε κομμάτι μετριέται μία φορά (EBU R128, όπως το ReplayGain 2.0) και παίζει στα -18 LUFS: τέλος στα άλματα έντασης από το ένα MP3 στο άλλο. Τα δυνατότερα κομμάτια χαμηλώνουν, οπότε ανέβασε λίγο την ένταση του κινητού. Τα αρχεία στο Drive μετριούνται μόνο με Wi-Fi.</string>
+    <string name="volume_hint">Κάθε κομμάτι μετριέται μία φορά (EBU R128, όπως το ReplayGain 2.0) και παίζει στα -14 LUFS: τέλος στα άλματα έντασης από το ένα MP3 στο άλλο. Τα δυνατότερα κομμάτια χαμηλώνουν, οπότε ανέβασε λίγο την ένταση του κινητού. Τα αρχεία στο Drive μετριούνται μόνο με Wi-Fi.</string>
     <string name="default_sort">Προεπιλεγμένη σειρά</string>
     <string name="ascending">↑ αύξουσα</string>
     <string name="descending">↓ φθίνουσα</string>

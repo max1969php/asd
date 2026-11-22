@@ -132,7 +132,7 @@
     <string name="volume_all_measured">il-kanzunetti kollha ġew imkejla</string>
     <string name="volume_measuring">qed inkejjel il-volum: fadal %1$d</string>
     <string name="volume_waiting_wifi">%1$d kanzunetti tal-cloud x\'jitkejlu: qed nistenna l-Wi-Fi</string>
-    <string name="volume_hint">Kull kanzunetta titkejjel darba (EBU R128, bħal ReplayGain 2.0) u tindaqq fuq -18 LUFS: ma jkunx hemm aktar qbiżiet fil-volum bejn MP3 u ieħor. Il-kanzunetti li jindaqqu b\'saħħa jitbaxxew, għalhekk għolli ftit it-telefon. Il-fajls fuq Drive jitkejlu biss bil-Wi-Fi.</string>
+    <string name="volume_hint">Kull kanzunetta titkejjel darba (EBU R128, bħal ReplayGain 2.0) u tindaqq fuq -14 LUFS: ma jkunx hemm aktar qbiżiet fil-volum bejn MP3 u ieħor. Il-kanzunetti li jindaqqu b\'saħħa jitbaxxew, għalhekk għolli ftit it-telefon. Il-fajls fuq Drive jitkejlu biss bil-Wi-Fi.</string>
     <string name="default_sort">Ordni awtomatiku</string>
     <string name="ascending">↑ jiżdied</string>
     <string name="descending">↓ jonqos</string>

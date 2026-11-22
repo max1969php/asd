@@ -16,7 +16,7 @@
   "tabs.title": "Fanerne",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: dine playlister. Opret, omdøb, brænd. For at flytte et nummer skal du holde det nede, vælge <em>↕ Flyt</em>, bruge pilene ↑ ↓ og trykke OK. At brænde en mixtape rører ikke filerne.",
   "volume.title": "Ensartet lydstyrke",
-  "volume.text": "Hvert nummer måles én gang (EBU R128, samme standard som ReplayGain 2.0) og afspilles ved -18 LUFS: ingen spring i lydstyrke mellem den ene MP3 og den næste. De højeste numre skrues ned, så skru lidt op for telefonens lydstyrke. Kan slås fra i SETUP.",
+  "volume.text": "Hvert nummer måles én gang (EBU R128, samme standard som ReplayGain 2.0) og afspilles ved -14 LUFS: ingen spring i lydstyrke mellem den ene MP3 og den næste. De højeste numre skrues ned, så skru lidt op for telefonens lydstyrke. Kan slås fra i SETUP.",
   "rules.title": "Husregler",
   "rules.legal": "Hent kun ting, der er dine egne eller frie: YouTubes vilkår forbyder resten.",
   "yt.title": "// yt-dlp PÅ COMPUTEREN",

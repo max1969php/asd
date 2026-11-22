@@ -16,7 +16,7 @@
   "tabs.title": "Na cluaisíní",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: do liostaí seinnte. Cruthaigh, athainmnigh, dóigh. Chun amhrán a bhogadh coinnigh brúite é, roghnaigh <em>↕ Bog</em>, úsáid na saigheada ↑ ↓ agus brúigh OK. Ní dhéanann mixtape a dhó dochar do na comhaid.",
   "volume.title": "Airde fuaime chothrom",
-  "volume.text": "Tomhaistear gach amhrán uair amháin (EBU R128, an caighdeán céanna le ReplayGain 2.0) agus seinntear ag -18 LUFS é: gan léimeanna airde idir MP3 amháin agus an chéad cheann eile. Ísítear na hamhráin níos airde, mar sin ardaigh airde fuaime an fhóin beagán. Is féidir é a mhúchadh i SETUP.",
+  "volume.text": "Tomhaistear gach amhrán uair amháin (EBU R128, an caighdeán céanna le ReplayGain 2.0) agus seinntear ag -14 LUFS é: gan léimeanna airde idir MP3 amháin agus an chéad cheann eile. Ísítear na hamhráin níos airde, mar sin ardaigh airde fuaime an fhóin beagán. Is féidir é a mhúchadh i SETUP.",
   "rules.title": "Rialacha an tí",
   "rules.legal": "Ná híoslódáil ach rudaí atá leatsa nó saor: toirmisceann téarmaí YouTube an chuid eile.",
   "yt.title": "// yt-dlp AR AN RÍOMHAIRE",

@@ -16,7 +16,7 @@
   "tabs.title": "Kartice",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: tvoji popisi za reprodukciju. Stvori, preimenuj, spali. Da premjestiš pjesmu, dugo je pritisni, odaberi <em>↕ Premjesti</em>, koristi strelice ↑ ↓ i pritisni OK. Spaljivanje mixtapea ne dira datoteke.",
   "volume.title": "Ujednačena glasnoća",
-  "volume.text": "Svaka se pjesma izmjeri jednom (EBU R128, isti standard kao ReplayGain 2.0) i svira na -18 LUFS: nema skokova glasnoće između jednog MP3-a i drugog. Glasnije pjesme se utišaju, pa malo pojačaj glasnoću telefona. Isključuje se u SETUP-u.",
+  "volume.text": "Svaka se pjesma izmjeri jednom (EBU R128, isti standard kao ReplayGain 2.0) i svira na -14 LUFS: nema skokova glasnoće između jednog MP3-a i drugog. Glasnije pjesme se utišaju, pa malo pojačaj glasnoću telefona. Isključuje se u SETUP-u.",
   "rules.title": "Kućna pravila",
   "rules.legal": "Preuzimaj samo svoje ili slobodne stvari: uvjeti YouTubea zabranjuju ostalo.",
   "yt.title": "// yt-dlp NA RAČUNALU",

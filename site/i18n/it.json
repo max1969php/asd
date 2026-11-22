@@ -34,7 +34,7 @@
   "tube.title": "TUBO e \"non sei un bot?\"",
   "tube.text": "Ogni tanto YouTube blocca i download anonimi di una rete e chiede di confermare che non sei un bot. Due rimedi: passa ai dati mobili invece del Wi-Fi, oppure nel TUBO premi <em>Accedi a YouTube</em> (meglio con un account secondario). yt-dlp si aggiorna da solo una volta al giorno; se YouTube fa i capricci c'è <em>Aggiorna yt-dlp</em>.",
   "volume.title": "Volume uniforme",
-  "volume.text": "Ogni pezzo viene misurato una volta (EBU R128, lo stesso standard di ReplayGain 2.0) e suonato a -18 LUFS: niente salti di volume tra un MP3 e l'altro. I pezzi più forti vengono abbassati, quindi alza un po' il volume del telefono. Si spegne in SETUP.",
+  "volume.text": "Ogni pezzo viene misurato una volta (EBU R128) e suonato a -14 LUFS, lo stesso livello di Spotify e YouTube: niente salti di volume tra un MP3 e l'altro. I pezzi forti vengono abbassati e quelli deboli alzati, con un limitatore che non fa distorcere. Si spegne in SETUP.",
   "rules.title": "Regole della casa",
   "rules.nodelete": "ASD non cancella mai i tuoi file. Per togliere un pezzo usa il file manager del telefono: alla riscansione sparisce anche dalla lista.",
   "rules.legal": "Scarica solo roba tua o libera: i termini di YouTube vietano il resto.",

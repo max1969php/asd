@@ -132,7 +132,7 @@
     <string name="volume_all_measured">kõik lood mõõdetud</string>
     <string name="volume_measuring">mõõdan helitugevust: jäänud %1$d</string>
     <string name="volume_waiting_wifi">%1$d pilvelugu mõõta: ootan Wi-Fi\'d</string>
-    <string name="volume_hint">Iga lugu mõõdetakse üks kord (EBU R128, nagu ReplayGain 2.0) ja mängitakse tasemel -18 LUFS: enam ei hüppa helitugevus ühelt MP3-lt teisele. Valjemaid lugusid vaigistatakse, nii et keera telefoni veidi valjemaks. Drive\'i faile mõõdetakse ainult Wi-Fi\'ga.</string>
+    <string name="volume_hint">Iga lugu mõõdetakse üks kord (EBU R128, nagu ReplayGain 2.0) ja mängitakse tasemel -14 LUFS: enam ei hüppa helitugevus ühelt MP3-lt teisele. Valjemaid lugusid vaigistatakse, nii et keera telefoni veidi valjemaks. Drive\'i faile mõõdetakse ainult Wi-Fi\'ga.</string>
     <string name="default_sort">Vaikejärjekord</string>
     <string name="ascending">↑ kasvav</string>
     <string name="descending">↓ kahanev</string>

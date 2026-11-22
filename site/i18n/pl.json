@@ -16,7 +16,7 @@
   "tabs.title": "Zakładki",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: twoje playlisty. Twórz, zmieniaj nazwy, pal. Żeby przesunąć utwór, przytrzymaj go, wybierz <em>↕ Przenieś</em>, użyj strzałek ↑ ↓ i naciśnij OK. Spalenie mixtape'u nie rusza plików.",
   "volume.title": "Jednolita głośność",
-  "volume.text": "Każdy utwór jest mierzony raz (EBU R128, ten sam standard co ReplayGain 2.0) i odtwarzany na poziomie -18 LUFS: bez skoków głośności między jednym MP3 a drugim. Głośniejsze utwory są ściszane, więc podkręć trochę głośność telefonu. Wyłącza się w SETUP.",
+  "volume.text": "Każdy utwór jest mierzony raz (EBU R128, ten sam standard co ReplayGain 2.0) i odtwarzany na poziomie -14 LUFS: bez skoków głośności między jednym MP3 a drugim. Głośniejsze utwory są ściszane, więc podkręć trochę głośność telefonu. Wyłącza się w SETUP.",
   "rules.title": "Regulamin domowy",
   "rules.legal": "Pobieraj tylko to, co jest twoje lub wolne: regulamin YouTube zabrania reszty.",
   "yt.title": "// yt-dlp NA KOMPUTERZE",

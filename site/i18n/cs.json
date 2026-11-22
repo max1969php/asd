@@ -16,7 +16,7 @@
   "tabs.title": "Záložky",
   "tabs.mixtape": "<strong>MIXTAPE</strong>: tvoje playlisty. Vytvoř, přejmenuj, vypal. Skladbu přesuneš dlouhým stiskem, volbou <em>↕ Přesunout</em>, šipkami ↑ ↓ a stiskem OK. Vypálení mixtapu se souborů nedotkne.",
   "volume.title": "Jednotná hlasitost",
-  "volume.text": "Každá skladba se změří jednou (EBU R128, stejný standard jako ReplayGain 2.0) a přehrává se na -18 LUFS: žádné skoky hlasitosti mezi jedním MP3 a druhým. Hlasitější skladby se ztlumí, takže trochu přidej hlasitost telefonu. Vypíná se v SETUP.",
+  "volume.text": "Každá skladba se změří jednou (EBU R128, stejný standard jako ReplayGain 2.0) a přehrává se na -14 LUFS: žádné skoky hlasitosti mezi jedním MP3 a druhým. Hlasitější skladby se ztlumí, takže trochu přidej hlasitost telefonu. Vypíná se v SETUP.",
   "rules.title": "Domácí řád",
   "rules.legal": "Stahuj jen své nebo volné věci: podmínky YouTube zakazují zbytek.",
   "yt.title": "// yt-dlp NA POČÍTAČI",

@@ -14,7 +14,6 @@ import com.asd.player.playback.PlaybackState
 import com.asd.player.playback.SleepTimer
 import com.asd.player.playback.SleepTimerState
 import com.asd.player.playback.TrackDetails
-import kotlin.math.log10
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -38,7 +37,7 @@ data class NowPlayingInfo(
     val details: TrackDetails? = null,
     val artwork: ImageBitmap? = null,
     val loading: Boolean = false,
-    /** Correzione del volume uniforme in dB (0 o negativa); null se spento o non misurato. */
+    /** Correzione del volume uniforme in dB (negativa abbassa, positiva alza); null se spento o non misurato. */
     val gainDb: Double? = null,
 )
 
@@ -58,7 +57,7 @@ class PlayerViewModel(container: AppContainer) : ViewModel() {
         container.settings.normalizeVolume,
     ) { median, normalize ->
         { song: Song? ->
-            song?.loudnessLufs?.takeIf { normalize }?.let { 20 * log10(VolumeLeveling.volumeFor(it, median).toDouble()) }
+            song?.loudnessLufs?.takeIf { normalize }?.let { VolumeLeveling.gainDb(it, median) }
         }
     }
 

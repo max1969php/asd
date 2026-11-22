@@ -53,8 +53,8 @@ class PlaybackService : MediaSessionService() {
     private var fade = 1f
     private var applyVolume: () -> Unit = {}
 
-    /** Margine per l'equalizzatore: con le bande alzate il player abbassa un po'. */
-    private var headroom = 1f
+    /** Margine per l'equalizzatore (dB, 0 o negativo): con le bande alzate il player abbassa un po'. */
+    private var headroomDb = 0.0
 
     override fun onCreate() {
         super.onCreate()
@@ -210,15 +210,19 @@ class PlaybackService : MediaSessionService() {
     }
 
     /**
-     * Volume uniforme: a ogni cambio di brano (e quando arriva una misura nuova) il volume del
-     * player diventa il guadagno ReplayGain del brano corrente.
+     * Volume uniforme: a ogni cambio di brano (e quando arriva una misura nuova) si applica il
+     * guadagno del brano corrente, tolto il margine dell'equalizzatore. Sotto zero lo fa il volume
+     * del player, sopra zero il LoudnessEnhancer (il volume del player non va oltre 1). Tutti e due
+     * agiscono su ciò che esce ora dalle casse, quindi cambiano proprio al cambio di brano.
      */
     private fun levelVolume(player: ExoPlayer) {
         val container = (application as MusicApplication).container
         fun apply() {
             val uri = player.currentMediaItem?.mediaId
-            val level = if (normalize) VolumeLeveling.volumeFor(levels[uri], fallbackLufs) else 1f
-            player.volume = fade * headroom * level
+            val gain = if (normalize) VolumeLeveling.gainDb(levels[uri], fallbackLufs) else 0.0
+            val total = gain + headroomDb
+            player.volume = fade * VolumeLeveling.linear(total.coerceAtMost(0.0))
+            container.audioEffects.setBoost(total)
         }
         applyVolume = ::apply
         player.addListener(object : Player.Listener {
@@ -234,7 +238,7 @@ class PlaybackService : MediaSessionService() {
         scope.launch {
             container.settings.eq.collect { eq ->
                 container.audioEffects.apply(eq)
-                headroom = container.audioEffects.headroom(eq)
+                headroomDb = container.audioEffects.headroomDb(eq)
                 apply()
             }
         }
