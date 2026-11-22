@@ -117,7 +117,7 @@ class Tube(
             settings.state.value.ytBrowser?.let { cmd += listOf("--cookies-from-browser", it) }
             cmd += job.url
             set(job.id, TubeJob.State.Downloading(0))
-            val process = ProcessBuilder(cmd).redirectErrorStream(true).start()
+            val process = processOf(cmd).start()
             val output = StringBuilder()
             process.inputStream.bufferedReader().forEachLine { line ->
                 output.appendLine(line)
@@ -171,7 +171,7 @@ class Tube(
     private fun lastLine(output: String) = output.lines().map { it.trim() }.lastOrNull { it.isNotEmpty() } ?: Texts.YTDLP_FAILED
 
     private fun exec(cmd: List<String>, timeoutSec: Long): Pair<Int, String> {
-        val p = ProcessBuilder(cmd).redirectErrorStream(true).start()
+        val p = processOf(cmd).start()
         val out = StringBuilder()
         val reader = Thread { p.inputStream.bufferedReader().forEachLine { out.appendLine(it) } }.apply { start() }
         if (!p.waitFor(timeoutSec, TimeUnit.SECONDS)) {
@@ -182,8 +182,22 @@ class Tube(
         return p.exitValue() to out.toString()
     }
 
+    /**
+     * Dal menu di GNOME il PATH di ASD spesso non ha ~/.local/bin e ~/.deno/bin: yt-dlp non
+     * troverebbe Deno (gli serve per YouTube). Si aggiungono qui, per yt-dlp e per pipx.
+     */
+    private fun processOf(cmd: List<String>): ProcessBuilder = ProcessBuilder(cmd).redirectErrorStream(true).apply {
+        environment()["PATH"] = (extraDirs() + environment()["PATH"].orEmpty().split(File.pathSeparator))
+            .filter { it.isNotEmpty() }.distinct().joinToString(File.pathSeparator)
+    }
+
     companion object {
         const val TUBE_DIR = "TUBO"
+
+        private fun extraDirs(): List<String> {
+            val home = System.getProperty("user.home")
+            return listOf("$home/.local/bin", "$home/.deno/bin")
+        }
         val BROWSERS = listOf("firefox", "chrome", "chromium", "brave", "edge", "opera", "vivaldi")
 
         /** yt-dlp nel PATH, o nei posti di pipx e pip --user (dal menu di GNOME ~/.local/bin può mancare dal PATH). */
@@ -191,7 +205,7 @@ class Tube(
 
         private fun findOnPath(name: String): File? {
             val home = System.getProperty("user.home")
-            val dirs = System.getenv("PATH").orEmpty().split(File.pathSeparator) + listOf("$home/.local/bin", "/usr/local/bin", "/usr/bin", "/snap/bin")
+            val dirs = System.getenv("PATH").orEmpty().split(File.pathSeparator) + extraDirs() + listOf("/usr/local/bin", "/usr/bin", "/snap/bin")
             return dirs.filter { it.isNotEmpty() }.map { File(it, name) }.firstOrNull { it.isFile && it.canExecute() }
         }
     }

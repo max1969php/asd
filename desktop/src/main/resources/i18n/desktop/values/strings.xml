@@ -16,7 +16,7 @@
     <string name="desktop_playlist_empty">Nastro vergine. Vai in %1$s e premi + accanto a un pezzo.</string>
     <string name="desktop_sleep_left">si spegne tra %1$s</string>
     <string name="desktop_ytdlp_missing">Per il TUBO serve yt-dlp, che non è installato.</string>
-    <string name="desktop_ytdlp_install">Installalo con: pipx install yt-dlp (consigliato: si aggiorna da SETUP), oppure sudo apt install yt-dlp (spesso troppo vecchio per YouTube). Poi premi RIPROVA.</string>
+    <string name="desktop_ytdlp_install">Installalo come spiega il sito, sezione ASD Desktop: yt-dlp in ~/.local/bin più Deno (si aggiorna da SETUP). Lo yt-dlp di apt è spesso troppo vecchio per YouTube. Poi premi RIPROVA.</string>
     <string name="desktop_tube_saves_to">Salvo in %1$s: i pezzi compaiono in ROBA.</string>
     <string name="desktop_yt_cookies">Cookie di YouTube</string>
     <string name="desktop_yt_cookies_hint">Se YouTube chiede di dimostrare che non sei un bot: scegli un browser dove hai fatto l\'accesso a YouTube, yt-dlp usa i suoi cookie.</string>

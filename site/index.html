@@ -18,6 +18,7 @@
     </a>
     <nav>
       <a href="#asd" data-i18n="nav.asd"></a>
+      <a href="#desktop" data-i18n="nav.desktop"></a>
       <a href="#ytdlp" data-i18n="nav.ytdlp"></a>
       <a href="#linux" data-i18n="nav.linux"></a>
       <a href="#windows" data-i18n="nav.windows"></a>
@@ -127,6 +128,28 @@
         <li data-i18n="scripts.playlist"></li>
       </ul>
       <p data-i18n="scripts.output"></p>
+    </section>
+
+    <section id="desktop">
+      <h2 data-i18n="desktop.title"></h2>
+      <p data-i18n="desktop.intro"></p>
+
+      <h3 data-i18n="desktop.install"></h3>
+      <p data-i18n="desktop.install_text"></p>
+      <pre><code>cd "$(xdg-user-dir DOWNLOAD)"
+sudo apt install ./asd-desktop.deb</code></pre>
+
+      <h3 data-i18n="desktop.tube"></h3>
+      <p data-i18n="desktop.tube_text"></p>
+      <pre><code>mkdir -p ~/.local/bin
+curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o ~/.local/bin/yt-dlp
+chmod a+rx ~/.local/bin/yt-dlp
+sudo apt install unzip
+curl -fsSL https://deno.land/install.sh | sh</code></pre>
+      <p data-i18n="desktop.tube_link"></p>
+      <p class="small" data-i18n="desktop.tube_check"></p>
+      <pre><code>~/.local/bin/yt-dlp --version
+~/.deno/bin/deno --version</code></pre>
     </section>
 
     <section id="linux">

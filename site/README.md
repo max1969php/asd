@@ -21,6 +21,9 @@ versione si crea una Release con quei file con questi nomi esatti
 scarica dal computer con yt-dlp e si copia sul telefono (sezione `#phone`), oppure col TUBO di ASD
 Tubo.
 
+La sezione `#desktop` spiega come installare il `.deb` e, per il TUBO di ASD Desktop, yt-dlp in
+`~/.local/bin` più Deno (gli stessi comandi della sezione `#linux`, senza ffmpeg).
+
 Prova in locale: `python3 -m http.server -d site 8000` e apri http://localhost:8000.
 
 ## Lingue

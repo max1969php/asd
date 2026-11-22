@@ -41,7 +41,7 @@ Architecture: amd64
 Installed-Size: $SIZE_KB
 Depends: gstreamer1.0-plugins-base, gstreamer1.0-plugins-good, gstreamer1.0-libav
 Recommends: zenity
-Suggests: yt-dlp, pipx
+Suggests: yt-dlp
 Maintainer: ASD <noreply@users.noreply.github.com>
 Homepage: https://asd-eight-rust.vercel.app
 Description: ASD Desktop, lettore musicale per la tua musica

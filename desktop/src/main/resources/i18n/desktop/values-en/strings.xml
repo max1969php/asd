@@ -15,7 +15,7 @@
     <string name="desktop_playlist_empty">Blank tape. Go to %1$s and press + next to a track.</string>
     <string name="desktop_sleep_left">stops in %1$s</string>
     <string name="desktop_ytdlp_missing">TUBE needs yt-dlp, which is not installed.</string>
-    <string name="desktop_ytdlp_install">Install it with: pipx install yt-dlp (recommended: it updates from SETUP), or sudo apt install yt-dlp (often too old for YouTube). Then press RETRY.</string>
+    <string name="desktop_ytdlp_install">Install it as the website explains, ASD Desktop section: yt-dlp in ~/.local/bin plus Deno (it updates from SETUP). The apt yt-dlp is often too old for YouTube. Then press RETRY.</string>
     <string name="desktop_tube_saves_to">Saving to %1$s: the tracks show up in STUFF.</string>
     <string name="desktop_yt_cookies">YouTube cookies</string>
     <string name="desktop_yt_cookies_hint">If YouTube asks you to prove you are not a bot: pick a browser where you are signed in to YouTube, yt-dlp uses its cookies.</string>

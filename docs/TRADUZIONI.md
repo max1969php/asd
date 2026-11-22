@@ -71,3 +71,5 @@ segnaposto (`%1$d` resta `%1$d`, non `%1$s`), poi aggiungere il codice a `L10n.S
   quelle generali tradotte da Claude in tutte le 38 lingue (da far rivedere, come le altre); quelle
   del TUBO e `desktop_missing_aac` solo in it/en, nelle altre lingue si vedono in inglese.
   Attenzione: il `volume_hint` ancora da ritradurre (vedi sopra) si vede anche nel desktop.
+- Sito, 2026-11-22: sezione `#desktop`, chiavi nuove `nav.desktop` e `desktop.*` solo in `it.json`
+  (le altre lingue le vedono in italiano finché non vengono tradotte).

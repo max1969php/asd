@@ -285,8 +285,11 @@ direttamente dalla cartella dell'app, la logica viene da `shared/`.
   sfumatura negli ultimi 10 secondi, oppure a fine pezzo. **Lingue**: le stesse 38 dell'app, vedi
   "Testi".
 - **TUBO (fase 5)** (`Tube`): incolli un link YouTube, invio, e lo yt-dlp **installato nel sistema**
-  (pipx consigliato, o apt) scarica solo la traccia audio già pronta (m4a, altrimenti mp3), senza
-  ffmpeg, un pezzo alla volta, con gli stessi argomenti dell'app. Il file va in
+  (il file in `~/.local/bin` più Deno, come spiega il sito nella sezione ASD Desktop; va anche
+  pipx; quello di apt è spesso troppo vecchio) scarica solo la traccia audio già pronta (m4a, altrimenti mp3), senza
+  ffmpeg, un pezzo alla volta, con gli stessi argomenti dell'app. ASD cerca yt-dlp anche in
+  `~/.local/bin` e passa a yt-dlp un PATH con `~/.local/bin` e `~/.deno/bin`: dal menu di GNOME
+  quelle cartelle spesso mancano e yt-dlp non troverebbe Deno. Il file va in
   `<cartella della musica>/TUBO/Artista - Titolo.m4a` (nome da `TubeTrack`; se c'è già diventa
   "… (2)", mai sopra un file; prima `.part`, poi il nome giusto) e ROBA si riscansiona. Senza yt-dlp
   il TUBO spiega come installarlo. In SETUP: versione e "Aggiorna yt-dlp" (`pipx upgrade`, o
