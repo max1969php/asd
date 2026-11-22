@@ -87,6 +87,12 @@ Stato: `[ ]` da fare, `[~]` in corso, `[x]` fatto (con versione).
   normale, YouTube, Amazon), attenuazione con il volume del player e guadagno fino a +12 dB con
   `LoudnessEnhancer` (limitatore incluso). Le misure già salvate valgono: nessuna rianalisi.
   Da provare a orecchio sul telefono.
+- [x] 0.8.0 **Android Auto e comandi vocali** (2026-11-22). In auto si vedevano solo pausa/riprendi
+  e ±10 s, e "metti una canzone con ASD" non andava: ASD esponeva solo la sessione. Ora
+  `MediaLibraryService` con libreria sfogliabile (ROBA, Artisti, Album, Mixtape, Tutto/Caos),
+  ricerca, richieste vocali (`VoiceSearch`) e ripresa dell'ultimo ascolto (`onPlaybackResumption`),
+  più `MEDIA_PLAY_FROM_SEARCH` per l'assistente sul telefono. Provato con test e build; da provare
+  in macchina dal titolare.
 
 ## ASD Desktop per Ubuntu (deciso il 2026-11-22)
 

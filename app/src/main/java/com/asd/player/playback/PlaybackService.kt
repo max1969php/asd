@@ -15,8 +15,14 @@ import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.ResolvingDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import android.os.Bundle
+import androidx.media3.session.LibraryResult
+import androidx.media3.session.MediaLibraryService
+import androidx.media3.session.MediaLibraryService.LibraryParams
+import androidx.media3.session.MediaLibraryService.MediaLibrarySession
 import androidx.media3.session.MediaSession
-import androidx.media3.session.MediaSessionService
+import com.google.common.collect.ImmutableList
+import com.google.common.util.concurrent.SettableFuture
 import com.asd.player.MainActivity
 import com.asd.player.MusicApplication
 import com.asd.player.data.loudness.VolumeLeveling
@@ -35,13 +41,15 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 
 /**
- * Tiene vivo ExoPlayer in background ed espone la MediaSession al sistema:
- * notifica, lock screen, cuffie Bluetooth e tasti multimediali.
+ * Tiene vivo ExoPlayer in background ed espone la sessione al sistema: notifica, lock screen,
+ * cuffie Bluetooth, tasti multimediali e Android Auto, che sfoglia la libreria ([CarLibrary]) e
+ * gli passa le richieste vocali ("metti … con ASD").
  */
 @OptIn(UnstableApi::class)
-class PlaybackService : MediaSessionService() {
+class PlaybackService : MediaLibraryService() {
 
-    private var session: MediaSession? = null
+    private var session: MediaLibrarySession? = null
+    private val car by lazy { CarLibrary((application as MusicApplication).container) }
     private val scope = MainScope()
 
     /** Loudness misurata per URI, e la mediana per i brani non ancora misurati. */
@@ -89,13 +97,12 @@ class PlaybackService : MediaSessionService() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
 
-        session = MediaSession.Builder(this, player)
+        session = MediaLibrarySession.Builder(this, player, LibraryCallback())
             .setSessionActivity(openApp)
-            .setCallback(LocalFilesCallback())
             .build()
     }
 
-    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? = session
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession? = session
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         val player = session?.player
@@ -252,20 +259,140 @@ class PlaybackService : MediaSessionService() {
         }
     }
 
-    /**
-     * Gli item che attraversano il confine controller → sessione perdono l'URI locale:
-     * lo ricostruiamo dal mediaId, che contiene l'URI del documento.
-     */
-    private class LocalFilesCallback : MediaSession.Callback {
+    /** Un risultato calcolato in una coroutine sul main thread, come lo vuole Media3. */
+    private fun <T> future(block: suspend () -> T): ListenableFuture<T> {
+        val result = SettableFuture.create<T>()
+        scope.launch {
+            try {
+                result.set(block())
+            } catch (e: Exception) {
+                result.setException(e)
+            }
+        }
+        return result
+    }
+
+    /** Dove si era rimasti: la coda che c'è, altrimenti l'ultimo ascolto salvato. */
+    private suspend fun lastListening(): MediaSession.MediaItemsWithStartPosition {
+        val player = session?.player
+        if (player != null && player.mediaItemCount > 0) {
+            return MediaSession.MediaItemsWithStartPosition(
+                List(player.mediaItemCount) { player.getMediaItemAt(it) }, player.currentMediaItemIndex, player.currentPosition,
+            )
+        }
+        val container = (application as MusicApplication).container
+        val saved = withContext(Dispatchers.IO) { memory.load() } ?: throw IllegalStateException("niente da riprendere")
+        val byUri = container.libraryRepository.songs.first().associateBy { it.uri }
+        val songs = saved.uris.mapNotNull { byUri[it] }
+        if (songs.isEmpty()) throw IllegalStateException("niente da riprendere")
+        val index = songs.indexOfFirst { it.uri == saved.uris.getOrNull(saved.index) }
+        val skip = container.settings.skipSilence.value
+        return MediaSession.MediaItemsWithStartPosition(
+            songs.map { it.toMediaItem(skip) },
+            if (index >= 0) index else saved.index.coerceIn(songs.indices),
+            if (index >= 0) saved.positionMs else C.TIME_UNSET,
+        )
+    }
+
+    private inner class LibraryCallback : MediaLibrarySession.Callback {
+
+        /** Le schede di Android Auto in elenco, con la ricerca. */
+        override fun onGetLibraryRoot(
+            session: MediaLibrarySession,
+            browser: MediaSession.ControllerInfo,
+            params: LibraryParams?,
+        ): ListenableFuture<LibraryResult<MediaItem>> {
+            val extras = Bundle().apply {
+                putBoolean("android.media.browse.SEARCH_SUPPORTED", true)
+                putInt("android.media.browse.CONTENT_STYLE_BROWSABLE_HINT", 1)
+                putInt("android.media.browse.CONTENT_STYLE_PLAYABLE_HINT", 1)
+            }
+            return Futures.immediateFuture(LibraryResult.ofItem(car.root(), LibraryParams.Builder().setExtras(extras).build()))
+        }
+
+        override fun onGetChildren(
+            session: MediaLibrarySession,
+            browser: MediaSession.ControllerInfo,
+            parentId: String,
+            page: Int,
+            pageSize: Int,
+            params: LibraryParams?,
+        ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> = future {
+            val all = car.children(parentId) ?: return@future LibraryResult.ofError(LibraryResult.RESULT_ERROR_BAD_VALUE)
+            LibraryResult.ofItemList(page(all, page, pageSize), params)
+        }
+
+        override fun onSearch(
+            session: MediaLibrarySession,
+            browser: MediaSession.ControllerInfo,
+            query: String,
+            params: LibraryParams?,
+        ): ListenableFuture<LibraryResult<Void>> = future {
+            session.notifySearchResultChanged(browser, query, car.search(query).size, params)
+            LibraryResult.ofVoid()
+        }
+
+        override fun onGetSearchResult(
+            session: MediaLibrarySession,
+            browser: MediaSession.ControllerInfo,
+            query: String,
+            page: Int,
+            pageSize: Int,
+            params: LibraryParams?,
+        ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> = future {
+            LibraryResult.ofItemList(page(car.search(query), page, pageSize), params)
+        }
+
+        /**
+         * Da Android Auto e dall'assistente arrivano solo id o testo cercato: qui diventano la coda
+         * vera. Testo vuoto ("metti qualcosa con ASD") = riprende l'ultimo ascolto. Dall'app
+         * arrivano item completi, che passano come prima.
+         */
+        override fun onSetMediaItems(
+            mediaSession: MediaSession,
+            controller: MediaSession.ControllerInfo,
+            mediaItems: MutableList<MediaItem>,
+            startIndex: Int,
+            startPositionMs: Long,
+        ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> = future {
+            val query = mediaItems.singleOrNull()?.takeIf { it.mediaId.isEmpty() }?.requestMetadata?.searchQuery
+            if (query != null && query.isBlank()) return@future lastListening()
+            val resolved = car.resolve(mediaItems)
+                ?: return@future MediaSession.MediaItemsWithStartPosition(withUris(mediaItems), startIndex, startPositionMs)
+            val (songs, index) = resolved
+            if (songs.isEmpty()) throw IllegalArgumentException("niente trovato: $query")
+            val skip = (application as MusicApplication).container.settings.skipSilence.value
+            MediaSession.MediaItemsWithStartPosition(songs.map { it.toMediaItem(skip) }, index, C.TIME_UNSET)
+        }
+
         override fun onAddMediaItems(
             mediaSession: MediaSession,
             controller: MediaSession.ControllerInfo,
             mediaItems: MutableList<MediaItem>,
-        ): ListenableFuture<MutableList<MediaItem>> =
-            Futures.immediateFuture(
-                mediaItems.map { item ->
-                    item.buildUpon().setUri(item.requestMetadata.mediaUri ?: Uri.parse(item.mediaId)).build()
-                }.toMutableList()
-            )
+        ): ListenableFuture<MutableList<MediaItem>> = future {
+            val skip = (application as MusicApplication).container.settings.skipSilence.value
+            car.resolve(mediaItems)?.first?.map { it.toMediaItem(skip) }?.toMutableList() ?: withUris(mediaItems)
+        }
+
+        /** Play da Android Auto o dalla notifica di ripresa, con ASD chiuso: l'ultimo ascolto. */
+        override fun onPlaybackResumption(
+            mediaSession: MediaSession,
+            controller: MediaSession.ControllerInfo,
+        ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> = future { lastListening() }
+
+        /**
+         * Gli item che attraversano il confine controller → sessione perdono l'URI locale:
+         * lo ricostruiamo dal mediaId, che contiene l'URI del documento.
+         */
+        private fun withUris(mediaItems: List<MediaItem>): MutableList<MediaItem> =
+            mediaItems.map { item ->
+                item.buildUpon().setUri(item.requestMetadata.mediaUri ?: Uri.parse(item.mediaId)).build()
+            }.toMutableList()
+
+        private fun <T> page(all: List<T>, page: Int, pageSize: Int): ImmutableList<T> {
+            if (pageSize <= 0 || pageSize == Int.MAX_VALUE) return ImmutableList.copyOf(all)
+            val from = (page.toLong() * pageSize).coerceAtMost(all.size.toLong()).toInt()
+            return ImmutableList.copyOf(all.subList(from, minOf(all.size, from + pageSize)))
+        }
     }
 }

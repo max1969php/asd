@@ -62,6 +62,14 @@ Il ragionamento architetturale di partenza è in [`a.md`](a.md).
   e sulle cuffie. Alla riapertura riparte dall'ultimo ascolto (stessa coda, pezzo e punto, in
   pausa: `PlaybackMemory`, la coda in un file dell'app). Timer di spegnimento (icona luna in alto
   nel player): 15, 30, 60 minuti o a fine pezzo; negli ultimi 10 secondi il volume sfuma, poi pausa.
+- **Android Auto e assistente** (0.8.0): ASD compare tra le app musicali di Android Auto con
+  quattro schede (ROBA per cartelle, Artisti, Album, Mixtape), le stesse cartelle dell'app e in cima
+  a ogni elenco ▶ Tutto e ⤮ Caos; toccando un pezzo suona la sua cartella da lì. C'è la ricerca, e
+  la voce: "metti Blitzkrieg Bop con ASD", "metti i Ramones con ASD", "metti il mixtape palestra con
+  ASD" (`VoiceSearch` in `shared/`: mixtape, artista, album, titolo e artista, poi la ricerca di
+  ROBA anche senza "di", "dei", "by"); "metti qualcosa con ASD" riprende l'ultimo ascolto. Funziona
+  anche dal telefono ("Ok Google…", intent `MEDIA_PLAY_FROM_SEARCH`). Tutto locale, anche nella
+  minimal: `PlaybackService` è una `MediaLibraryService`, l'albero sta in `CarLibrary`.
   Copertina incorporata nel file al posto del vinile (anche in notifica e schermata di blocco, via
   Media3); **INFO** (album, anno, genere, traccia, formato, bitrate, frequenza, dimensione, percorso,
   loudness e correzione) e **TESTO** (solo quello scritto nel file: ID3 USLT, Vorbis LYRICS, M4A
@@ -164,7 +172,7 @@ app/src/main/java/com/asd/player/
 │   ├── repository/   MusicLibraryRepository, PlaylistRepository
 │   └── settings/     SettingsStore (cartella, ordinamento, Drive, volume, silenzio, equalizzatore…)
 ├── domain/           Song, Playlist, LibraryQuery; usecase: SearchSongs, BrowseFolder, SongNames, Duplicates
-├── playback/         PlaybackService (MediaSession), PlaybackController, CloudStreamResolver (Drive),
+├── playback/         PlaybackService (MediaLibraryService), CarLibrary (Android Auto), PlaybackController, CloudStreamResolver (Drive),
 │                     MediaItems, PlaybackMemory (ultimo ascolto), SleepTimer, AudioEffects
 │                     (equalizzatore, bassi, guadagno), TrackDetailsReader (copertina, info, testo)
 ├── ui/               theme, components, library, playlists, player, tube, cloud, settings

@@ -3,7 +3,9 @@ package com.asd.player.playback
 import android.content.ComponentName
 import android.content.Context
 import androidx.core.content.ContextCompat
+import android.os.Bundle
 import androidx.media3.common.C
+import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
@@ -97,6 +99,17 @@ class PlaybackController(private val context: Context, private val settings: Set
             c.prepare()
             c.play()
         }
+    }
+
+    /**
+     * "Metti … con ASD" detto all'assistente fuori dall'auto: lo stesso percorso di Android Auto
+     * (il servizio trasforma il testo nella coda, vedi CarLibrary).
+     */
+    fun playFromSearch(query: String, extras: Bundle?) = withController { c ->
+        val request = MediaItem.RequestMetadata.Builder().setSearchQuery(query).setExtras(extras).build()
+        c.setMediaItem(MediaItem.Builder().setRequestMetadata(request).build())
+        c.prepare()
+        c.play()
     }
 
     fun togglePlayPause() = withController { c ->

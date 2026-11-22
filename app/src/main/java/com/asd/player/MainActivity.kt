@@ -1,6 +1,9 @@
 package com.asd.player
 
+import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
+import android.provider.MediaStore
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,5 +29,18 @@ class MainActivity : ComponentActivity() {
         setContent {
             AsdTheme { AsdApp() }
         }
+        if (savedInstanceState == null) playFromSearch(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        playFromSearch(intent)
+    }
+
+    /** "Ok Google, metti … con ASD": la ricerca arriva qui e passa al servizio. */
+    private fun playFromSearch(intent: Intent?) {
+        if (intent?.action != MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH) return
+        (application as MusicApplication).container.playbackController
+            .playFromSearch(intent.getStringExtra(SearchManager.QUERY).orEmpty(), intent.extras)
     }
 }
