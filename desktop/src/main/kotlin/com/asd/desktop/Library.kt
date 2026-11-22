@@ -31,6 +31,12 @@ sealed interface ScanState {
     data class Failed(val message: String) : ScanState
 }
 
+/**
+ * L'analisi audio di un pezzo (volume e silenzio). [lufs] null = file illeggibile, da non riprovare.
+ * [startMs]/[endMs]: da dove a dove suonare saltando il silenzio ai lati (null = niente da saltare).
+ */
+data class Analysis(val lufs: Double?, val peakDb: Double?, val startMs: Long?, val endMs: Long?)
+
 /** Un file del catalogo con i nomi grezzi (tag o nome file), come nel database dell'app Android. */
 private data class Entry(
     val id: Long,
@@ -39,6 +45,8 @@ private data class Entry(
     val modified: Long,
     val folder: List<String>,
     val tags: Tags,
+    /** null = non ancora analizzato; si perde se il file cambia. */
+    val analysis: Analysis? = null,
 ) {
     fun toSong(): Song {
         val file = File(path)
@@ -56,6 +64,9 @@ private data class Entry(
             folder = folder,
             trackNumber = tags.trackNumber,
             discNumber = tags.discNumber,
+            loudnessLufs = analysis?.lufs,
+            soundStartMs = analysis?.startMs,
+            soundEndMs = analysis?.endMs,
         )
     }
 }
@@ -69,7 +80,7 @@ class Library(private val cache: File = File(Paths.data, "library.json")) {
 
     private val mutex = Mutex()
     private var root: String? = null
-    private var entries: List<Entry> = emptyList()
+    @Volatile private var entries: List<Entry> = emptyList()
     private var nextId = 1L
 
     private val _songs = MutableStateFlow<List<Song>>(emptyList())
@@ -78,6 +89,37 @@ class Library(private val cache: File = File(Paths.data, "library.json")) {
 
     private val _scan = MutableStateFlow<ScanState>(ScanState.Idle)
     val scan: StateFlow<ScanState> = _scan.asStateFlow()
+
+    /** Misure non ancora scritte su disco: si salvano a gruppi, non a ogni pezzo. */
+    @Volatile private var dirty = false
+    private var lastSave = 0L
+
+    /** I pezzi ancora da analizzare (volume e silenzio). */
+    fun unanalyzed(): List<Song> {
+        val pending = entries.filter { it.analysis == null }.mapTo(HashSet()) { it.id }
+        return _songs.value.filter { it.id in pending }
+    }
+
+    /** Salva l'analisi di un pezzo, se nel frattempo il file non è cambiato (false = non salvata). */
+    suspend fun setAnalysis(uri: String, size: Long, modified: Long, analysis: Analysis): Boolean = mutex.withLock {
+        val path = File(java.net.URI(uri)).path
+        val i = entries.indexOfFirst { it.path == path }
+        if (i < 0 || entries[i].size != size || entries[i].modified != modified) return@withLock false
+        val e = entries[i].copy(analysis = analysis)
+        entries = entries.toMutableList().also { it[i] = e }
+        // Solo i campi dell'analisi: i nomi puliti non cambiano, niente SongNames su tutta la libreria.
+        _songs.value = _songs.value.map {
+            if (it.id == e.id) it.copy(loudnessLufs = analysis.lufs, soundStartMs = analysis.startMs, soundEndMs = analysis.endMs) else it
+        }
+        dirty = true
+        if (System.currentTimeMillis() - lastSave > SAVE_EVERY_MS) withContext(Dispatchers.IO) { save() }
+        true
+    }
+
+    /** All'uscita: scrive le misure rimaste in sospeso. */
+    fun flush() {
+        if (dirty) save()
+    }
 
     /** Carica il catalogo salvato, se è della stessa cartella: la lista c'è subito, prima della scansione. */
     suspend fun load(folder: String) = mutex.withLock {
@@ -172,6 +214,8 @@ class Library(private val cache: File = File(Paths.data, "library.json")) {
     }
 
     private fun save() {
+        dirty = false
+        lastSave = System.currentTimeMillis()
         val a = JSONArray()
         entries.forEach { e ->
             a.put(
@@ -181,6 +225,10 @@ class Library(private val cache: File = File(Paths.data, "library.json")) {
                     .putOpt("title", e.tags.title).putOpt("artist", e.tags.artist).putOpt("album", e.tags.album)
                     .put("durationMs", e.tags.durationMs)
                     .putOpt("track", e.tags.trackNumber).putOpt("disc", e.tags.discNumber)
+                    .putOpt("analysis", e.analysis?.let { an ->
+                        JSONObject().putOpt("lufs", an.lufs).putOpt("peakDb", an.peakDb)
+                            .putOpt("startMs", an.startMs).putOpt("endMs", an.endMs)
+                    })
             )
         }
         runCatching { Paths.writeAtomically(cache, JSONObject().put("version", 1).put("root", root).put("songs", a).toString()) }
@@ -194,11 +242,18 @@ class Library(private val cache: File = File(Paths.data, "library.json")) {
             id = o.getLong("id"), path = o.getString("path"), size = o.getLong("size"), modified = o.getLong("modified"),
             folder = folder,
             tags = Tags(str("title"), str("artist"), str("album"), o.optLong("durationMs"), int("track"), int("disc")),
+            analysis = o.optJSONObject("analysis")?.let { an ->
+                fun dbl(k: String) = if (an.has(k) && !an.isNull(k)) an.getDouble(k) else null
+                fun lng(k: String) = if (an.has(k) && !an.isNull(k)) an.getLong(k) else null
+                Analysis(dbl("lufs"), dbl("peakDb"), lng("startMs"), lng("endMs"))
+            },
         )
     }
 
     companion object {
         /** Gli stessi formati dell'app Android. */
+        private const val SAVE_EVERY_MS = 10_000L
+
         val SUPPORTED_EXTENSIONS = setOf("mp3", "wav", "flac", "m4a", "aac", "ogg", "opus")
 
         fun isSupported(name: String): Boolean =

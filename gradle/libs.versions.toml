@@ -17,6 +17,8 @@ composeMultiplatform = "1.7.3"
 coroutines = "1.8.1"
 gst1JavaCore = "1.4.0"
 jaudiotagger = "3.0.1"
+dbusJava = "4.3.1"
+slf4j = "2.0.9"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,6 +43,9 @@ org-json = { group = "org.json", name = "json", version.ref = "orgJson" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "coroutines" }
 gst1-java-core = { group = "org.freedesktop.gstreamer", name = "gst1-java-core", version.ref = "gst1JavaCore" }
 jaudiotagger = { group = "net.jthink", name = "jaudiotagger", version.ref = "jaudiotagger" }
+dbus-java-core = { group = "com.github.hypfvieh", name = "dbus-java-core", version.ref = "dbusJava" }
+dbus-java-transport = { group = "com.github.hypfvieh", name = "dbus-java-transport-native-unixsocket", version.ref = "dbusJava" }
+slf4j-nop = { group = "org.slf4j", name = "slf4j-nop", version.ref = "slf4j" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

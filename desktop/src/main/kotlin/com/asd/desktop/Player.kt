@@ -7,15 +7,24 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.freedesktop.gstreamer.Bus
+import org.freedesktop.gstreamer.Element
 import org.freedesktop.gstreamer.Gst
 import org.freedesktop.gstreamer.GstObject
+import org.freedesktop.gstreamer.Pad
+import org.freedesktop.gstreamer.PadProbeReturn
+import org.freedesktop.gstreamer.event.StreamStartEvent
 import org.freedesktop.gstreamer.message.Message
 import org.freedesktop.gstreamer.message.MessageType
 import org.freedesktop.gstreamer.State
-import org.freedesktop.gstreamer.Version
 import org.freedesktop.gstreamer.elements.PlayBin
 
 enum class Repeat { OFF, ALL, ONE }
+
+/**
+ * Come suonare un pezzo: guadagno del volume uniforme (dB, anche positivo) e, con il silenzio
+ * saltato, da dove a dove (null = dall'inizio / fino alla fine).
+ */
+data class Adjust(val gainDb: Double = 0.0, val startMs: Long? = null, val endMs: Long? = null)
 
 data class PlayerState(
     val queue: List<Song> = emptyList(),
@@ -34,6 +43,11 @@ data class PlayerState(
  * Il motore audio di ASD Desktop: GStreamer (playbin), che sul PC legge tutti i formati di ASD.
  * Gapless: a fine pezzo ("about-to-finish") playbin riceve già il prossimo, e il cambio vero si
  * vede con il messaggio STREAM_START. La UI vede solo [state] e i comandi, mai GStreamer.
+ *
+ * Volume uniforme: dentro playbin c'è "volume ! rglimiter". Il guadagno cambia nel thread audio
+ * quando passa l'evento di inizio del pezzo nuovo, quindi esattamente al confine tra i due, anche
+ * in gapless; il limitatore lavora solo quando si alza. Silenzio: all'inizio un salto in avanti,
+ * alla fine si passa al pezzo dopo appena si arriva all'ultimo suono.
  */
 class Player {
 
@@ -50,22 +64,44 @@ class Player {
     @Volatile private var order: List<Int> = emptyList()
     /** Il pezzo già passato a playbin per il gapless, che diventa corrente allo STREAM_START. */
     @Volatile private var pending: Int? = null
-    /** Punto da cui ripartire quando la pipeline è pronta (ultimo ascolto). */
+    /** Punto da cui ripartire quando la pipeline è pronta (ultimo ascolto, silenzio iniziale). */
     private var pendingSeekMs: Long = 0
 
+    /** Guadagno e silenzio di un pezzo, con le misure e le impostazioni del momento (da Desktop). */
+    @Volatile var adjust: (Song) -> Adjust = { Adjust() }
+
+    /** Il prossimo pezzo che entrerà nel filtro di volume: il suo guadagno vale dal suo inizio. */
+    @Volatile private var upcoming: Song? = null
+    private val gain: Element
+    private val limiter: Element
+    @Volatile private var running = true
+
     init {
-        Gst.init(Version.of(1, 16), "asd-desktop")
+        GstInit.ensure()
         playbin = PlayBin("asd")
         canPlayAac = listOf("avdec_aac", "faad").any { name ->
             runCatching { org.freedesktop.gstreamer.ElementFactory.find(name) != null }.getOrDefault(false)
         }
         // Niente video: solo audio.
         playbin.setVideoSink(org.freedesktop.gstreamer.ElementFactory.make("fakesink", "novideo"))
+        val filter = Gst.parseBinFromDescription("volume name=asdgain ! rglimiter name=asdlimit enabled=false", true)
+        gain = filter.getElementByName("asdgain")
+        limiter = filter.getElementByName("asdlimit")
+        playbin.set("audio-filter", filter)
+        gain.getStaticPad("sink").addEventProbe(Pad.EVENT_PROBE { _, event ->
+            if (event is StreamStartEvent) upcoming?.let { setGain(adjust(it).gainDb) }
+            PadProbeReturn.OK
+        })
+        Thread({ while (running) { Thread.sleep(100); runCatching { checkSoundEnd() } } }, "asd-silence").apply {
+            isDaemon = true
+            start()
+        }
         // Arriva dal thread audio di GStreamer: niente lock, altrimenti uno stop() dalla UI
         // (che aspetta proprio quel thread) si bloccherebbe per sempre.
         playbin.connect(PlayBin.ABOUT_TO_FINISH { pb ->
             val next = nextIndex(automatic = true) ?: return@ABOUT_TO_FINISH
             pending = next
+            upcoming = _state.value.queue[next]
             pb.setURI(URI(_state.value.queue[next].uri))
         })
         playbin.bus.connect(Bus.MESSAGE { _, message -> onMessage(message) })
@@ -93,7 +129,10 @@ class Player {
             MessageType.STREAM_START -> synchronized(lock) {
                 pending?.let { next ->
                     pending = null
-                    _state.value = _state.value.copy(index = next, durationMs = _state.value.queue[next].durationMs)
+                    val song = _state.value.queue[next]
+                    _state.value = _state.value.copy(index = next, durationMs = song.durationMs)
+                    // Pezzo nuovo in gapless con silenzio iniziale lungo: si salta.
+                    adjust(song).startMs?.let { playbin.seek(it, TimeUnit.MILLISECONDS) }
                 }
             }
             MessageType.ASYNC_DONE -> synchronized(lock) {
@@ -129,8 +168,7 @@ class Player {
             val i = index.coerceIn(songs.indices)
             _state.value = _state.value.copy(queue = songs, shuffle = shuffle, repeat = repeat)
             order = buildOrder(songs.size, i, shuffle)
-            pendingSeekMs = positionMs
-            start(i, play = false)
+            start(i, play = false, positionMs = positionMs.takeIf { it > 0 })
         }
     }
 
@@ -187,18 +225,54 @@ class Player {
         refreshPending()
     }
 
+    /** Misure o impostazioni cambiate: il guadagno del pezzo che suona si rifà subito. */
+    fun refreshAdjust() {
+        _state.value.current?.let { setGain(adjust(it).gainDb) }
+    }
+
     fun shutdown() {
+        running = false
         runCatching { playbin.stop() }
         runCatching { playbin.dispose() }
     }
 
-    private fun start(index: Int, play: Boolean) {
+    private fun start(index: Int, play: Boolean, positionMs: Long? = null) {
         pending = null
         val song = _state.value.queue[index]
+        upcoming = song
+        pendingSeekMs = positionMs ?: adjust(song).startMs ?: 0
         playbin.stop()
         playbin.setURI(URI(song.uri))
         if (play) playbin.play() else playbin.pause()
         _state.value = _state.value.copy(index = index, playing = play, durationMs = song.durationMs)
+    }
+
+    /** Il volume lineare impostato ora nel filtro (per i test). */
+    internal val appliedVolume: Double get() = (gain.get("volume") as Number).toDouble()
+
+    private fun setGain(db: Double) {
+        runCatching {
+            gain.set("volume", Math.pow(10.0, db / 20).coerceIn(0.0, 10.0))
+            limiter.set("enabled", db > 0.01)
+        }
+    }
+
+    /** Silenzio finale: arrivati all'ultimo suono si passa al pezzo dopo (o ci si ferma). */
+    private fun checkSoundEnd() {
+        val s = _state.value
+        val song = s.current ?: return
+        // Anche con il prossimo già passato a playbin (about-to-finish arriva prima della fine).
+        if (!s.playing) return
+        val end = adjust(song).endMs ?: return
+        if (positionMs < end) return
+        synchronized(lock) {
+            if (_state.value.index != s.index || !_state.value.playing) return
+            val next = nextIndex(automatic = true)
+            if (next != null) start(next, play = true) else {
+                playbin.stop()
+                _state.value = _state.value.copy(playing = false)
+            }
+        }
     }
 
     /** Il prossimo pezzo; [automatic] = fine naturale del pezzo (lì vale "ripeti uno"). */

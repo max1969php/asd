@@ -256,7 +256,7 @@ con una chiave debug diversa non si installano sopra le versioni precedenti e Dr
 
 ## ASD Desktop (Ubuntu)
 
-Lettore per PC Linux, versione `0.1.0` (`desktopVersion` in `desktop/build.gradle.kts`). Kotlin con
+Lettore per PC Linux, versione `0.2.0` (`desktopVersion` in `desktop/build.gradle.kts`). Kotlin con
 Compose Desktop: tema e componenti (`ui/theme`, `ui/components`, tranne `AsdLinks`) sono compilati
 direttamente dalla cartella dell'app, la logica viene da `shared/`.
 
@@ -265,15 +265,25 @@ direttamente dalla cartella dell'app, la logica viene da `shared/`.
   ricerca, ordinamento, Tutto e Caos, nomi puliti come nell'app; player in fondo alla finestra con
   coda, shuffle, repeat, avanzamento, riproduzione gapless; alla riapertura la stessa cartella, lo
   stesso punto della lista e l'ultimo ascolto in pausa. Riscansione incrementale a ogni avvio.
-- **Non ancora**: volume uniforme, silenzio saltato, tasti multimediali/MPRIS (fase 3); mixtape,
-  doppioni, info/copertina/testo, timer, altre lingue (fase 4); TUBO (fase 5). Vedi `docs/ROADMAP.md`.
+- **Suono (fase 3)**: **volume uniforme** a -14 LUFS come nell'app: `Analyzer` decodifica ogni pezzo
+  con GStreamer (appsink, senza orologio) e lo passa allo stesso `LoudnessMeter`; `AnalysisQueue`
+  lavora in sottofondo, un pezzo alla volta, prima quello che suona. Dentro `playbin` c'è il filtro
+  `volume ! rglimiter`: il guadagno (`VolumeLeveling.gainDb`, anche positivo fino a +12 dB) cambia
+  nel thread audio quando passa l'evento di inizio del pezzo nuovo, quindi esattamente al confine
+  anche in gapless; il limitatore si accende solo quando si alza. **Silenzio a inizio e fine**
+  (`SilenceTrim`, stesse soglie dell'app): all'inizio un salto in avanti, alla fine si passa al
+  pezzo dopo appena finisce l'ultimo suono. Tutti e due si spengono in SETUP. **MPRIS** (`Mpris`,
+  dbus-java): GNOME mostra ASD Desktop tra i controlli multimediali e gli manda play/pausa, avanti,
+  indietro (tastiera, cuffie); nome sul bus `org.mpris.MediaPlayer2.asd_desktop`.
+- **Non ancora**: mixtape, doppioni, info/copertina/testo, timer, altre lingue (fase 4); TUBO
+  (fase 5); equalizzatore. Vedi `docs/ROADMAP.md`.
 - **Riproduzione**: GStreamer (`playbin`, via `gst1-java-core`), quello di sistema. Gli M4A/AAC
   (anche quelli del TUBO) vogliono `gstreamer1.0-libav`: il `.deb` lo dichiara tra le dipendenze,
   e se manca SETUP lo dice.
 - **Tag**: jaudiotagger (MP3, FLAC, OGG, M4A, WAV); senza tag il titolo è il nome del file.
 - **Dove salva** (regole XDG): impostazioni in `~/.config/asd-desktop/settings.json`, catalogo
-  in `~/.local/share/asd-desktop/library.json`, ultimo ascolto in `playback.json` nella stessa
-  cartella. Come l'app, non scrive e non cancella mai nella cartella della musica.
+  in `~/.local/share/asd-desktop/library.json` (con le misure di volume e silenzio, rifatte se il
+  file cambia), ultimo ascolto in `playback.json` nella stessa cartella. Come l'app, non scrive e non cancella mai nella cartella della musica.
 - **Testi**: per ora solo italiano, in `desktop/.../Texts.kt`, con accanto la chiave di
   `strings.xml` corrispondente (le lingue arriveranno riusando quei file).
 
@@ -286,7 +296,11 @@ desktop/
     ├── Desktop.kt              collega impostazioni, catalogo, player, ultimo ascolto
     ├── Library.kt              scansione incrementale e catalogo JSON
     ├── TagReader.kt            tag con jaudiotagger
-    ├── Player.kt               GStreamer playbin: coda, shuffle, repeat, gapless
+    ├── Player.kt               GStreamer playbin: coda, shuffle, repeat, gapless, guadagno, silenzio
+    ├── Analyzer.kt             decodifica GStreamer → LoudnessMeter e silenzio ai lati
+    ├── AnalysisQueue.kt        analisi in sottofondo, prima il pezzo che suona
+    ├── Mpris.kt                controlli multimediali di GNOME via D-Bus
+    ├── GstInit.kt              GStreamer inizializzato una volta sola
     ├── PlaybackMemory.kt       ultimo ascolto
     ├── Settings.kt, Paths.kt   impostazioni e cartelle XDG
     ├── FolderChooser.kt        zenity o JFileChooser
@@ -295,10 +309,10 @@ desktop/
 ```
 
 ```bash
-./gradlew :shared:test :desktop:test      # test (PlayerTest suona due WAV di silenzio con GStreamer vero)
+./gradlew :shared:test :desktop:test      # test: GStreamer e D-Bus veri (WAV generati, gdbus)
 ./gradlew :desktop:run                    # avvia senza installare
 ./gradlew :desktop:packageAsdDeb          # desktop/build/deb/asd-desktop_<versione>_amd64.deb
-sudo apt install ./desktop/build/deb/asd-desktop_0.1.0_amd64.deb
+sudo apt install ./desktop/build/deb/asd-desktop_0.2.0_amd64.deb
 ```
 
 Il pacchetto (~90 MB) contiene un Java 17 ridotto (jlink): non serve Java installato. ProGuard è

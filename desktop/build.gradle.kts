@@ -8,7 +8,7 @@ plugins {
 }
 
 /** Versione di ASD Desktop: finisce nel .deb e nella schermata SETUP. */
-val desktopVersion = "0.1.0"
+val desktopVersion = "0.2.0"
 
 kotlin {
     compilerOptions { jvmTarget.set(JvmTarget.JVM_17) }
@@ -50,6 +50,10 @@ dependencies {
     implementation(libs.gst1.java.core)
     implementation(libs.jaudiotagger)
     implementation(libs.org.json)
+    implementation(libs.dbus.java.core)
+    implementation(libs.dbus.java.transport)
+    // dbus-java scrive i suoi log con slf4j: in un lettore musicale non servono.
+    implementation(libs.slf4j.nop)
     testImplementation(libs.junit)
 }
 
@@ -62,7 +66,7 @@ compose.desktop {
             packageName = "asd-desktop"
             packageVersion = desktopVersion
             description = "ASD Desktop"
-            modules("java.instrument", "java.logging", "jdk.unsupported")
+            modules("java.instrument", "java.logging", "jdk.security.auth", "jdk.unsupported")
         }
         // Niente ProGuard: GStreamer-Java e JNA vivono di riflessione (come yt-dlp con R8 su Android).
         buildTypes.release.proguard { isEnabled.set(false) }

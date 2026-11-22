@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -25,6 +26,7 @@ import com.asd.desktop.Texts
 import com.asd.desktop.Version
 import com.asd.player.ui.components.PunkButton
 import com.asd.player.ui.components.Stamp
+import com.asd.player.ui.components.TapeChip
 import com.asd.player.ui.theme.Asd
 
 /** SETUP: la cartella della musica, la riscansione, i link. */
@@ -32,6 +34,7 @@ import com.asd.player.ui.theme.Asd
 fun SettingsScreen(desktop: Desktop) {
     val settings by desktop.settings.state.collectAsState()
     val scan by desktop.library.scan.collectAsState()
+    val progress by desktop.analysis.progress.collectAsState()
 
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp)) {
         Stamp(Texts.FOLDER)
@@ -44,6 +47,19 @@ fun SettingsScreen(desktop: Desktop) {
         }
         Spacer(Modifier.height(8.dp))
         ScanLine(scan)
+
+        Spacer(Modifier.height(32.dp))
+        Toggle(Texts.VOLUME_TITLE, Texts.VOLUME_HINT, settings.normalizeVolume, desktop::setNormalizeVolume)
+        if (settings.normalizeVolume || settings.skipSilence) {
+            Spacer(Modifier.height(6.dp))
+            Text(
+                if (progress.pending > 0) Texts.measuring(progress.pending) else Texts.ALL_MEASURED,
+                style = MaterialTheme.typography.labelSmall,
+                color = if (progress.pending > 0) Asd.Acid else Asd.Smudge,
+            )
+        }
+        Spacer(Modifier.height(24.dp))
+        Toggle(Texts.SILENCE_TITLE, Texts.SILENCE_HINT, settings.skipSilence, desktop::setSkipSilence)
 
         if (!desktop.player.canPlayAac) {
             Spacer(Modifier.height(24.dp))
@@ -58,6 +74,18 @@ fun SettingsScreen(desktop: Desktop) {
         Spacer(Modifier.height(24.dp))
         Text("${Texts.APP} · ${Texts.VERSION} ${Version.NAME}", style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
     }
+}
+
+@Composable
+private fun Toggle(title: String, hint: String, on: Boolean, set: (Boolean) -> Unit) {
+    Stamp(title, color = Asd.Paper)
+    Spacer(Modifier.height(10.dp))
+    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        TapeChip(Texts.ON, selected = on, onClick = { set(true) })
+        TapeChip(Texts.OFF, selected = !on, onClick = { set(false) })
+    }
+    Spacer(Modifier.height(8.dp))
+    Text(hint, style = MaterialTheme.typography.bodySmall, color = Asd.Smudge, modifier = Modifier.widthIn(max = 640.dp))
 }
 
 @Composable

@@ -1,5 +1,6 @@
 package com.asd.desktop
 
+import com.asd.player.data.loudness.VolumeLeveling
 import com.asd.player.domain.model.Song
 import com.asd.player.domain.usecase.BrowseFolder
 import com.asd.player.domain.usecase.SearchSongs
@@ -7,6 +8,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -14,18 +20,37 @@ import kotlinx.coroutines.withContext
 
 /**
  * Tutto ASD Desktop collegato a mano, come AppContainer dell'app Android: impostazioni, catalogo,
- * player e ultimo ascolto. All'avvio: catalogo salvato subito, poi riscansione e ripresa dell'ascolto.
+ * analisi audio, player, ultimo ascolto e MPRIS. All'avvio: catalogo salvato subito, poi ripresa
+ * dell'ascolto e riscansione.
  */
 class Desktop {
     val settings = SettingsStore()
     val library = Library()
     val player = Player()
+    val analysis = AnalysisQueue(library, settings)
     val browse = BrowseFolder(SearchSongs())
     private val memory = PlaybackMemory()
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
+    /** Richieste di portare la finestra davanti (dai controlli multimediali di GNOME). */
+    private val _raise = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val raise: SharedFlow<Unit> = _raise.asSharedFlow()
+
+    /** Chiusura chiesta da fuori (MPRIS "Quit"): la imposta la finestra. */
+    @Volatile var onQuit: () -> Unit = {}
+
+    val mpris = Mpris(player, onRaise = { _raise.tryEmit(Unit) }, onQuit = { onQuit() })
+
+    /** Misure correnti per URI e mediana della libreria (per i pezzi non ancora misurati). */
+    @Volatile private var byUri: Map<String, Song> = emptyMap()
+    @Volatile private var medianLufs: Double? = null
+
     init {
         Song.unknownArtist = Texts.UNKNOWN_ARTIST
+        player.adjust = ::adjustFor
+        analysis.start()
+        mpris.start()
+
         scope.launch {
             val folder = settings.state.value.folder
             if (folder != null) {
@@ -34,9 +59,26 @@ class Desktop {
                 library.rescan(folder)
             }
         }
+        // Misure nuove o interruttori cambiati: il pezzo che suona si regola subito.
+        scope.launch {
+            combine(library.songs, settings.state.map { it.normalizeVolume to it.skipSilence }.distinctUntilChanged()) { songs, _ -> songs }
+                .collect { songs ->
+                    byUri = songs.associateBy { it.uri }
+                    medianLufs = VolumeLeveling.median(songs.mapNotNull { it.loudnessLufs })
+                    player.refreshAdjust()
+                }
+        }
+        // Il pezzo che suona si analizza per primo; MPRIS sa sempre cosa suona.
+        scope.launch {
+            player.state.collect { s ->
+                analysis.prioritize(s.current?.uri)
+                mpris.publish()
+            }
+        }
         // Ultimo ascolto: a ogni cambio di pezzo, pausa o modo, e ogni 15 secondi mentre suona.
         scope.launch {
             player.state.map { listOf(it.index, it.playing, it.shuffle, it.repeat, it.queue.size) }
+                .distinctUntilChanged()
                 .collect { savePlayback() }
         }
         scope.launch {
@@ -45,6 +87,17 @@ class Desktop {
                 if (player.state.value.playing) savePlayback()
             }
         }
+    }
+
+    /** Guadagno e silenzio di un pezzo con le misure più recenti (la coda tiene copie vecchie dei pezzi). */
+    private fun adjustFor(song: Song): Adjust {
+        val s = settings.state.value
+        val fresh = byUri[song.uri] ?: song
+        return Adjust(
+            gainDb = if (s.normalizeVolume) VolumeLeveling.gainDb(fresh.loudnessLufs, medianLufs) else 0.0,
+            startMs = fresh.soundStartMs.takeIf { s.skipSilence },
+            endMs = fresh.soundEndMs.takeIf { s.skipSilence },
+        )
     }
 
     fun chooseFolder() {
@@ -61,6 +114,9 @@ class Desktop {
         val folder = settings.state.value.folder ?: return
         scope.launch { library.rescan(folder) }
     }
+
+    fun setNormalizeVolume(on: Boolean) = settings.update { it.copy(normalizeVolume = on) }
+    fun setSkipSilence(on: Boolean) = settings.update { it.copy(skipSilence = on) }
 
     private suspend fun restorePlayback() {
         val saved = memory.load() ?: return
@@ -79,9 +135,11 @@ class Desktop {
         memory.save(SavedPlayback(s.queue.map { it.uri }, s.index, player.positionMs, s.shuffle, s.repeat))
     }
 
-    /** All'uscita: salva dove si era e chiude GStreamer. */
+    /** All'uscita: salva dove si era e le misure, chiude MPRIS e GStreamer. */
     fun close() {
         savePlayback()
+        library.flush()
+        mpris.close()
         player.shutdown()
     }
 }

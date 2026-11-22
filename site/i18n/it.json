@@ -17,7 +17,7 @@
   "hero.download_desktop": "Scarica ASD Desktop",
   "hero.source": "Codice sorgente",
   "hero.versions": "<strong>ASD</strong> (3 MB): solo lettore, niente rete. <strong>ASD Tubo</strong> (45 MB): in più il TUBO, che scarica l'audio da YouTube direttamente nel telefono. Si possono installare tutte e due.",
-  "hero.versions_desktop": "<strong>ASD Desktop</strong> (90 MB) è il lettore per PC con Ubuntu: stessa ROBA per cartelle, artisti e album, niente rete. Si installa con <code>sudo apt install ./asd-desktop.deb</code>, che porta con sé anche i decoder di GStreamer.",
+  "hero.versions_desktop": "<strong>ASD Desktop</strong> (90 MB) è il lettore per PC con Ubuntu: stessa ROBA per cartelle, artisti e album, stesso volume uniforme, salta il silenzio a inizio e fine, si comanda dai tasti multimediali di GNOME, niente rete. Si installa con <code>sudo apt install ./asd-desktop.deb</code>, che porta con sé anche i decoder di GStreamer.",
   "asd.title": "// ASD",
   "asd.intro": "ASD è un lettore musicale per Android che suona i file di <strong>una cartella del telefono</strong>. Niente account, niente pubblicità, niente tracciamento e <strong>niente rete</strong>: ASD non ha nemmeno il permesso di andare su internet. La musica la scarichi tu dal computer con yt-dlp (la guida è qui sotto) e la copi nel telefono.",
   "install.title": "Installare",

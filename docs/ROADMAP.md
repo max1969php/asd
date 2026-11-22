@@ -98,9 +98,11 @@ Kotlin + Compose Desktop nello stesso repo, GStreamer per suonare, logica comune
 - [x] desktop 0.1.0 **Fase 2 — desktop minimo**: cartella, ROBA (cartelle/artisti/album, ricerca,
   ordinamento, Tutto/Caos), player con coda, shuffle, repeat, gapless, ultimo ascolto, posizione
   nella lista ricordata, riscansione all'avvio, `.deb`.
-- [ ] **Fase 3 — suono**: volume uniforme a −14 LUFS (decodifica GStreamer → `LoudnessMeter`; il
-  `volume` di GStreamer alza anche, con `rglimiter` dopo), silenzio saltato, MPRIS (tasti
-  multimediali e controlli di GNOME).
+- [x] desktop 0.2.0 **Fase 3 — suono** (2026-11-22): volume uniforme a −14 LUFS (decodifica
+  GStreamer → `LoudnessMeter`; filtro `volume ! rglimiter` in playbin, guadagno cambiato all'evento
+  di inizio pezzo, limitatore solo quando si alza), silenzio a inizio e fine saltato, MPRIS
+  (controlli multimediali di GNOME, tasti). Interruttori in SETUP, accesi di default. Da provare a
+  orecchio dal titolare.
 - [ ] **Fase 4 — il resto**: mixtape, doppioni, filtri per formato/artista, info/copertina/testo,
   timer, le 38 lingue (riusando i `strings.xml`).
 - [ ] **Fase 5 — TUBO** con lo yt-dlp di sistema.

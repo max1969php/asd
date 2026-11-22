@@ -20,6 +20,10 @@ data class DesktopSettings(
     val path: List<String> = emptyList(),
     /** Il primo pezzo visibile della lista, per tornare allo stesso punto. */
     val scroll: Int = 0,
+    /** Volume uniforme a -14 LUFS, come nell'app: acceso di default. */
+    val normalizeVolume: Boolean = true,
+    /** Silenzio a inizio e fine saltato: acceso di default. */
+    val skipSilence: Boolean = true,
 )
 
 class SettingsStore(private val file: File = File(Paths.config, "settings.json")) {
@@ -45,6 +49,8 @@ class SettingsStore(private val file: File = File(Paths.config, "settings.json")
             view = runCatching { LibraryView.valueOf(o.optString("view")) }.getOrDefault(LibraryView.FOLDERS),
             path = o.optJSONArray("path")?.let { a -> List(a.length()) { a.getString(it) } }.orEmpty(),
             scroll = o.optInt("scroll", 0),
+            normalizeVolume = o.optBoolean("normalizeVolume", true),
+            skipSilence = o.optBoolean("skipSilence", true),
         )
     }.getOrDefault(DesktopSettings())
 
@@ -55,4 +61,6 @@ class SettingsStore(private val file: File = File(Paths.config, "settings.json")
         .put("view", s.view.name)
         .put("path", JSONArray(s.path))
         .put("scroll", s.scroll)
+        .put("normalizeVolume", s.normalizeVolume)
+        .put("skipSilence", s.skipSilence)
 }

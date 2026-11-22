@@ -4,6 +4,7 @@
 
 Ciò che git non vede: decisioni, prove, sistemi esterni. Una riga per voce, più recente in alto.
 
+2026-11-22  prodotto   ASD Desktop 0.2.0 (fase 3): volume uniforme, silenzio saltato, MPRIS; test con GStreamer e D-Bus veri ok, da provare a orecchio (→ ROADMAP.md)
 2026-11-22  firma      APK compilati sul PC Ubuntu firmati con una chiave debug nuova (SHA-1 28:A4:E8…), non quella di WSL (98:D5:A1…): non rilasciarli finché non torna il keystore di WSL (→ DEPLOY.md)
 2026-11-22  ambiente   build spostata su PC Ubuntu 26.04: JDK 17 + Android SDK in ~/.local/share/asd-build-tools; test e release delle tre versioni ok
 2026-11-22  prodotto   ASD Desktop 0.1.0 (fasi 1 e 2): modulo shared/, lettore Compose Desktop + GStreamer, .deb; provato in automatico (test, avvio, screenshot), da provare dal titolare (→ ROADMAP.md)
