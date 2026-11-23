@@ -28,6 +28,8 @@ data class DesktopSettings(
     val language: String? = null,
     /** Browser da cui yt-dlp prende i cookie di YouTube (contro "non sei un bot"); null = nessuno. */
     val ytBrowser: String? = null,
+    /** L'albero delle cartelle a sinistra in ROBA: acceso di default. */
+    val showTree: Boolean = true,
 )
 
 class SettingsStore(private val file: File = File(Paths.config, "settings.json")) {
@@ -57,6 +59,7 @@ class SettingsStore(private val file: File = File(Paths.config, "settings.json")
             skipSilence = o.optBoolean("skipSilence", true),
             language = o.optString("language").takeIf { it.isNotEmpty() },
             ytBrowser = o.optString("ytBrowser").takeIf { it.isNotEmpty() },
+            showTree = o.optBoolean("showTree", true),
         )
     }.getOrDefault(DesktopSettings())
 
@@ -71,4 +74,5 @@ class SettingsStore(private val file: File = File(Paths.config, "settings.json")
         .put("skipSilence", s.skipSilence)
         .put("language", s.language ?: "")
         .put("ytBrowser", s.ytBrowser ?: "")
+        .put("showTree", s.showTree)
 }

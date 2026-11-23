@@ -2,6 +2,7 @@ package com.asd.desktop.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -40,7 +41,9 @@ fun SettingsScreen(desktop: Desktop) {
     val scan by desktop.library.scan.collectAsState()
     val progress by desktop.analysis.progress.collectAsState()
 
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp)) {
+    val scroll = rememberScrollState()
+    Box(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize().verticalScroll(scroll).padding(start = 24.dp, top = 24.dp, bottom = 24.dp, end = 36.dp)) {
         Stamp(Texts.FOLDER)
         Spacer(Modifier.height(12.dp))
         Text(settings.folder ?: Texts.NO_FOLDER, style = MaterialTheme.typography.bodyLarge, color = Asd.Paper)
@@ -90,6 +93,8 @@ fun SettingsScreen(desktop: Desktop) {
         Link(REPO_URL)
         Spacer(Modifier.height(24.dp))
         Text("${Texts.APP} · ${Texts.VERSION} ${Version.NAME}", style = MaterialTheme.typography.bodySmall, color = Asd.Smudge)
+    }
+    ColumnScrollbar(scroll)
     }
 }
 

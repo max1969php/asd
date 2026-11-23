@@ -4,6 +4,7 @@
 
 Ciò che git non vede: decisioni, prove, sistemi esterni. Una riga per voce, più recente in alto.
 
+2026-11-23  prodotto   ASD Desktop 0.4.0: albero delle cartelle in ROBA e barre di scorrimento (solo desktop) (→ ROADMAP.md)
 2026-11-22  prodotto   app 0.8.0: Android Auto (libreria sfogliabile, ricerca) e comandi vocali "metti … con ASD"; da provare in auto (→ ROADMAP.md)
 2026-11-22  rilascio   asd-desktop.deb (0.3.0) caricato nella Release v0.7.0: il bottone del sito funziona
 2026-11-22  prodotto   ASD Desktop 0.3.0 (fasi 4-5): mixtape, doppioni e formati, INFO/copertina/TESTO, timer, 38 lingue, TUBO con lo yt-dlp di sistema; test ok, da provare dal titolare (→ ROADMAP.md)

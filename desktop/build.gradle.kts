@@ -8,7 +8,7 @@ plugins {
 }
 
 /** Versione di ASD Desktop: finisce nel .deb e nella schermata SETUP. */
-val desktopVersion = "0.3.0"
+val desktopVersion = "0.4.0"
 
 kotlin {
     compilerOptions { jvmTarget.set(JvmTarget.JVM_17) }

@@ -144,7 +144,9 @@ fun AddToMixtapeDialog(desktop: Desktop, songs: List<Song>, onDismiss: () -> Uni
             Text(Texts.songs(songs.size), style = MaterialTheme.typography.titleMedium, color = Asd.Paper)
         }
         Spacer(Modifier.height(12.dp))
-        Column(Modifier.heightIn(max = 280.dp).verticalScroll(rememberScrollState())) {
+        val tapeScroll = rememberScrollState()
+        Box(Modifier.heightIn(max = 280.dp)) {
+        Column(Modifier.verticalScroll(tapeScroll).padding(end = 14.dp)) {
             tapes.forEach { m ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -159,6 +161,8 @@ fun AddToMixtapeDialog(desktop: Desktop, songs: List<Song>, onDismiss: () -> Uni
                     Text(Texts.songs(m.uris.size), style = MaterialTheme.typography.labelSmall, color = Asd.Smudge)
                 }
             }
+        }
+        ColumnScrollbar(tapeScroll)
         }
         Spacer(Modifier.height(12.dp))
         Text(Texts.NEW_PLAYLIST_CAPS, style = MaterialTheme.typography.labelMedium, color = Asd.Acid)
@@ -180,12 +184,16 @@ fun DetailsDialog(desktop: Desktop, song: Song, lyrics: Boolean, onDismiss: () -
         Text(listOfNotNull(song.displayArtist, song.album).joinToString(" // "), style = MaterialTheme.typography.bodyMedium, color = Asd.Smudge)
         Spacer(Modifier.height(14.dp))
         val d = details
-        Column(Modifier.heightIn(max = 460.dp).verticalScroll(rememberScrollState())) {
+        val bodyScroll = rememberScrollState()
+        Box(Modifier.heightIn(max = 460.dp)) {
+        Column(Modifier.verticalScroll(bodyScroll).padding(end = 14.dp)) {
             when {
                 d == null -> Text(Texts.INFO_READING, style = MaterialTheme.typography.bodyMedium, color = Asd.Smudge)
                 lyrics -> Text(d.lyrics ?: Texts.LYRICS_MISSING, style = MaterialTheme.typography.bodyMedium, color = if (d.lyrics == null) Asd.Smudge else Asd.Paper)
                 else -> InfoBody(song, d)
             }
+        }
+        ColumnScrollbar(bodyScroll)
         }
         Buttons { PunkButton(Texts.OK, onClick = onDismiss) }
     }

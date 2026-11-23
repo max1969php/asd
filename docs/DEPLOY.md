@@ -41,7 +41,7 @@
 
 - Asset `asd-desktop.deb` nella stessa Release degli APK (bottone del sito
   `releases/latest/download/asd-desktop.deb`): `./gradlew :desktop:packageAsdDeb`, poi copia con
-  quel nome. Versione propria (`desktopVersion` in `desktop/build.gradle.kts`, 0.3.0).
+  quel nome. Versione propria (`desktopVersion` in `desktop/build.gradle.kts`, 0.4.0).
 - Il `.deb` è costruito da `desktop/packaging/make-deb.sh` con `dpkg-deb --root-owner-group`
   (il `packageDeb` di Compose vorrebbe fakeroot e non permette di dichiarare le dipendenze).
   Dipendenze: `gstreamer1.0-plugins-base`, `-good`, `gstreamer1.0-libav` (AAC); consigliato `zenity`.

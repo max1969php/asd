@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -68,7 +70,9 @@ fun PlaylistsScreen(desktop: Desktop) {
             Spacer(Modifier.height(16.dp))
             PunkButton(Texts.NEW_PLAYLIST, onClick = { creating = true }, icon = Icons.Filled.Add)
             Spacer(Modifier.height(12.dp))
-            LazyColumn(Modifier.weight(1f)) {
+            val tapeList = rememberLazyListState()
+            Box(Modifier.weight(1f)) {
+            LazyColumn(state = tapeList, modifier = Modifier.fillMaxSize().padding(end = 12.dp)) {
                 items(tapes, key = { it.id }) { m ->
                     val selected = m.id == open?.id
                     Row(
@@ -87,6 +91,8 @@ fun PlaylistsScreen(desktop: Desktop) {
                         Text(m.uris.size.toString(), style = MaterialTheme.typography.labelSmall, color = if (selected) Asd.Toner else Asd.Smudge)
                     }
                 }
+            }
+            ListScrollbar(tapeList)
             }
         }
         VerticalDivider(color = Asd.Concrete, thickness = 2.dp)
@@ -122,7 +128,9 @@ fun PlaylistsScreen(desktop: Desktop) {
             if (queue.isEmpty()) {
                 Text(Texts.PLAYLIST_EMPTY, style = MaterialTheme.typography.bodyLarge, color = Asd.Smudge, modifier = Modifier.padding(32.dp))
             }
-            LazyColumn(Modifier.weight(1f)) {
+            val songList = rememberLazyListState()
+            Box(Modifier.weight(1f)) {
+            LazyColumn(state = songList, modifier = Modifier.fillMaxSize().padding(end = 12.dp)) {
                 items(entries.size, key = { open.uris[entries[it].first] + "#" + entries[it].first }) { i ->
                     val (tapeIndex, song) = entries[i]
                     val ink = if (song.uri == playing.current?.uri) Asd.Toner else Asd.Paper
@@ -139,6 +147,8 @@ fun PlaylistsScreen(desktop: Desktop) {
                         },
                     )
                 }
+            }
+            ListScrollbar(songList)
             }
         }
     }

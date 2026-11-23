@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
@@ -130,8 +131,12 @@ fun TubeScreen(desktop: Desktop) {
             }
         }
         Spacer(Modifier.height(8.dp))
-        LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            items(jobs, key = { it.id }) { job -> JobRow(job) { tube.retry(job.id) } }
+        val jobList = rememberLazyListState()
+        Box(Modifier.weight(1f)) {
+            LazyColumn(state = jobList, modifier = Modifier.fillMaxSize().padding(end = 12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                items(jobs, key = { it.id }) { job -> JobRow(job) { tube.retry(job.id) } }
+            }
+            ListScrollbar(jobList)
         }
     }
 }

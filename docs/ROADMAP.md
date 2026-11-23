@@ -116,6 +116,8 @@ Kotlin + Compose Desktop nello stesso repo, GStreamer per suonare, logica comune
 - [x] desktop 0.3.0 **Fase 5 — TUBO** (2026-11-22) con lo yt-dlp di sistema: m4a in
   `<cartella>/TUBO`, aggiornamento e cookie dal browser in SETUP. Provato con un finto yt-dlp;
   da provare con quello vero (qui non installato).
+- [x] desktop 0.4.0 (2026-11-23): albero delle cartelle a sinistra in ROBA e barre di scorrimento
+  su tutti gli elenchi. Solo desktop, chiesto dal titolare.
 - [ ] Testi solo desktop del TUBO (`desktop_ytdlp_*`, `desktop_yt_*`, `desktop_tube_saves_to`,
   `desktop_missing_aac`) solo in italiano e inglese: le altre lingue li vedono in inglese.
 - [ ] Dopo: equalizzatore (`equalizer-10bands`). Più leggero il `.deb`: le icone Material estese

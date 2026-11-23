@@ -264,7 +264,7 @@ con una chiave debug diversa non si installano sopra le versioni precedenti e Dr
 
 ## ASD Desktop (Ubuntu)
 
-Lettore per PC Linux, versione `0.3.0` (`desktopVersion` in `desktop/build.gradle.kts`). Kotlin con
+Lettore per PC Linux, versione `0.4.0` (`desktopVersion` in `desktop/build.gradle.kts`). Kotlin con
 Compose Desktop: tema e componenti (`ui/theme`, `ui/components`, tranne `AsdLinks`) sono compilati
 direttamente dalla cartella dell'app, la logica viene da `shared/`.
 
@@ -304,6 +304,12 @@ direttamente dalla cartella dell'app, la logica viene da `shared/`.
   `yt-dlp -U` per il file scaricato dal sito; quello di apt si aggiorna con apt) e il browser da cui
   prendere i cookie di YouTube (`--cookies-from-browser`) quando chiede "non sei un bot". È l'unica
   parte che va in rete, e solo quando incolli un link.
+- **Albero e barre (0.4.0, solo desktop)**: in ROBA a sinistra l'albero (`FolderTree`) delle
+  cartelle annidate, con il numero di pezzi di ogni ramo; nella vista Artisti artista → album, in
+  Album gli album. Un clic sul nome apre la cartella in ROBA, la freccia apre e chiude il ramo; il
+  ramo della cartella aperta si espande da solo. Il bottone ad albero accanto a Cartelle lo
+  nasconde (ricordato in `showTree`). Tutti gli elenchi lunghi (ROBA, albero, mixtape, TUBO, SETUP,
+  finestrelle) hanno la barra di scorrimento a destra.
 - **Non ancora**: equalizzatore. Vedi `docs/ROADMAP.md`.
 - **Riproduzione**: GStreamer (`playbin`, via `gst1-java-core`), quello di sistema. Gli M4A/AAC
   (anche quelli del TUBO) vogliono `gstreamer1.0-libav`: il `.deb` lo dichiara tra le dipendenze,
@@ -332,6 +338,8 @@ desktop/
     ├── Sleep.kt                timer di spegnimento
     ├── Tube.kt                 TUBO con lo yt-dlp di sistema
     ├── I18n.kt, Texts.kt       le 38 lingue dagli strings.xml dell'app
+    ├── ui/FolderTree.kt        albero delle cartelle in ROBA
+    ├── ui/Scrollbars.kt        barre di scorrimento nello stile di ASD
     ├── Library.kt              scansione incrementale e catalogo JSON
     ├── TagReader.kt            tag con jaudiotagger
     ├── Player.kt               GStreamer playbin: coda, shuffle, repeat, gapless, guadagno, silenzio
@@ -351,7 +359,7 @@ desktop/
 ./gradlew :shared:test :desktop:test      # test: GStreamer e D-Bus veri (WAV generati, gdbus), TUBO con finto yt-dlp
 ./gradlew :desktop:run                    # avvia senza installare
 ./gradlew :desktop:packageAsdDeb          # desktop/build/deb/asd-desktop_<versione>_amd64.deb
-sudo apt install ./desktop/build/deb/asd-desktop_0.3.0_amd64.deb
+sudo apt install ./desktop/build/deb/asd-desktop_0.4.0_amd64.deb
 ```
 
 Il pacchetto (~90 MB) contiene un Java 17 ridotto (jlink): non serve Java installato. ProGuard è
